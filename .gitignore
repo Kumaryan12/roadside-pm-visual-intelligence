@@ -1,0 +1,48 @@
+cat > .gitignore <<'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+.env
+
+# Mac
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Raw/intermediate data - do not commit
+data/raw/
+data/interim/
+data/processed/
+
+# Outputs - large/generated
+outputs/features/
+outputs/models/
+outputs/road_roi_frames/
+outputs/road_roi_cleaned/
+outputs/masks/
+
+# Videos/images
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.webp
+
+# Model files
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.joblib
+
+# Logs
+*.log
+EOF

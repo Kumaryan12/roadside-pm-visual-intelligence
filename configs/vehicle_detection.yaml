@@ -1,0 +1,22 @@
+model:
+  baseline_detector: yolo11m.pt
+  future_detector: yolo11m_custom_auto.pt
+
+classes:
+  - bicycle
+  - motorcycle
+  - auto_rickshaw
+  - car
+  - bus
+  - truck
+  - person
+
+audit:
+  num_frames_target: 100
+  metrics:
+    - total_count_mae
+    - class_count_mae
+    - auto_rickshaw_recall
+    - truck_recall
+    - motorcycle_recall
+    - heavy_vehicle_count_error

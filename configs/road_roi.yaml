@@ -1,0 +1,15 @@
+road_roi_config:
+  lens1:
+    x1_ratio: 0.40
+    y1_ratio: 0.55
+    x2_ratio: 1.00
+    y2_ratio: 0.80
+
+  lens6:
+    x1_ratio: 0.00
+    y1_ratio: 0.45
+    x2_ratio: 0.65
+    y2_ratio: 0.82
+
+notes:
+  lens4: "No reliable road ROI; use vehicle features only."

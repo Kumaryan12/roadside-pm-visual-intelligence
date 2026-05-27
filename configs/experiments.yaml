@@ -1,0 +1,21 @@
+validation:
+  method: GroupKFold
+  group_column: timestamp
+  n_splits: 5
+
+experiments:
+  - name: mean_baseline
+  - name: traffic_only
+  - name: road_only
+  - name: osm_only
+  - name: traffic_plus_road
+  - name: traffic_plus_road_plus_osm
+  - name: temporal_features
+  - name: dino_fusion
+  - name: environment_only
+  - name: full_fusion
+
+metrics:
+  - MAE
+  - RMSE
+  - R2
