@@ -60,11 +60,13 @@ PM_CLASS_MAP = {
     "car": "car",
     "caravan": "unknown_vehicle",
     "motorcycle": "motorcycle",
-    "person": "person",
-    "rider": "rider",
     "trailer": "truck",
     "truck": "truck",
     "vehicle fallback": "unknown_vehicle",
+
+    # ignored classes
+    "person": "ignore",
+    "rider": "ignore",
     "animal": "ignore",
     "traffic light": "ignore",
     "traffic sign": "ignore",
@@ -78,8 +80,6 @@ PM_CLASSES = [
     "bus",
     "car",
     "motorcycle",
-    "person",
-    "rider",
     "truck",
     "unknown_vehicle",
 ]
@@ -147,7 +147,7 @@ def initialize_feature_row(row) -> dict:
     return result
 
 
-def failed_feature_row(row, error: str) -> dict:
+def failed_feature_roFw(row, error: str) -> dict:
     result = initialize_feature_row(row)
     result["idd_detection_status"] = "failed"
     result["idd_detection_error"] = error
@@ -258,10 +258,14 @@ def process_frame(model: YOLO, row, conf: float, imgsz: int, save_annotated: boo
     if not frame_path.exists():
         return failed_feature_row(row, f"frame_not_found: {frame_path}")
 
+    VEHICLE_CLASS_IDS = [1, 2, 3, 4, 5, 6, 11, 13, 14]
+
     predictions = model.predict(
         source=str(frame_path),
         conf=conf,
         imgsz=imgsz,
+        classes=VEHICLE_CLASS_IDS,
+        max_det=500,
         verbose=False,
     )
 
@@ -416,16 +420,14 @@ def main():
 
     print("\nTotal detected PM-relevant counts:")
     summary_cols = [
-        "idd_auto_rickshaw_count",
-        "idd_bicycle_count",
-        "idd_bus_count",
-        "idd_car_count",
-        "idd_motorcycle_count",
-        "idd_person_count",
-        "idd_rider_count",
-        "idd_truck_count",
-        "idd_unknown_vehicle_count",
-    ]
+    "idd_auto_rickshaw_count",
+    "idd_bicycle_count",
+    "idd_bus_count",
+    "idd_car_count",
+    "idd_motorcycle_count",
+    "idd_truck_count",
+    "idd_unknown_vehicle_count",
+]
 
     for col in summary_cols:
         print(col, int(out_df[col].sum()))
