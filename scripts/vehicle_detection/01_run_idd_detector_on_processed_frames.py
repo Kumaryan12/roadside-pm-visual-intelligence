@@ -33,6 +33,8 @@ DEFAULT_OUTPUT_CSV = Path("outputs/features/idd_vehicle_detections_processed_fra
 
 DEFAULT_ANNOTATED_DIR = Path("outputs/figures/idd_detector_annotations")
 
+PROJECT_ROOT = Path.cwd()
+
 
 IDD_CLASS_NAMES = [
     "animal",
@@ -108,13 +110,18 @@ RESUSPENSION_WEIGHTS_INITIAL = {
 
 
 def resolve_frame_path(path_value: str) -> Path:
+    """
+    Resolve frame paths relative to the current new project only.
+
+    Expected frame paths:
+    outputs/preprocessed_frames_v2/...
+    """
     raw_path = Path(str(path_value))
 
     if raw_path.is_absolute():
         return raw_path
 
-    return OLD_PROJECT_ROOT / raw_path
-
+    return PROJECT_ROOT / raw_path
 
 def initialize_feature_row(row) -> dict:
     result = {
@@ -151,6 +158,13 @@ def failed_feature_roFw(row, error: str) -> dict:
     result = initialize_feature_row(row)
     result["idd_detection_status"] = "failed"
     result["idd_detection_error"] = error
+    return result
+
+
+def failed_feature_row(row, error: str) -> dict:
+    result = initialize_feature_row(row)
+    result["idd_detection_status"] = "failed"
+    result["idd_detection_error"] = str(error)
     return result
 
 
