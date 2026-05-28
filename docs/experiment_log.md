@@ -238,3 +238,44 @@ Comparison metrics:
 - emission-proxy difference
 - downstream PM/effective-density model performance
 
+
+---
+
+## Experiment Update: Vehicle Detection v1 Local Frame Verification
+
+### Date
+2026-05-28
+
+### Objective
+Verify whether the fine-tuned IDD YOLO11m detector works on the PM-density project's own processed traffic frames.
+
+### Result
+The detector successfully detected PM-relevant vehicle classes on local processed frames, including explicit auto-rickshaw detections. Vehicle-only filtering was applied so non-vehicle classes such as person, rider, traffic light, traffic sign, animal, and train were excluded from inference outputs and annotated images.
+
+### Current Vehicle Classes Used
+- autorickshaw
+- bicycle
+- bus
+- car
+- caravan
+- motorcycle
+- trailer
+- truck
+- vehicle fallback
+
+### Ignored Classes
+- person
+- rider
+- animal
+- traffic light
+- traffic sign
+- train
+
+### Status
+Vehicle Detection v1 is working and ready for full-frame feature extraction.
+
+### Next Step
+Run full inference on all processed frames and save:
+outputs/features/idd_vehicle_detections_processed_frames.csv
+
+After this, begin road-condition and road-dust feature extraction as a separate module.
