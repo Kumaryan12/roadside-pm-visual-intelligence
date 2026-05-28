@@ -279,3 +279,124 @@ Run full inference on all processed frames and save:
 outputs/features/idd_vehicle_detections_processed_frames.csv
 
 After this, begin road-condition and road-dust feature extraction as a separate module.
+
+---
+
+## Experiment Update: Video Coverage Verification for Sensor-Timestamp Frame Extraction
+
+### Date
+2026-05-28
+
+### Objective
+Verify why some sensor timestamps failed during frame extraction from the external hard-drive camera videos.
+
+### Context
+The sensor CSV contains 281 timestamped sensor rows. For vehicle and visual feature extraction, frames were extracted from three selected lenses:
+
+- LENS1
+- LENS4
+- LENS6
+
+Expected frame rows:
+
+281 sensor rows × 3 lenses = 843 frames
+
+Actual extraction result:
+
+- Total manifest rows: 843
+- Successful extracted frames: 756
+- Failed frame rows: 87
+
+Lens-wise extraction result:
+
+- LENS1: 252 success, 29 failed
+- LENS4: 252 success, 29 failed
+- LENS6: 252 success, 29 failed
+
+This means 29 sensor timestamps failed for all three selected lenses.
+
+### Failure Reason
+The failed rows reported:
+
+no_matching_video_run
+
+The failed timestamps were around:
+
+- 23-02-2026 12:01
+- 23-02-2026 12:02
+- 23-02-2026 12:03
+- 23-02-2026 12:04
+
+### Video Run Folder Verification
+The available run folders under:
+
+/Volumes/New Volume/23_02_2026_navneet
+
+were verified using:
+
+find "/Volumes/New Volume/23_02_2026_navneet" -maxdepth 2 -type d -name "run_20260223_*" | sort
+
+The available run folders were:
+
+- run_20260223_110646_1346
+- run_20260223_113049_8089
+- run_20260223_114432_8289
+- run_20260223_120453_8329
+- run_20260223_121418_5341
+- run_20260223_124141_8222
+- run_20260223_124907_9341
+- run_20260223_133724_4858
+- run_20260223_134925_2422
+- run_20260223_135542_7578
+
+No additional run folder was found between:
+
+- run_20260223_114432_8289
+- run_20260223_120453_8329
+
+### Run Coverage Evidence
+Using run_t0.json and capture_stats.json metadata, the relevant video coverage intervals were:
+
+| Run ID | Start IST | End IST |
+|---|---:|---:|
+| run_20260223_114432_8289 | 2026-02-23 11:44:32 | 2026-02-23 12:01:34 |
+| run_20260223_120453_8329 | 2026-02-23 12:04:53 | 2026-02-23 12:13:06 |
+
+Therefore, there is an available-video coverage gap between approximately:
+
+12:01:34 IST and 12:04:53 IST
+
+The failed sensor timestamps fall inside this interval.
+
+### Interpretation
+The extraction failures are not lens-specific because the failure count is equal for LENS1, LENS4, and LENS6.
+
+The most likely explanation is that these 29 sensor timestamps fall outside the available video coverage intervals of the provided external-drive run folders.
+
+Precise wording:
+Frames could not be extracted for these timestamps because no matching video run was found in the provided video dataset folder.
+
+We should not claim that no video was ever recorded anywhere. We can only claim that no matching video is available in the provided run folders.
+
+### Usable Image-Supported Dataset
+After excluding timestamps without matching video coverage:
+
+- Usable sensor samples: 252
+- Selected lenses per sample: 3
+- Usable extracted frames: 756
+
+This is the corrected image-supported dataset for downstream vehicle detection and road-condition feature extraction.
+
+### Next Step
+Run the fine-tuned IDD YOLO11m vehicle detector on:
+
+outputs/features/processed_frame_manifest_v2.csv
+
+using only rows where:
+
+preprocess_status == success
+
+Expected detector input size:
+
+756 frames
+
