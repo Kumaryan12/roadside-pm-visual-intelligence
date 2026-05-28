@@ -400,3 +400,33 @@ Expected detector input size:
 
 756 frames
 
+
+---
+
+## Experiment Update: Vehicle Detection v2 Sanity Check
+
+### Objective
+Sanity-check high aggregated vehicle counts after running the fine-tuned IDD YOLO detector on preprocessed frames.
+
+### Result
+The high-count samples were inspected at the lens level. The high counts were distributed across LENS1, LENS4, and LENS6 rather than coming from a single faulty lens.
+
+Example high-count samples showed dense traffic across all selected camera views.
+
+### Interpretation
+The aggregated count features are accepted as multi-lens visual traffic-intensity features.
+
+Important distinction:
+These counts are not de-duplicated unique real-world vehicle counts. They represent the total number of YOLO vehicle detections across selected lens views for each sensor timestamp.
+
+Therefore:
+- count_sum features represent multi-view traffic intensity
+- count_mean features represent average visible traffic density across lenses
+- count_max features represent the strongest single-view traffic load
+- exhaust_proxy_initial_sum and resuspension_vehicle_proxy_initial_sum remain initial engineered proxy features, not calibrated emission measurements
+
+### Status
+Vehicle Detection v2 is accepted for downstream feature fusion.
+
+### Next Step
+Proceed to road-condition / road-dust feature extraction as a separate module.
