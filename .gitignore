@@ -46,3 +46,10 @@ outputs/masks/
 # Logs
 *.log
 EOF
+# Generated detector outputs
+outputs/features/
+outputs/figures/idd_detector_annotations/
+
+# Local detector weights
+models/detectors/
+*.pt
