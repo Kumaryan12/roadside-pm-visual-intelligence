@@ -15,6 +15,18 @@ from transformers import (
 )
 
 
+# Same artificial platform masks that were applied during preprocessing.
+# Coordinates are normalized: (x1_ratio, y1_ratio, x2_ratio, y2_ratio)
+#
+# IMPORTANT:
+# These areas should NOT be counted as road, even if the segmentor predicts road there.
+PLATFORM_MASK_CONFIG = {
+    1: (0.00, 0.82, 1.00, 1.00),
+    4: (0.00, 0.95, 1.00, 1.00),
+    6: (0.00, 0.75, 1.00, 1.00),
+}
+
+
 def resolve_path(path_value, project_root):
     p = Path(str(path_value))
     if p.is_absolute():
@@ -123,6 +135,120 @@ def generate_road_mask(image_pil, road_processor, road_model, device, threshold=
         mask = pred == 1
 
     return mask
+
+
+def build_platform_exclusion_mask(image_shape, lens_id):
+    """
+    Returns boolean valid mask.
+    True  = valid image area
+    False = artificial platform/black-mask region that should be excluded
+    """
+    h, w = image_shape[:2]
+
+    valid_mask = np.ones((h, w), dtype=bool)
+
+    if int(lens_id) not in PLATFORM_MASK_CONFIG:
+        return valid_mask
+
+    x1r, y1r, x2r, y2r = PLATFORM_MASK_CONFIG[int(lens_id)]
+
+    x1 = int(round(x1r * w))
+    y1 = int(round(y1r * h))
+    x2 = int(round(x2r * w))
+    y2 = int(round(y2r * h))
+
+    x1 = max(0, min(x1, w))
+    x2 = max(0, min(x2, w))
+    y1 = max(0, min(y1, h))
+    y2 = max(0, min(y2, h))
+
+    if x2 > x1 and y2 > y1:
+        valid_mask[y1:y2, x1:x2] = False
+
+    return valid_mask
+
+
+def remove_bottom_connected_black_region(image_bgr, black_threshold=10):
+    """
+    Detects near-black regions connected to the bottom border.
+
+    This targets artificial bottom black canvas/masking regions while avoiding
+    removal of ordinary dark shadows inside the real scene.
+    """
+    gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
+
+    near_black = gray <= black_threshold
+
+    num_labels, labels = cv2.connectedComponents(
+        near_black.astype(np.uint8),
+        connectivity=8,
+    )
+
+    if num_labels <= 1:
+        return np.zeros_like(near_black, dtype=bool)
+
+    h, w = near_black.shape
+
+    bottom_labels = np.unique(labels[h - 1, :])
+    bottom_labels = [int(x) for x in bottom_labels if int(x) != 0]
+
+    if not bottom_labels:
+        return np.zeros_like(near_black, dtype=bool)
+
+    bottom_black_region = np.isin(labels, bottom_labels)
+
+    return bottom_black_region
+
+
+def clean_road_mask(
+    image_bgr,
+    road_mask,
+    lens_id,
+    black_threshold=10,
+    apply_platform_config=True,
+    apply_bottom_black_cleanup=True,
+):
+    """
+    Cleans raw SegFormer road mask.
+
+    Removes:
+    1. Known lens-specific artificial platform region.
+    2. Near-black region connected to image bottom.
+
+    This prevents artificial black preprocessing regions from being counted as road.
+    """
+    cleaned = road_mask.astype(bool).copy()
+
+    h, w = cleaned.shape
+
+    if image_bgr.shape[:2] != (h, w):
+        image_bgr = cv2.resize(
+            image_bgr,
+            (w, h),
+            interpolation=cv2.INTER_LINEAR,
+        )
+
+    if apply_platform_config:
+        valid_platform = build_platform_exclusion_mask(
+            image_shape=image_bgr.shape,
+            lens_id=lens_id,
+        )
+        cleaned &= valid_platform
+
+    if apply_bottom_black_cleanup:
+        bottom_black_region = remove_bottom_connected_black_region(
+            image_bgr=image_bgr,
+            black_threshold=black_threshold,
+        )
+        cleaned[bottom_black_region] = False
+
+    # Small cleanup after invalid-region removal.
+    kernel = np.ones((5, 5), np.uint8)
+    cleaned_u8 = cleaned.astype(np.uint8) * 255
+    cleaned_u8 = cv2.morphologyEx(cleaned_u8, cv2.MORPH_OPEN, kernel)
+    cleaned_u8 = cv2.morphologyEx(cleaned_u8, cv2.MORPH_CLOSE, kernel)
+
+    return cleaned_u8 > 0
 
 
 def generate_metric_depth(image_pil, depth_processor, depth_model, device):
@@ -290,6 +416,25 @@ def main():
     )
 
     parser.add_argument(
+        "--disable-platform-cleaning",
+        action="store_true",
+        help="Disable known lens-specific platform exclusion cleaning.",
+    )
+
+    parser.add_argument(
+        "--disable-bottom-black-cleaning",
+        action="store_true",
+        help="Disable connected bottom-black cleanup.",
+    )
+
+    parser.add_argument(
+        "--black-threshold",
+        type=int,
+        default=10,
+        help="Pixel intensity threshold for detecting artificial black regions.",
+    )
+
+    parser.add_argument(
         "--output-dir",
         default="outputs/road_area_lens1_batch",
     )
@@ -335,6 +480,9 @@ def main():
     print("fx:", args.fx)
     print("fy:", fy)
     print("Area calculation width:", area_width if area_width else "full resolution")
+    print("Platform cleaning:", not args.disable_platform_cleaning)
+    print("Bottom-black cleaning:", not args.disable_bottom_black_cleaning)
+    print("Black threshold:", args.black_threshold)
 
     print("\nLoading road segmentation model...")
     road_processor = SegformerImageProcessor.from_pretrained(args.road_model_path)
@@ -390,16 +538,40 @@ def main():
             image_pil = Image.open(image_path).convert("RGB")
             image_w, image_h = image_pil.size
 
+            image_bgr = cv2.imread(str(image_path))
+            if image_bgr is None:
+                raise RuntimeError(f"Could not read image with cv2: {image_path}")
+
             result["area_image_width_px"] = image_w
             result["area_image_height_px"] = image_h
             result["area_input_image_path"] = str(image_path)
 
-            road_mask = generate_road_mask(
+            raw_road_mask = generate_road_mask(
                 image_pil=image_pil,
                 road_processor=road_processor,
                 road_model=road_model,
                 device=device,
                 threshold=0.5,
+            )
+
+            road_mask = clean_road_mask(
+                image_bgr=image_bgr,
+                road_mask=raw_road_mask,
+                lens_id=lens_id,
+                black_threshold=args.black_threshold,
+                apply_platform_config=not args.disable_platform_cleaning,
+                apply_bottom_black_cleanup=not args.disable_bottom_black_cleaning,
+            )
+
+            raw_road_pixels = int(raw_road_mask.sum())
+            cleaned_road_pixels = int(road_mask.sum())
+            removed_road_pixels = raw_road_pixels - cleaned_road_pixels
+
+            result["raw_road_pixels_before_cleaning"] = raw_road_pixels
+            result["cleaned_road_pixels_after_cleaning"] = cleaned_road_pixels
+            result["removed_road_pixels_by_cleaning"] = removed_road_pixels
+            result["removed_road_fraction_by_cleaning"] = (
+                removed_road_pixels / max(raw_road_pixels, 1)
             )
 
             depth_m = generate_metric_depth(
@@ -472,6 +644,10 @@ def main():
                 cv2.imwrite(str(mask_path), (road_mask.astype(np.uint8) * 255))
                 result["saved_road_mask_path"] = str(mask_path)
 
+                raw_mask_path = mask_dir / f"{out_id}_raw_road_mask_before_cleaning.png"
+                cv2.imwrite(str(raw_mask_path), (raw_road_mask.astype(np.uint8) * 255))
+                result["saved_raw_road_mask_before_cleaning_path"] = str(raw_mask_path)
+
             if args.save_depth_npy:
                 depth_path = depth_dir / f"{out_id}_depth_m.npy"
                 np.save(depth_path, depth_m.astype(np.float32))
@@ -488,6 +664,7 @@ def main():
             print(
                 f"Area = {result['estimated_road_area_m2']:.3f} m² | "
                 f"road% = {result['road_area_percent_px']:.2f}% | "
+                f"removed_raw_mask% = {result['removed_road_fraction_by_cleaning'] * 100:.2f}% | "
                 f"quality = {result['area_quality_flag']}"
             )
 
@@ -519,6 +696,10 @@ def main():
 
             print("\nQuality flags:")
             print(ok["area_quality_flag"].value_counts(dropna=False))
+
+            if "removed_road_fraction_by_cleaning" in ok.columns:
+                print("\nRemoved road-mask fraction by cleaning:")
+                print(ok["removed_road_fraction_by_cleaning"].describe())
 
 
 if __name__ == "__main__":
