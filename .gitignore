@@ -53,3 +53,9 @@ outputs/figures/idd_detector_annotations/
 # Local detector weights
 models/detectors/
 *.pt
+outputs/
+/Users/aryansatyendrakumar/Projects/roadside-pm-visual-intelligence/outputs/road_area_lens1_batch
+app/
+configs/lens_preprocessing.yaml
+data/
+models/

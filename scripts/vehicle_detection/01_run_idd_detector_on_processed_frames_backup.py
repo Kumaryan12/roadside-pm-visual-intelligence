@@ -5,14 +5,13 @@ Purpose:
 - Use Indian-road-specific YOLO detector trained/fine-tuned on IDD 15-class dataset.
 - Extract vehicle-class counts from preprocessed camera frames.
 - Save frame-level vehicle features for later particle-density / PM modeling.
-- Also save object-level detection boxes for vehicle-footprint occlusion adjustment.
 
 Input:
-- outputs/features/processed_frame_manifest_preprocessed_v2.csv
+- New project preprocessed frame manifest:
+  outputs/features/processed_frame_manifest_preprocessed_v2.csv
 
-Outputs:
+Output:
 - outputs/features/idd_vehicle_detections_frame_level_v2.csv
-- outputs/features/idd_vehicle_detections_object_level_v2.csv
 - optional annotated images:
   outputs/figures/idd_detector_annotations/
 
@@ -34,7 +33,6 @@ PROJECT_ROOT = Path.cwd()
 DEFAULT_INPUT_MANIFEST = Path("outputs/features/processed_frame_manifest_preprocessed_v2.csv")
 DEFAULT_MODEL_PATH = Path("models/detectors/yolo11m_idd15_v1_best.pt")
 DEFAULT_OUTPUT_CSV = Path("outputs/features/idd_vehicle_detections_frame_level_v2.csv")
-DEFAULT_OBJECT_OUTPUT_CSV = Path("outputs/features/idd_vehicle_detections_object_level_v2.csv")
 DEFAULT_ANNOTATED_DIR = Path("outputs/figures/idd_detector_annotations")
 
 
@@ -89,6 +87,7 @@ PM_CLASSES = [
 ]
 
 
+# Initial hypothesis weights only. These are not calibrated emission factors.
 EXHAUST_WEIGHTS_INITIAL = {
     "bicycle": 0.00,
     "motorcycle": 0.50,
@@ -100,6 +99,7 @@ EXHAUST_WEIGHTS_INITIAL = {
 }
 
 
+# Initial hypothesis weights only. These are not calibrated resuspension factors.
 RESUSPENSION_WEIGHTS_INITIAL = {
     "bicycle": 0.05,
     "motorcycle": 0.30,
@@ -112,6 +112,13 @@ RESUSPENSION_WEIGHTS_INITIAL = {
 
 
 def resolve_frame_path(path_value: str) -> Path:
+    """
+    Resolve frame paths relative to the current project root.
+
+    Supports:
+    - absolute paths
+    - relative paths like outputs/preprocessed_frames_v2/...
+    """
     raw_path = Path(str(path_value))
 
     if raw_path.is_absolute():
@@ -124,6 +131,7 @@ def initialize_feature_row(row) -> dict:
     resolved_frame_path = resolve_frame_path(row.get("processed_frame_path", ""))
 
     result = {
+        # Metadata from preprocessed frame manifest
         "sample_index": row.get("sample_index", None),
         "sensor_timestamp": row.get("sensor_timestamp", ""),
         "sample_unix": row.get("sample_unix", None),
@@ -135,10 +143,12 @@ def initialize_feature_row(row) -> dict:
         "lens_id": row.get("lens_id", ""),
         "processed_frame_path": str(resolved_frame_path),
 
+        # Detection status
         "idd_detection_status": "success",
         "idd_detection_error": "",
         "idd_annotated_image_path": "",
 
+        # Detection summary
         "idd_total_detections_raw": 0,
         "idd_total_vehicle_count": 0,
         "idd_total_pm_relevant_objects": 0,
@@ -146,6 +156,7 @@ def initialize_feature_row(row) -> dict:
         "idd_average_confidence": 0.0,
         "idd_max_confidence": 0.0,
 
+        # Engineered vehicle groups
         "idd_heavy_vehicle_count": 0,
         "idd_motor_vehicle_count": 0,
         "idd_exhaust_proxy_initial": 0.0,
@@ -182,19 +193,13 @@ def save_annotated_prediction(pred, row, annotated_dir: Path) -> str:
     return str(out_path)
 
 
-def extract_features_and_objects_from_prediction(
+def extract_features_from_prediction(
     pred,
     row,
     save_annotated: bool,
     annotated_dir: Path,
-):
-    """
-    Returns:
-    - frame-level feature row
-    - object-level detection rows
-    """
+) -> dict:
     result = initialize_feature_row(row)
-    object_rows = []
 
     h, w = pred.orig_shape
     image_area = float(h * w)
@@ -213,7 +218,7 @@ def extract_features_and_objects_from_prediction(
         )
 
     if pred.boxes is not None and len(pred.boxes) > 0:
-        for det_index, box in enumerate(pred.boxes):
+        for box in pred.boxes:
             cls_id = int(box.cls.item())
             conf_score = float(box.conf.item())
 
@@ -221,59 +226,17 @@ def extract_features_and_objects_from_prediction(
                 continue
 
             idd_class = IDD_CLASS_NAMES[cls_id]
-            pm_class = PM_CLASS_MAP.get(idd_class, "ignore")
-
-            x1, y1, x2, y2 = box.xyxy[0].tolist()
-            bbox_width = max(0.0, x2 - x1)
-            bbox_height = max(0.0, y2 - y1)
-            box_area = bbox_width * bbox_height
-            box_area_ratio = float(box_area / image_area) if image_area > 0 else 0.0
-
             raw_counts[idd_class] += 1
 
-            is_pm_relevant = pm_class != "ignore"
+            pm_class = PM_CLASS_MAP.get(idd_class, "ignore")
 
-            # Save object-level row for every detected object class returned by model.
-            # This includes ignored classes too, so we can audit later.
-            object_rows.append({
-                "sample_index": row.get("sample_index", None),
-                "sensor_timestamp": row.get("sensor_timestamp", ""),
-                "sample_unix": row.get("sample_unix", None),
-
-                "processed_frame_key": str(row.get("processed_frame_key", "")),
-                "source_frame_key": row.get("source_frame_key", ""),
-                "matched_run_id": row.get("matched_run_id", ""),
-                "video_offset_sec": row.get("video_offset_sec", None),
-                "lens_id": row.get("lens_id", ""),
-                "processed_frame_path": str(resolve_frame_path(row.get("processed_frame_path", ""))),
-
-                "detection_index": det_index,
-                "idd_class_id": cls_id,
-                "idd_class_name": idd_class,
-                "pm_class_name": pm_class,
-                "is_pm_relevant_vehicle": bool(is_pm_relevant),
-
-                "confidence": conf_score,
-
-                "x1": float(x1),
-                "y1": float(y1),
-                "x2": float(x2),
-                "y2": float(y2),
-
-                "bbox_width": float(bbox_width),
-                "bbox_height": float(bbox_height),
-                "bbox_area": float(box_area),
-                "bbox_area_ratio": float(box_area_ratio),
-
-                "image_width": int(w),
-                "image_height": int(h),
-                "image_area": float(image_area),
-            })
-
-            if not is_pm_relevant:
+            if pm_class == "ignore":
                 continue
 
             pm_counts[pm_class] += 1
+
+            x1, y1, x2, y2 = box.xyxy[0].tolist()
+            box_area = max(0.0, x2 - x1) * max(0.0, y2 - y1)
 
             total_box_area += box_area
             confidences.append(conf_score)
@@ -326,7 +289,7 @@ def extract_features_and_objects_from_prediction(
     result["idd_exhaust_proxy_initial"] = float(exhaust_proxy)
     result["idd_resuspension_vehicle_proxy_initial"] = float(resuspension_proxy)
 
-    return result, object_rows
+    return result
 
 
 def process_frame(
@@ -336,12 +299,15 @@ def process_frame(
     imgsz: int,
     save_annotated: bool,
     annotated_dir: Path,
-):
+) -> dict:
     frame_path = resolve_frame_path(row.get("processed_frame_path", ""))
 
     if not frame_path.exists():
-        return failed_feature_row(row, f"frame_not_found: {frame_path}"), []
+        return failed_feature_row(row, f"frame_not_found: {frame_path}")
 
+    # IDD class IDs relevant for vehicle/PM feature extraction:
+    # 1 autorickshaw, 2 bicycle, 3 bus, 4 car, 5 caravan,
+    # 6 motorcycle, 11 trailer, 13 truck, 14 vehicle fallback
     vehicle_class_ids = [1, 2, 3, 4, 5, 6, 11, 13, 14]
 
     predictions = model.predict(
@@ -354,9 +320,9 @@ def process_frame(
     )
 
     if not predictions:
-        return failed_feature_row(row, "no_prediction_returned"), []
+        return failed_feature_row(row, "no_prediction_returned")
 
-    return extract_features_and_objects_from_prediction(
+    return extract_features_from_prediction(
         pred=predictions[0],
         row=row,
         save_annotated=save_annotated,
@@ -370,7 +336,6 @@ def main():
     parser.add_argument("--input-manifest", default=str(DEFAULT_INPUT_MANIFEST))
     parser.add_argument("--model-path", default=str(DEFAULT_MODEL_PATH))
     parser.add_argument("--output-csv", default=str(DEFAULT_OUTPUT_CSV))
-    parser.add_argument("--object-output-csv", default=str(DEFAULT_OBJECT_OUTPUT_CSV))
 
     parser.add_argument("--conf", type=float, default=0.25)
     parser.add_argument("--imgsz", type=int, default=960)
@@ -381,19 +346,11 @@ def main():
     parser.add_argument("--annotated-dir", default=str(DEFAULT_ANNOTATED_DIR))
     parser.add_argument("--annotated-limit", type=int, default=100)
 
-    # Optional: rerun even if frame-level CSV already exists.
-    parser.add_argument(
-        "--overwrite",
-        action="store_true",
-        help="Ignore existing frame/object outputs and rerun all selected frames.",
-    )
-
     args = parser.parse_args()
 
     input_manifest = Path(args.input_manifest)
     model_path = Path(args.model_path)
     output_csv = Path(args.output_csv)
-    object_output_csv = Path(args.object_output_csv)
     annotated_dir = Path(args.annotated_dir)
 
     if not input_manifest.exists():
@@ -403,7 +360,6 @@ def main():
         raise FileNotFoundError(f"Model not found: {model_path}")
 
     output_csv.parent.mkdir(parents=True, exist_ok=True)
-    object_output_csv.parent.mkdir(parents=True, exist_ok=True)
 
     manifest_df = pd.read_csv(input_manifest)
 
@@ -428,37 +384,27 @@ def main():
     print("=" * 60)
     print("Input manifest:", input_manifest)
     print("Model path:", model_path)
-    print("Frame-level output CSV:", output_csv)
-    print("Object-level output CSV:", object_output_csv)
+    print("Output CSV:", output_csv)
     print("Frames:", len(frame_df))
     print("Confidence:", args.conf)
     print("Image size:", args.imgsz)
     print("Save annotated:", args.save_annotated)
     print("Annotated limit:", args.annotated_limit)
-    print("Overwrite:", args.overwrite)
 
     model = YOLO(str(model_path))
 
     output_rows = []
-    object_rows = []
     completed_keys = set()
 
-    if output_csv.exists() and not args.overwrite:
+    if output_csv.exists():
         old_df = pd.read_csv(output_csv)
 
         if "processed_frame_key" in old_df.columns:
             completed_keys = set(old_df["processed_frame_key"].astype(str))
             output_rows = old_df.to_dict(orient="records")
 
-        print("\nExisting frame-level output found.")
+        print("\nExisting output found.")
         print("Already processed:", len(completed_keys))
-
-    if object_output_csv.exists() and not args.overwrite:
-        old_obj_df = pd.read_csv(object_output_csv)
-        object_rows = old_obj_df.to_dict(orient="records")
-
-        print("Existing object-level output found.")
-        print("Existing object rows:", len(object_rows))
 
     annotated_saved = sum(
         1
@@ -482,7 +428,7 @@ def main():
         print(f"\nProcessing {len(completed_keys) + 1}/{len(frame_df)}: {key}")
 
         try:
-            features, objects = process_frame(
+            features = process_frame(
                 model=model,
                 row=row,
                 conf=args.conf,
@@ -492,10 +438,8 @@ def main():
             )
         except Exception as exc:
             features = failed_feature_row(row, str(exc))
-            objects = []
 
         output_rows.append(features)
-        object_rows.extend(objects)
         completed_keys.add(key)
 
         if str(features.get("idd_annotated_image_path", "")).strip():
@@ -507,30 +451,21 @@ def main():
         print("  motorcycle:", features["idd_motorcycle_count"])
         print("  bus:", features["idd_bus_count"])
         print("  truck:", features["idd_truck_count"])
-        print("  objects saved:", len(objects))
         print("  exhaust proxy:", features["idd_exhaust_proxy_initial"])
 
         processed_since_save += 1
 
         if processed_since_save >= args.checkpoint_every:
             pd.DataFrame(output_rows).to_csv(output_csv, index=False)
-            pd.DataFrame(object_rows).to_csv(object_output_csv, index=False)
             print("Checkpoint saved:", output_csv)
-            print("Checkpoint object saved:", object_output_csv)
             processed_since_save = 0
 
     out_df = pd.DataFrame(output_rows)
-    obj_df = pd.DataFrame(object_rows)
-
     out_df.to_csv(output_csv, index=False)
-    obj_df.to_csv(object_output_csv, index=False)
 
     print("\nDone.")
-    print("Saved frame-level:", output_csv)
-    print("Frame shape:", out_df.shape)
-
-    print("Saved object-level:", object_output_csv)
-    print("Object shape:", obj_df.shape)
+    print("Saved:", output_csv)
+    print("Shape:", out_df.shape)
 
     print("\nDetection status:")
     print(out_df["idd_detection_status"].value_counts(dropna=False))
@@ -549,13 +484,6 @@ def main():
     for col in summary_cols:
         if col in out_df.columns:
             print(col, int(out_df[col].sum()))
-
-    if len(obj_df) > 0:
-        print("\nObject-level class counts:")
-        print(obj_df["idd_class_name"].value_counts(dropna=False))
-
-        print("\nPM-relevant object counts:")
-        print(obj_df["pm_class_name"].value_counts(dropna=False))
 
 
 if __name__ == "__main__":
