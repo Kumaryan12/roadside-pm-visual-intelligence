@@ -7,18 +7,19 @@ Purpose:
 - Save frame-level vehicle features for later particle-density / PM modeling.
 - Also save object-level detection boxes for vehicle-footprint occlusion adjustment.
 
+Important:
+- This script preserves all metadata from the input manifest.
+- This is required for the 1-second pipeline, where fields like:
+  sensor_row_id, sensor_unix, frame_sample_unix, relative_time_sec
+  must survive from extraction → preprocessing → detection → aggregation.
+
 Input:
-- outputs/features/processed_frame_manifest_preprocessed_v2.csv
+- Preprocessed frame manifest CSV.
 
 Outputs:
-- outputs/features/idd_vehicle_detections_frame_level_v2.csv
-- outputs/features/idd_vehicle_detections_object_level_v2.csv
-- optional annotated images:
-  outputs/figures/idd_detector_annotations/
-
-Important:
-- This script does NOT use the old pm_density_image_pipeline project.
-- Relative paths are resolved from the current project root.
+- Frame-level vehicle features CSV.
+- Object-level detection boxes CSV.
+- Optional annotated images.
 """
 
 from pathlib import Path
@@ -29,6 +30,10 @@ import pandas as pd
 from ultralytics import YOLO
 
 
+# ============================================================
+# DEFAULT PATHS
+# ============================================================
+
 PROJECT_ROOT = Path.cwd()
 
 DEFAULT_INPUT_MANIFEST = Path("outputs/features/processed_frame_manifest_preprocessed_v2.csv")
@@ -37,6 +42,10 @@ DEFAULT_OUTPUT_CSV = Path("outputs/features/idd_vehicle_detections_frame_level_v
 DEFAULT_OBJECT_OUTPUT_CSV = Path("outputs/features/idd_vehicle_detections_object_level_v2.csv")
 DEFAULT_ANNOTATED_DIR = Path("outputs/figures/idd_detector_annotations")
 
+
+# ============================================================
+# IDD CLASS CONFIG
+# ============================================================
 
 IDD_CLASS_NAMES = [
     "animal",
@@ -89,6 +98,7 @@ PM_CLASSES = [
 ]
 
 
+# Initial hypothesis weights only. These are not calibrated emission factors.
 EXHAUST_WEIGHTS_INITIAL = {
     "bicycle": 0.00,
     "motorcycle": 0.50,
@@ -100,6 +110,7 @@ EXHAUST_WEIGHTS_INITIAL = {
 }
 
 
+# Initial hypothesis weights only. These are not calibrated resuspension factors.
 RESUSPENSION_WEIGHTS_INITIAL = {
     "bicycle": 0.05,
     "motorcycle": 0.30,
@@ -111,7 +122,18 @@ RESUSPENSION_WEIGHTS_INITIAL = {
 }
 
 
+# ============================================================
+# PATH HELPERS
+# ============================================================
+
 def resolve_frame_path(path_value: str) -> Path:
+    """
+    Resolve frame paths relative to the current project root.
+
+    Supports:
+    - absolute paths
+    - relative paths like outputs/preprocessed_frames_v2/...
+    """
     raw_path = Path(str(path_value))
 
     if raw_path.is_absolute():
@@ -120,14 +142,38 @@ def resolve_frame_path(path_value: str) -> Path:
     return PROJECT_ROOT / raw_path
 
 
+# ============================================================
+# FRAME-LEVEL ROW INITIALIZATION
+# ============================================================
+
 def initialize_feature_row(row) -> dict:
+    """
+    Initialize frame-level detection row.
+
+    Critical:
+    Start from row.to_dict() so all upstream metadata is preserved.
+
+    This preserves old-pipeline fields:
+    - sample_index
+    - sensor_timestamp
+    - sample_unix
+    - lens_id
+    - matched_run_id
+    - video_offset_sec
+
+    And also 1-second pipeline fields:
+    - sensor_row_id
+    - sensor_unix
+    - frame_sample_unix
+    - relative_time_sec
+    - frame_extraction_status
+    - frame_extraction_error
+    """
     resolved_frame_path = resolve_frame_path(row.get("processed_frame_path", ""))
 
-    result = {
-        "sample_index": row.get("sample_index", None),
-        "sensor_timestamp": row.get("sensor_timestamp", ""),
-        "sample_unix": row.get("sample_unix", None),
+    result = row.to_dict()
 
+    result.update({
         "processed_frame_key": str(row.get("processed_frame_key", "")),
         "source_frame_key": row.get("source_frame_key", ""),
         "matched_run_id": row.get("matched_run_id", ""),
@@ -135,10 +181,12 @@ def initialize_feature_row(row) -> dict:
         "lens_id": row.get("lens_id", ""),
         "processed_frame_path": str(resolved_frame_path),
 
+        # Detection status
         "idd_detection_status": "success",
         "idd_detection_error": "",
         "idd_annotated_image_path": "",
 
+        # Detection summary
         "idd_total_detections_raw": 0,
         "idd_total_vehicle_count": 0,
         "idd_total_pm_relevant_objects": 0,
@@ -146,11 +194,12 @@ def initialize_feature_row(row) -> dict:
         "idd_average_confidence": 0.0,
         "idd_max_confidence": 0.0,
 
+        # Engineered vehicle groups
         "idd_heavy_vehicle_count": 0,
         "idd_motor_vehicle_count": 0,
         "idd_exhaust_proxy_initial": 0.0,
         "idd_resuspension_vehicle_proxy_initial": 0.0,
-    }
+    })
 
     for cls in PM_CLASSES:
         result[f"idd_{cls}_count"] = 0
@@ -168,6 +217,10 @@ def failed_feature_row(row, error: str) -> dict:
     return result
 
 
+# ============================================================
+# ANNOTATION HELPER
+# ============================================================
+
 def save_annotated_prediction(pred, row, annotated_dir: Path) -> str:
     annotated_dir.mkdir(parents=True, exist_ok=True)
 
@@ -181,6 +234,87 @@ def save_annotated_prediction(pred, row, annotated_dir: Path) -> str:
 
     return str(out_path)
 
+
+# ============================================================
+# OBJECT-LEVEL ROW HELPER
+# ============================================================
+
+def make_object_row(
+    row,
+    det_index,
+    cls_id,
+    idd_class,
+    pm_class,
+    is_pm_relevant,
+    conf_score,
+    x1,
+    y1,
+    x2,
+    y2,
+    bbox_width,
+    bbox_height,
+    box_area,
+    box_area_ratio,
+    image_width,
+    image_height,
+    image_area,
+):
+    """
+    Create one object-level detection row.
+
+    Critical:
+    Include upstream 1-second metadata so NMS and road-area scripts
+    can preserve the sensor/window relationship.
+    """
+    return {
+        # 1-second pipeline metadata
+        "sensor_row_id": row.get("sensor_row_id", None),
+        "sensor_unix": row.get("sensor_unix", None),
+        "frame_sample_unix": row.get("frame_sample_unix", None),
+        "relative_time_sec": row.get("relative_time_sec", None),
+        "frame_extraction_status": row.get("frame_extraction_status", ""),
+        "frame_extraction_error": row.get("frame_extraction_error", ""),
+
+        # Original project metadata
+        "sample_index": row.get("sample_index", None),
+        "sensor_timestamp": row.get("sensor_timestamp", ""),
+        "sample_unix": row.get("sample_unix", None),
+
+        "processed_frame_key": str(row.get("processed_frame_key", "")),
+        "source_frame_key": row.get("source_frame_key", ""),
+        "matched_run_id": row.get("matched_run_id", ""),
+        "video_offset_sec": row.get("video_offset_sec", None),
+        "lens_id": row.get("lens_id", ""),
+        "processed_frame_path": str(resolve_frame_path(row.get("processed_frame_path", ""))),
+
+        # Object detection metadata
+        "detection_index": det_index,
+        "idd_class_id": cls_id,
+        "idd_class_name": idd_class,
+        "pm_class_name": pm_class,
+        "is_pm_relevant_vehicle": bool(is_pm_relevant),
+
+        "confidence": float(conf_score),
+
+        "x1": float(x1),
+        "y1": float(y1),
+        "x2": float(x2),
+        "y2": float(y2),
+
+        "bbox_width": float(bbox_width),
+        "bbox_height": float(bbox_height),
+        "bbox_area": float(box_area),
+        "bbox_area_ratio": float(box_area_ratio),
+
+        "image_width": int(image_width),
+        "image_height": int(image_height),
+        "image_area": float(image_area),
+    }
+
+
+# ============================================================
+# FEATURE EXTRACTION
+# ============================================================
 
 def extract_features_and_objects_from_prediction(
     pred,
@@ -224,6 +358,7 @@ def extract_features_and_objects_from_prediction(
             pm_class = PM_CLASS_MAP.get(idd_class, "ignore")
 
             x1, y1, x2, y2 = box.xyxy[0].tolist()
+
             bbox_width = max(0.0, x2 - x1)
             bbox_height = max(0.0, y2 - y1)
             box_area = bbox_width * bbox_height
@@ -233,42 +368,28 @@ def extract_features_and_objects_from_prediction(
 
             is_pm_relevant = pm_class != "ignore"
 
-            # Save object-level row for every detected object class returned by model.
-            # This includes ignored classes too, so we can audit later.
-            object_rows.append({
-                "sample_index": row.get("sample_index", None),
-                "sensor_timestamp": row.get("sensor_timestamp", ""),
-                "sample_unix": row.get("sample_unix", None),
-
-                "processed_frame_key": str(row.get("processed_frame_key", "")),
-                "source_frame_key": row.get("source_frame_key", ""),
-                "matched_run_id": row.get("matched_run_id", ""),
-                "video_offset_sec": row.get("video_offset_sec", None),
-                "lens_id": row.get("lens_id", ""),
-                "processed_frame_path": str(resolve_frame_path(row.get("processed_frame_path", ""))),
-
-                "detection_index": det_index,
-                "idd_class_id": cls_id,
-                "idd_class_name": idd_class,
-                "pm_class_name": pm_class,
-                "is_pm_relevant_vehicle": bool(is_pm_relevant),
-
-                "confidence": conf_score,
-
-                "x1": float(x1),
-                "y1": float(y1),
-                "x2": float(x2),
-                "y2": float(y2),
-
-                "bbox_width": float(bbox_width),
-                "bbox_height": float(bbox_height),
-                "bbox_area": float(box_area),
-                "bbox_area_ratio": float(box_area_ratio),
-
-                "image_width": int(w),
-                "image_height": int(h),
-                "image_area": float(image_area),
-            })
+            object_rows.append(
+                make_object_row(
+                    row=row,
+                    det_index=det_index,
+                    cls_id=cls_id,
+                    idd_class=idd_class,
+                    pm_class=pm_class,
+                    is_pm_relevant=is_pm_relevant,
+                    conf_score=conf_score,
+                    x1=x1,
+                    y1=y1,
+                    x2=x2,
+                    y2=y2,
+                    bbox_width=bbox_width,
+                    bbox_height=bbox_height,
+                    box_area=box_area,
+                    box_area_ratio=box_area_ratio,
+                    image_width=w,
+                    image_height=h,
+                    image_area=image_area,
+                )
+            )
 
             if not is_pm_relevant:
                 continue
@@ -329,6 +450,10 @@ def extract_features_and_objects_from_prediction(
     return result, object_rows
 
 
+# ============================================================
+# FRAME PROCESSING
+# ============================================================
+
 def process_frame(
     model: YOLO,
     row,
@@ -342,6 +467,9 @@ def process_frame(
     if not frame_path.exists():
         return failed_feature_row(row, f"frame_not_found: {frame_path}"), []
 
+    # IDD class IDs relevant for vehicle/PM feature extraction:
+    # 1 autorickshaw, 2 bicycle, 3 bus, 4 car, 5 caravan,
+    # 6 motorcycle, 11 trailer, 13 truck, 14 vehicle fallback
     vehicle_class_ids = [1, 2, 3, 4, 5, 6, 11, 13, 14]
 
     predictions = model.predict(
@@ -364,6 +492,10 @@ def process_frame(
     )
 
 
+# ============================================================
+# MAIN
+# ============================================================
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -381,7 +513,6 @@ def main():
     parser.add_argument("--annotated-dir", default=str(DEFAULT_ANNOTATED_DIR))
     parser.add_argument("--annotated-limit", type=int, default=100)
 
-    # Optional: rerun even if frame-level CSV already exists.
     parser.add_argument(
         "--overwrite",
         action="store_true",

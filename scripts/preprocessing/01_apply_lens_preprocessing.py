@@ -109,55 +109,62 @@ def apply_platform_mask(image, mask_ratios):
 
 
 def preprocess_one_row(row, no_mask: bool, output_root: Path):
+    # Keep the original extracted-frame identity before overwriting processed fields
+    original_row = row.to_dict()
+
     source_frame_key = str(row["processed_frame_key"])
     lens_id = int(row["lens_id"])
     source_frame_path = resolve_path(row["processed_frame_path"])
 
     if lens_id not in LENS_CROP_CONFIG:
-        return {
-            **row.to_dict(),
+        result = original_row.copy()
+        result.update({
             "source_frame_key": source_frame_key,
             "source_frame_path": str(source_frame_path),
             "processed_frame_key": "",
             "processed_frame_path": "",
             "preprocess_status": "failed",
             "preprocess_error": f"no_crop_config_for_lens_{lens_id}",
-        }
+        })
+        return result
 
     if lens_id not in LENS_ROTATION_CONFIG:
-        return {
-            **row.to_dict(),
+        result = original_row.copy()
+        result.update({
             "source_frame_key": source_frame_key,
             "source_frame_path": str(source_frame_path),
             "processed_frame_key": "",
             "processed_frame_path": "",
             "preprocess_status": "failed",
             "preprocess_error": f"no_rotation_config_for_lens_{lens_id}",
-        }
+        })
+        return result
 
     if not source_frame_path.exists():
-        return {
-            **row.to_dict(),
+        result = original_row.copy()
+        result.update({
             "source_frame_key": source_frame_key,
             "source_frame_path": str(source_frame_path),
             "processed_frame_key": "",
             "processed_frame_path": "",
             "preprocess_status": "failed",
             "preprocess_error": f"source_frame_not_found: {source_frame_path}",
-        }
+        })
+        return result
 
     image = cv2.imread(str(source_frame_path))
 
     if image is None:
-        return {
-            **row.to_dict(),
+        result = original_row.copy()
+        result.update({
             "source_frame_key": source_frame_key,
             "source_frame_path": str(source_frame_path),
             "processed_frame_key": "",
             "processed_frame_path": "",
             "preprocess_status": "failed",
             "preprocess_error": f"could_not_read_source_frame: {source_frame_path}",
-        }
+        })
+        return result
 
     crop_ratios = LENS_CROP_CONFIG[lens_id]
     rotation_name = LENS_ROTATION_CONFIG[lens_id]
@@ -187,43 +194,59 @@ def preprocess_one_row(row, no_mask: bool, output_root: Path):
 
     matched_run_id = str(row.get("matched_run_id", "unknown_run"))
 
-    output_path = (
-    output_root
-    / matched_run_id
-    / f"lens{lens_id}"
-    / f"{processed_frame_key}.jpg"
-)
+    # For 1-second pipeline, include sensor_row_id in the folder if available.
+    # This prevents too many files being dumped into only run/lens folders.
+    sensor_row_id = row.get("sensor_row_id", None)
+
+    if pd.notna(sensor_row_id):
+        output_path = (
+            output_root
+            / matched_run_id
+            / f"sensor_{int(sensor_row_id):05d}"
+            / f"lens{lens_id}"
+            / f"{processed_frame_key}.jpg"
+        )
+    else:
+        output_path = (
+            output_root
+            / matched_run_id
+            / f"lens{lens_id}"
+            / f"{processed_frame_key}.jpg"
+        )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     ok = cv2.imwrite(str(output_path), processed)
 
     if not ok:
-        return {
-            **row.to_dict(),
+        result = original_row.copy()
+        result.update({
             "source_frame_key": source_frame_key,
             "source_frame_path": str(source_frame_path),
             "processed_frame_key": processed_frame_key,
             "processed_frame_path": str(output_path),
             "preprocess_status": "failed",
             "preprocess_error": "cv2_imwrite_failed",
-        }
+        })
+        return result
 
-    return {
-        # Keep sensor/frame identity columns from extraction manifest
-        "sample_index": row.get("sample_index", None),
-        "sensor_timestamp": row.get("sensor_timestamp", ""),
-        "sample_unix": row.get("sample_unix", None),
-        "lens_id": lens_id,
-        "matched_run_id": matched_run_id,
-        "video_offset_sec": row.get("video_offset_sec", None),
-        "source_video_path": row.get("source_video_path", ""),
+    # Important:
+    # Start from original row so 1-second metadata is preserved:
+    # sensor_row_id, sensor_unix, frame_sample_unix, relative_time_sec, etc.
+    result = original_row.copy()
 
-        # New source/processed frame naming
+    result.update({
+        # Source frame info
         "source_frame_key": source_frame_key,
         "source_frame_path": str(source_frame_path),
+
+        # New processed frame info
         "processed_frame_key": processed_frame_key,
         "processed_frame_path": str(output_path),
+
+        # Keep normalized lens/run values
+        "lens_id": lens_id,
+        "matched_run_id": matched_run_id,
 
         # Crop metadata
         "crop_x1": crop_x1,
@@ -249,9 +272,12 @@ def preprocess_one_row(row, no_mask: bool, output_root: Path):
         "mask_x2_ratio": mask_ratios[2],
         "mask_y2_ratio": mask_ratios[3],
 
+        # Status
         "preprocess_status": "success",
         "preprocess_error": "",
-    }
+    })
+
+    return result
 
 
 def main():
