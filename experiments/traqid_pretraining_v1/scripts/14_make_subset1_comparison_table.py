@@ -329,6 +329,32 @@ def main():
     },
     interpretation="Best fair result so far; PM-aware visual pretraining improves purged-block generalization.",
 )
+    
+    add_row_from_json(
+    rows,
+    experiment_id="t7_gru_supervised_front_rear_mean_purged_block",
+    model_family="TRAQID-supervised MobileNetV2 mean-fused embeddings + GRU",
+    input_type="T=7 front+rear mean PM-aware embeddings",
+    split_protocol="purged within-date block split",
+    leakage_risk="low/medium",
+    json_path="experiments/traqid_pretraining_v1/reports/t7_supervised_front_rear_mean_gru_purged_block/metrics_t7_embedding_gru.json",
+    fallback={
+        "mean_val_rmse": 63.9431553897363,
+        "mean_test_rmse": 44.77640531014401,
+        "model_val_rmse": 59.75270546256511,
+        "model_test_rmse": 39.79804844394646,
+        "model_val_mae": 35.70510350129543,
+        "model_test_mae": 25.342067122613308,
+        "model_val_r2": -0.046486516116898136,
+        "model_test_r2": 0.1626942022267166,
+        "model_val_pearson": 0.30603503825128653,
+        "model_test_pearson": 0.44165486031600604,
+        "model_val_spearman": 0.33294856903320424,
+        "model_test_spearman": 0.3627935473435461,
+        "best_epoch": 17,
+    },
+    interpretation="Best fair result so far; mean-fused front/rear PM-aware embeddings improve both RMSE and rank correlation.",
+)
 
     df = pd.DataFrame(rows)
 

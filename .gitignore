@@ -82,3 +82,18 @@ experiments/traqid_pretraining_v1/reports/**/predictions_*.csv
 
 # Optional: large processed manifests if you want reproducible scripts only
 # experiments/traqid_pretraining_v1/data/processed/*.csv
+# TRAQID large artifacts
+experiments/traqid_pretraining_v1/data/raw/
+experiments/traqid_pretraining_v1/embeddings/
+experiments/traqid_pretraining_v1/models/
+experiments/traqid_pretraining_v1/logs/
+
+# Large prediction outputs
+experiments/traqid_pretraining_v1/reports/**/predictions_*.csv
+
+# Python / system
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+.venv_torch/

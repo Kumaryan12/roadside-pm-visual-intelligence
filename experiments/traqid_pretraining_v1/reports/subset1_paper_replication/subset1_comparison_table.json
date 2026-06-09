@@ -118,5 +118,25 @@
     "best_epoch":17,
     "interpretation":"Best fair result so far; PM-aware visual pretraining improves purged-block generalization.",
     "source":"experiments\/traqid_pretraining_v1\/reports\/t7_supervised_front_gru_purged_block\/metrics_t7_embedding_gru.json"
+  },
+  {
+    "experiment_id":"t7_gru_supervised_front_rear_mean_purged_block",
+    "model_family":"TRAQID-supervised MobileNetV2 mean-fused embeddings + GRU",
+    "input_type":"T=7 front+rear mean PM-aware embeddings",
+    "split_protocol":"purged within-date block split",
+    "leakage_risk":"low\/medium",
+    "mean_val_rmse":63.9431553897,
+    "mean_test_rmse":44.7764053101,
+    "model_val_rmse":59.7527054626,
+    "model_test_rmse":39.7980484439,
+    "test_rmse_delta_vs_mean":-4.9783568662,
+    "test_rmse_improvement_pct_vs_mean":11.1182593415,
+    "model_val_spearman":0.332948569,
+    "model_test_spearman":0.3627935473,
+    "model_val_r2":-0.0464865161,
+    "model_test_r2":0.1626942022,
+    "best_epoch":17,
+    "interpretation":"Best fair result so far; mean-fused front\/rear PM-aware embeddings improve both RMSE and rank correlation.",
+    "source":"experiments\/traqid_pretraining_v1\/reports\/t7_supervised_front_rear_mean_gru_purged_block\/metrics_t7_embedding_gru.json"
   }
 ]
