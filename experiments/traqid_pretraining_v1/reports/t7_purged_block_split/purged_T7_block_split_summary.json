@@ -1,0 +1,25 @@
+{
+  "input": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest.csv",
+  "output": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest_purged_block_split.csv",
+  "seq_len": 7,
+  "purge_size": 6,
+  "train_frac": 0.7,
+  "val_frac": 0.15,
+  "test_frac": 0.15,
+  "input_sequences": 26558,
+  "output_sequences": 26558,
+  "split_counts": {
+    "train": 18461,
+    "test": 3873,
+    "val": 3744,
+    "purge": 480
+  },
+  "usable_sequences": 26078,
+  "purged_sequences": 480,
+  "overlap_leakage_check_total": {
+    "total_train_val_overlap": 0,
+    "total_train_test_overlap": 0,
+    "total_val_test_overlap": 0
+  },
+  "note": "Purged block split keeps all dates represented while preventing overlapping T=7 sequence frames from crossing train/val/test boundaries."
+}

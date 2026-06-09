@@ -1,0 +1,36 @@
+{
+  "baseline": {
+    "val": {
+      "MAE": 37.090764815722686,
+      "RMSE": 63.94315538973628,
+      "R2": -0.1984132905490399,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 26.947590574866123,
+      "RMSE": 44.776405310144,
+      "R2": -0.059885613990358744,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  },
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/t7_supervised_front_gru_purged_block/best_t7_embedding_gru.pt",
+    "epoch": 17
+  },
+  "val": {
+    "MAE": 38.905317382680046,
+    "RMSE": 62.61416736330929,
+    "R2": -0.14911556836976847,
+    "Pearson": 0.14036954995407683,
+    "Spearman": 0.1813350934445621
+  },
+  "test": {
+    "MAE": 26.711150640053802,
+    "RMSE": 41.647467728152776,
+    "R2": 0.08306669730587346,
+    "Pearson": 0.359596593620724,
+    "Spearman": 0.36123066410240273
+  }
+}

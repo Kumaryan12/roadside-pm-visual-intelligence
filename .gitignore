@@ -59,3 +59,26 @@ app/
 configs/lens_preprocessing.yaml
 data/
 models/
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Mac
+.DS_Store
+
+# Virtual environments
+.venv/
+.venv_torch/
+
+# TRAQID raw data and large generated artifacts
+experiments/traqid_pretraining_v1/data/raw/
+experiments/traqid_pretraining_v1/embeddings/*.npy
+experiments/traqid_pretraining_v1/models/**/*.pt
+experiments/traqid_pretraining_v1/logs/
+
+# Large prediction dumps if any
+experiments/traqid_pretraining_v1/reports/**/predictions_*.csv
+
+# Optional: large processed manifests if you want reproducible scripts only
+# experiments/traqid_pretraining_v1/data/processed/*.csv
