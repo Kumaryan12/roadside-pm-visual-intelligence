@@ -1,0 +1,15 @@
+Final enhanced architecture:
+
+Front image sequence (T=7) ─┐
+                            ├─ ResNet50 GAP feature extraction ─┐
+Rear image sequence (T=7)  ─┘                                    │
+                                                                 ↓
+                                                    Front/rear concatenated features
+                                                                 ↓
+                                                       LSTM temporal encoder
+                                                                 ↓
+Temperature, Humidity, hour_sin/hour_cos, Season, Day/Night ─→ Tabular MLP
+                                                                 ↓
+                                                    Fusion MLP regression head
+                                                                 ↓
+                                                 PM2.5, PM10, AQI predictions
