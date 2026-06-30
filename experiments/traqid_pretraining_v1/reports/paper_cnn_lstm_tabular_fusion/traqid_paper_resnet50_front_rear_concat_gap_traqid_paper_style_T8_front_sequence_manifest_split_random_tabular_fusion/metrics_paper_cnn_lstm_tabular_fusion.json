@@ -1,0 +1,140 @@
+{
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion/traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T8_front_sequence_manifest_split_random_tabular_fusion/best_paper_cnn_lstm_tabular_fusion.pt",
+    "epoch": 48
+  },
+  "target_min": [
+    12.916627883911133,
+    32.17660140991211,
+    36.54499816894531
+  ],
+  "target_max": [
+    400.863037109375,
+    669.6148681640625,
+    599.9471435546875
+  ],
+  "tabular_summary": {
+    "numeric_cols": [
+      "Temperature",
+      "Humidity",
+      "hour_sin",
+      "hour_cos"
+    ],
+    "categorical_cols": [
+      "Season",
+      "Day_or_Night"
+    ],
+    "num_medians": {
+      "Temperature": 30.92,
+      "Humidity": 38.218,
+      "hour_sin": -0.9659258262890683,
+      "hour_cos": -0.25881904510252063
+    },
+    "onehot_categories": {
+      "Season": [
+        "Monsoon",
+        "Summer",
+        "Winter"
+      ],
+      "Day_or_Night": [
+        "Day",
+        "Night"
+      ]
+    }
+  },
+  "val": {
+    "PM2.5": {
+      "MAE": 7.203597068786621,
+      "RMSE": 11.300312368751037,
+      "R2": 0.9397550821304321,
+      "Pearson": 0.970086395740509,
+      "Spearman": 0.9441570431167802,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 12.28243350982666,
+      "RMSE": 21.49717729358431,
+      "R2": 0.9627156257629395,
+      "Pearson": 0.9815840721130371,
+      "Spearman": 0.9469104999885294,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 14.839122772216797,
+      "RMSE": 24.100929387956832,
+      "R2": 0.9497436881065369,
+      "Pearson": 0.9758338928222656,
+      "Spearman": 0.9512827126111874,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9507381319999695,
+      "RMSE": 18.96613968343073
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 7.4780592918396,
+      "RMSE": 12.197143495435403,
+      "R2": 0.9302322864532471,
+      "Pearson": 0.9651374220848083,
+      "Spearman": 0.9445627158934469,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 12.827980041503906,
+      "RMSE": 23.063720009227968,
+      "R2": 0.9589044451713562,
+      "Pearson": 0.9797141551971436,
+      "Spearman": 0.9476670336625964,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 14.991742134094238,
+      "RMSE": 25.37081919837976,
+      "R2": 0.9451522827148438,
+      "Pearson": 0.9732462763786316,
+      "Spearman": 0.9542272981628043,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9447630047798157,
+      "RMSE": 20.210560901014375
+    }
+  },
+  "config": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T8_front_sequence_manifest.csv",
+    "base_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+    "features": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+    "split_col": "split_random",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "epochs": 50,
+    "batch_size": 32,
+    "hidden_dim": 128,
+    "tab_hidden_dim": 64,
+    "fusion_hidden_dim": 128,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "device": "auto",
+    "num_workers": 0,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/paper_cnn_lstm_tabular_fusion",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/paper_cnn_lstm_tabular_fusion"
+  },
+  "run_suffix": "traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T8_front_sequence_manifest_split_random_tabular_fusion",
+  "split": {
+    "split_col": "split_random",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "train_size": 18577,
+    "val_size": 3981,
+    "test_size": 3980
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm/traqid_paper_vgg16_front_gap_traqid_paper_style_T7_front_sequence_manifest_split_random/best_paper_cnn_lstm_multitarget.pt",
+    "epoch": 73
+  },
+  "target_min": [
+    12.916627883911133,
+    32.17660140991211,
+    37.164398193359375
+  ],
+  "target_max": [
+    400.863037109375,
+    669.8512573242188,
+    599.9471435546875
+  ],
+  "val": {
+    "PM2.5": {
+      "MAE": 13.598152160644531,
+      "RMSE": 19.983032658690252,
+      "R2": 0.8185227513313293,
+      "Pearson": 0.9049954414367676,
+      "Spearman": 0.7973182173012987,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 21.52770233154297,
+      "RMSE": 35.11163662330748,
+      "R2": 0.9046408534049988,
+      "Pearson": 0.9513710737228394,
+      "Spearman": 0.8501149513228033,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 26.12400245666504,
+      "RMSE": 40.156543347663934,
+      "R2": 0.8650240898132324,
+      "Pearson": 0.9301416873931885,
+      "Spearman": 0.8279780615665925,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.8627292315165201,
+      "RMSE": 31.750404209887222
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 13.179583549499512,
+      "RMSE": 18.997965653580106,
+      "R2": 0.8302924633026123,
+      "Pearson": 0.911904513835907,
+      "Spearman": 0.8165317464594744,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 21.643722534179688,
+      "RMSE": 34.88476425810772,
+      "R2": 0.9080056548118591,
+      "Pearson": 0.9529807567596436,
+      "Spearman": 0.8555776902772918,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 26.15232276916504,
+      "RMSE": 39.222576693289,
+      "R2": 0.8712705373764038,
+      "Pearson": 0.9335358142852783,
+      "Spearman": 0.846577684065618,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.8698562184969584,
+      "RMSE": 31.035102201658944
+    }
+  },
+  "config": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T7_front_sequence_manifest.csv",
+    "features": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_vgg16_front_gap_features.npy",
+    "split_col": "split_random",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "epochs": 80,
+    "batch_size": 64,
+    "hidden_dim": 128,
+    "head_hidden_dim": 64,
+    "num_layers": 1,
+    "dropout": 0.25,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "device": "auto",
+    "num_workers": 0,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/paper_cnn_lstm",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/paper_cnn_lstm"
+  },
+  "run_suffix": "traqid_paper_vgg16_front_gap_traqid_paper_style_T7_front_sequence_manifest_split_random",
+  "split": {
+    "split_col": "split_random",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "train_size": 18591,
+    "val_size": 3984,
+    "test_size": 3983
+  }
+}

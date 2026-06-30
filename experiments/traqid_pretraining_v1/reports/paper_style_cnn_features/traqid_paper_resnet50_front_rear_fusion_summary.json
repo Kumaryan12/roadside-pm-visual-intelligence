@@ -1,0 +1,22 @@
+{
+  "front": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_gap_features.npy",
+  "rear": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_rear_gap_features.npy",
+  "front_shape": [
+    26678,
+    2048
+  ],
+  "rear_shape": [
+    26678,
+    2048
+  ],
+  "mean_shape": [
+    26678,
+    2048
+  ],
+  "concat_shape": [
+    26678,
+    4096
+  ],
+  "out_mean": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_mean_gap_features.npy",
+  "out_concat": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy"
+}

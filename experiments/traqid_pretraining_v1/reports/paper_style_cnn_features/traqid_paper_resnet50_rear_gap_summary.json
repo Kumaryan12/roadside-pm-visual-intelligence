@@ -1,0 +1,18 @@
+{
+  "manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+  "view": "rear",
+  "image_col": "rear_path",
+  "model": "resnet50",
+  "feature_type": "global_average_pooling",
+  "rows": 26678,
+  "feature_dim": 2048,
+  "embedding_shape": [
+    26678,
+    2048
+  ],
+  "embeddings_path": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_rear_gap_features.npy",
+  "index_path": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_rear_gap_index.csv",
+  "status_counts": {
+    "success": 26678
+  }
+}

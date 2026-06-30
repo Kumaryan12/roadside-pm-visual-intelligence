@@ -1,0 +1,140 @@
+{
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion/traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_twofold_swapped_split_twofold_swapped_tabular_fusion/best_paper_cnn_lstm_tabular_fusion.pt",
+    "epoch": 80
+  },
+  "target_min": [
+    13.031506538391113,
+    32.437400817871094,
+    36.54499816894531
+  ],
+  "target_max": [
+    396.84228515625,
+    669.3784790039062,
+    599.9471435546875
+  ],
+  "tabular_summary": {
+    "numeric_cols": [
+      "Temperature",
+      "Humidity",
+      "hour_sin",
+      "hour_cos"
+    ],
+    "categorical_cols": [
+      "Season",
+      "Day_or_Night"
+    ],
+    "num_medians": {
+      "Temperature": 31.0,
+      "Humidity": 38.209,
+      "hour_sin": -0.9659258262890683,
+      "hour_cos": -0.25881904510252063
+    },
+    "onehot_categories": {
+      "Season": [
+        "Monsoon",
+        "Summer",
+        "Winter"
+      ],
+      "Day_or_Night": [
+        "Day",
+        "Night"
+      ]
+    }
+  },
+  "val": {
+    "PM2.5": {
+      "MAE": 8.335838317871094,
+      "RMSE": 14.379218237242865,
+      "R2": 0.9051231741905212,
+      "Pearson": 0.9519072771072388,
+      "Spearman": 0.9293937309842795,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 14.043960571289062,
+      "RMSE": 28.161460741476994,
+      "R2": 0.938011646270752,
+      "Pearson": 0.9688721895217896,
+      "Spearman": 0.9469891331104783,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 17.59578514099121,
+      "RMSE": 32.1754926784589,
+      "R2": 0.9121667742729187,
+      "Pearson": 0.9552550315856934,
+      "Spearman": 0.9421587207238056,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9184338649113973,
+      "RMSE": 24.90539055239292
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 8.335838317871094,
+      "RMSE": 14.379218237242865,
+      "R2": 0.9051231741905212,
+      "Pearson": 0.9519072771072388,
+      "Spearman": 0.9293937309842795,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 14.043960571289062,
+      "RMSE": 28.161460741476994,
+      "R2": 0.938011646270752,
+      "Pearson": 0.9688721895217896,
+      "Spearman": 0.9469891331104783,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 17.59578514099121,
+      "RMSE": 32.1754926784589,
+      "R2": 0.9121667742729187,
+      "Pearson": 0.9552550315856934,
+      "Spearman": 0.9421587207238056,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9184338649113973,
+      "RMSE": 24.90539055239292
+    }
+  },
+  "config": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T7_front_sequence_manifest_twofold_swapped.csv",
+    "base_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+    "features": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+    "split_col": "split_twofold_swapped",
+    "train_name": "fold2_train",
+    "val_name": "fold2_test",
+    "test_name": "fold2_test",
+    "epochs": 80,
+    "batch_size": 32,
+    "hidden_dim": 128,
+    "tab_hidden_dim": 64,
+    "fusion_hidden_dim": 128,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "device": "auto",
+    "num_workers": 0,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/paper_cnn_lstm_tabular_fusion",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/paper_cnn_lstm_tabular_fusion"
+  },
+  "run_suffix": "traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_twofold_swapped_split_twofold_swapped_tabular_fusion",
+  "split": {
+    "split_col": "split_twofold_swapped",
+    "train_name": "fold2_train",
+    "val_name": "fold2_test",
+    "test_name": "fold2_test",
+    "train_size": 13279,
+    "val_size": 13279,
+    "test_size": 13279
+  }
+}

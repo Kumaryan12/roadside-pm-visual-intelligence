@@ -1,0 +1,140 @@
+{
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion/traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_split_twofold_tabular_fusion/best_paper_cnn_lstm_tabular_fusion.pt",
+    "epoch": 77
+  },
+  "target_min": [
+    12.916627883911133,
+    32.17660140991211,
+    37.164398193359375
+  ],
+  "target_max": [
+    400.863037109375,
+    669.8512573242188,
+    599.9471435546875
+  ],
+  "tabular_summary": {
+    "numeric_cols": [
+      "Temperature",
+      "Humidity",
+      "hour_sin",
+      "hour_cos"
+    ],
+    "categorical_cols": [
+      "Season",
+      "Day_or_Night"
+    ],
+    "num_medians": {
+      "Temperature": 30.88,
+      "Humidity": 38.168,
+      "hour_sin": -0.9659258262890683,
+      "hour_cos": -0.25881904510252063
+    },
+    "onehot_categories": {
+      "Season": [
+        "Monsoon",
+        "Summer",
+        "Winter"
+      ],
+      "Day_or_Night": [
+        "Day",
+        "Night"
+      ]
+    }
+  },
+  "val": {
+    "PM2.5": {
+      "MAE": 8.279837608337402,
+      "RMSE": 14.375174081826366,
+      "R2": 0.9058083891868591,
+      "Pearson": 0.95196133852005,
+      "Spearman": 0.9297092523626842,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 14.0195894241333,
+      "RMSE": 25.90221267733765,
+      "R2": 0.9480019211769104,
+      "Pearson": 0.9737583994865417,
+      "Spearman": 0.9390671514236848,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 17.363224029541016,
+      "RMSE": 30.849647398777613,
+      "R2": 0.920030951499939,
+      "Pearson": 0.9592586755752563,
+      "Spearman": 0.937825779545926,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9246137539545695,
+      "RMSE": 23.709011385980546
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 8.279837608337402,
+      "RMSE": 14.375174081826366,
+      "R2": 0.9058083891868591,
+      "Pearson": 0.95196133852005,
+      "Spearman": 0.9297092523626842,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 14.0195894241333,
+      "RMSE": 25.90221267733765,
+      "R2": 0.9480019211769104,
+      "Pearson": 0.9737583994865417,
+      "Spearman": 0.9390671514236848,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 17.363224029541016,
+      "RMSE": 30.849647398777613,
+      "R2": 0.920030951499939,
+      "Pearson": 0.9592586755752563,
+      "Spearman": 0.937825779545926,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9246137539545695,
+      "RMSE": 23.709011385980546
+    }
+  },
+  "config": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T7_front_sequence_manifest.csv",
+    "base_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+    "features": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+    "split_col": "split_twofold",
+    "train_name": "fold1_train",
+    "val_name": "fold1_test",
+    "test_name": "fold1_test",
+    "epochs": 80,
+    "batch_size": 32,
+    "hidden_dim": 128,
+    "tab_hidden_dim": 64,
+    "fusion_hidden_dim": 128,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "device": "auto",
+    "num_workers": 0,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/paper_cnn_lstm_tabular_fusion",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/paper_cnn_lstm_tabular_fusion"
+  },
+  "run_suffix": "traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_split_twofold_tabular_fusion",
+  "split": {
+    "split_col": "split_twofold",
+    "train_name": "fold1_train",
+    "val_name": "fold1_test",
+    "test_name": "fold1_test",
+    "train_size": 13279,
+    "val_size": 13279,
+    "test_size": 13279
+  }
+}

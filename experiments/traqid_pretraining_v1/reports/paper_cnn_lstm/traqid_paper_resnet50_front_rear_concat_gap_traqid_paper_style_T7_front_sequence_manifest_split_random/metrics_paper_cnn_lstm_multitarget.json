@@ -1,0 +1,109 @@
+{
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm/traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_split_random/best_paper_cnn_lstm_multitarget.pt",
+    "epoch": 80
+  },
+  "target_min": [
+    12.916627883911133,
+    32.17660140991211,
+    37.164398193359375
+  ],
+  "target_max": [
+    400.863037109375,
+    669.8512573242188,
+    599.9471435546875
+  ],
+  "val": {
+    "PM2.5": {
+      "MAE": 7.277846336364746,
+      "RMSE": 12.358376791824682,
+      "R2": 0.9305899739265442,
+      "Pearson": 0.9658999443054199,
+      "Spearman": 0.9446734233586954,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 12.704882621765137,
+      "RMSE": 23.936225080278426,
+      "R2": 0.9556828737258911,
+      "Pearson": 0.9777467846870422,
+      "Spearman": 0.9483613895024738,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 15.132173538208008,
+      "RMSE": 27.326048958094113,
+      "R2": 0.9374974966049194,
+      "Pearson": 0.9685589671134949,
+      "Spearman": 0.951325190169363,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9412567814191183,
+      "RMSE": 21.20688361006574
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 7.1248674392700195,
+      "RMSE": 12.012102382085132,
+      "R2": 0.9321538805961609,
+      "Pearson": 0.966549813747406,
+      "Spearman": 0.9513668560348356,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 12.478574752807617,
+      "RMSE": 22.29158916519335,
+      "R2": 0.9624360203742981,
+      "Pearson": 0.9812710881233215,
+      "Spearman": 0.9519585011383296,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 15.050118446350098,
+      "RMSE": 25.927404143965727,
+      "R2": 0.9437498450279236,
+      "Pearson": 0.9718672037124634,
+      "Spearman": 0.9573232760332129,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9461132486661276,
+      "RMSE": 20.0770318970814
+    }
+  },
+  "config": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T7_front_sequence_manifest.csv",
+    "features": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+    "split_col": "split_random",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "epochs": 80,
+    "batch_size": 32,
+    "hidden_dim": 128,
+    "head_hidden_dim": 64,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "device": "auto",
+    "num_workers": 0,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/paper_cnn_lstm",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/paper_cnn_lstm"
+  },
+  "run_suffix": "traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_split_random",
+  "split": {
+    "split_col": "split_random",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "train_size": 18591,
+    "val_size": 3984,
+    "test_size": 3983
+  }
+}

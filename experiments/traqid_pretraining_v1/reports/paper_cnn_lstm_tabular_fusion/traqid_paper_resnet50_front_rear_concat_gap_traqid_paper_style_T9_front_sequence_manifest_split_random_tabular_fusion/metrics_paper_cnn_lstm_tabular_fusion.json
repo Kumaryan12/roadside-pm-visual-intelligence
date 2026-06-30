@@ -1,0 +1,140 @@
+{
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion/traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T9_front_sequence_manifest_split_random_tabular_fusion/best_paper_cnn_lstm_tabular_fusion.pt",
+    "epoch": 50
+  },
+  "target_min": [
+    12.916627883911133,
+    32.17660140991211,
+    36.54499816894531
+  ],
+  "target_max": [
+    400.863037109375,
+    669.8512573242188,
+    599.9471435546875
+  ],
+  "tabular_summary": {
+    "numeric_cols": [
+      "Temperature",
+      "Humidity",
+      "hour_sin",
+      "hour_cos"
+    ],
+    "categorical_cols": [
+      "Season",
+      "Day_or_Night"
+    ],
+    "num_medians": {
+      "Temperature": 30.93,
+      "Humidity": 38.228,
+      "hour_sin": -0.9659258262890683,
+      "hour_cos": -0.25881904510252063
+    },
+    "onehot_categories": {
+      "Season": [
+        "Monsoon",
+        "Summer",
+        "Winter"
+      ],
+      "Day_or_Night": [
+        "Day",
+        "Night"
+      ]
+    }
+  },
+  "val": {
+    "PM2.5": {
+      "MAE": 7.346835613250732,
+      "RMSE": 11.87878614601401,
+      "R2": 0.9346566200256348,
+      "Pearson": 0.9672681093215942,
+      "Spearman": 0.9462464981217615,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 12.496973991394043,
+      "RMSE": 23.061045696439727,
+      "R2": 0.9585008025169373,
+      "Pearson": 0.9790563583374023,
+      "Spearman": 0.9533949551428476,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 14.775521278381348,
+      "RMSE": 25.816076146418073,
+      "R2": 0.9440110325813293,
+      "Pearson": 0.9716097712516785,
+      "Spearman": 0.9564878813729799,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9457228183746338,
+      "RMSE": 20.251969329623936
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 7.401090621948242,
+      "RMSE": 12.310748755137089,
+      "R2": 0.9296663403511047,
+      "Pearson": 0.9647921323776245,
+      "Spearman": 0.9491057050132008,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 12.378276824951172,
+      "RMSE": 22.87260649619294,
+      "R2": 0.959498405456543,
+      "Pearson": 0.9795401096343994,
+      "Spearman": 0.9532754141762037,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 14.65257740020752,
+      "RMSE": 25.52310271053769,
+      "R2": 0.9445711374282837,
+      "Pearson": 0.9719530344009399,
+      "Spearman": 0.9572213604542082,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.9445786277453104,
+      "RMSE": 20.235485987289238
+    }
+  },
+  "config": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T9_front_sequence_manifest.csv",
+    "base_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+    "features": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+    "split_col": "split_random",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "epochs": 50,
+    "batch_size": 32,
+    "hidden_dim": 128,
+    "tab_hidden_dim": 64,
+    "fusion_hidden_dim": 128,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "device": "auto",
+    "num_workers": 0,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/paper_cnn_lstm_tabular_fusion",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/paper_cnn_lstm_tabular_fusion"
+  },
+  "run_suffix": "traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T9_front_sequence_manifest_split_random_tabular_fusion",
+  "split": {
+    "split_col": "split_random",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "train_size": 18563,
+    "val_size": 3978,
+    "test_size": 3977
+  }
+}
