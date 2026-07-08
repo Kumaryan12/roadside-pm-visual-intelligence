@@ -1,0 +1,2 @@
+target,R2,RMSE,MAE,split_mode,model,embedding_file,train_rows,val_rows,test_rows,best_epoch,best_val_loss
+PM2.5,0.9513562994610578,10.358972224178562,5.991336949705186,random,resnet50_front_rear_concat_gru_pm25_only,experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy,18059,3187,5312,36,0.04828321617096663

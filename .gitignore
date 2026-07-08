@@ -97,3 +97,30 @@ __pycache__/
 .DS_Store
 .venv/
 .venv_torch/
+# Python/cache
+__pycache__/
+*.pyc
+.DS_Store
+
+# Experiment caches
+.matplotlib-cache/
+**/.matplotlib-cache/
+
+# Large generated experiment artifacts
+experiments/**/outputs/
+experiments/**/models/
+experiments/**/figures/
+experiments/**/notebooks/
+
+# Large arrays / model weights
+*.npy
+*.npz
+*.pt
+*.pth
+*.pkl
+*.joblib
+
+# Raw/interim/generated bulk data
+experiments/**/data/raw/
+experiments/**/data/interim/
+experiments/**/data/external/

@@ -1,0 +1,17 @@
+{
+  "sequence_table": "experiments/traqid_pretraining_v1/data/processed/traqid_engineered_T7_sequence_table.csv",
+  "embedding_npy": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+  "out_dir": "experiments/traqid_pretraining_v1/reports/pm25_only_resnet50_concat_gru_image_base_seed42",
+  "split_mode": "random",
+  "train_frac": 0.8,
+  "seed": 42,
+  "batch_size": 64,
+  "epochs": 80,
+  "patience": 12,
+  "lr": 0.0001,
+  "weight_decay": 0.0001,
+  "projection_dim": 512,
+  "hidden_dim": 256,
+  "num_layers": 2,
+  "dropout": 0.25
+}
