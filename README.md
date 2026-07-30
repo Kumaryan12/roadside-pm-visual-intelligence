@@ -1,14 +1,68 @@
+<div align="center">
+
 # Roadside PM Visual Intelligence
 
-Multimodal roadside PM2.5 estimation from synchronized vehicle-mounted images,
-environmental sensors, traffic and road features, geospatial context, and
-external atmospheric products.
+### Multimodal roadside PM2.5 estimation from synchronized vehicle-mounted images, environmental sensors, traffic and road features, geospatial context, and external atmospheric products.
 
-**Repository:** [Kumaryan12/roadside-pm-visual-intelligence](https://github.com/Kumaryan12/roadside-pm-visual-intelligence)<br>
-**Full internship report:** [PDF](docs/internship_report/internship_report.pdf) ·
-[LaTeX source](docs/internship_report/internship_report.tex)<br>
-**Experiment consolidation:** [PM2.5 model summary](docs/pm25_experiment_consolidation.md) ·
-[architecture catalog](docs/model_architecture_catalog.md)
+<p>
+  <a href="https://github.com/Kumaryan12/roadside-pm-visual-intelligence">
+    <img src="https://img.shields.io/badge/Repository-View%20Code-111827?style=for-the-badge&logo=github&logoColor=white" alt="Repository">
+  </a>
+  <a href="docs/internship_report/internship_report.pdf">
+    <img src="https://img.shields.io/badge/Internship%20Report-Open%20PDF-0e6666?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="Internship report">
+  </a>
+</p>
+
+<p>
+  <a href="docs/pm25_experiment_consolidation.md">
+    <img src="https://img.shields.io/badge/Experiment%20Summary-PM2.5-3acebc?style=flat-square&labelColor=0e6666" alt="PM2.5 model summary">
+  </a>
+  <a href="docs/model_architecture_catalog.md">
+    <img src="https://img.shields.io/badge/Architecture-Catalog-3acebc?style=flat-square&labelColor=0e6666" alt="Architecture catalog">
+  </a>
+  <a href="docs/internship_report/internship_report.tex">
+    <img src="https://img.shields.io/badge/Report-LaTeX%20Source-3acebc?style=flat-square&labelColor=0e6666" alt="LaTeX source">
+  </a>
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/PyTorch-Temporal%20Models-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch">
+  <img src="https://img.shields.io/badge/YOLO-Traffic%20Features-111827?style=flat-square" alt="YOLO">
+  <img src="https://img.shields.io/badge/SegFormer-Road%20Features-0e6666?style=flat-square" alt="SegFormer">
+  <img src="https://img.shields.io/badge/MERRA--2%20%7C%20CAMS%20%7C%20ERA5-Atmospheric%20Context-3acebc?style=flat-square&labelColor=0e6666" alt="Atmospheric context">
+  <img src="https://img.shields.io/badge/Validation-Whole--Date%20%2B%20Nested-3acebc?style=flat-square&labelColor=0e6666" alt="Validation protocol">
+</p>
+
+**Computer Vision · Temporal Modelling · Geospatial Features · Atmospheric Context · Leakage-Aware Evaluation**
+
+</div>
+
+---
+
+<details>
+<summary><strong>Quick navigation</strong></summary>
+
+- [Project overview](#project-overview)
+- [What the repository contains](#what-the-repository-contains)
+- [Current results](#current-results)
+- [Data used](#data-used)
+- [Feature families](#feature-families)
+- [Repository layout](#repository-layout)
+- [Installation](#installation)
+- [Data preparation](#data-preparation)
+- [Canonical feature workflow](#canonical-feature-workflow)
+- [Model reproduction](#model-reproduction)
+- [Validation protocols](#validation-protocols)
+- [Generated outputs and provenance](#generated-outputs-and-provenance)
+- [Rebuilding the internship report](#rebuilding-the-internship-report)
+- [Exploratory source-attribution work](#exploratory-source-attribution-work)
+- [Reproducibility and data governance](#reproducibility-and-data-governance)
+- [Known limitations](#known-limitations)
+- [Documentation](#documentation)
+- [License and citation](#license-and-citation)
+
+</details>
 
 > [!IMPORTANT]
 > High random-split scores in this project are **diagnostic results**, not
@@ -16,7 +70,11 @@ external atmospheric products.
 > nearly identical raw frames in different partitions. The main scientific
 > evaluation withholds complete collection dates.
 
-![Current background-plus-local-increment architecture](docs/internship_report/figures/current_architecture.png)
+<p align="center">
+  <img src="docs/internship_report/figures/current_architecture.png"
+       alt="Current background-plus-local-increment architecture"
+       width="95%">
+</p>
 
 ## Project overview
 
@@ -43,6 +101,9 @@ The traffic, road, and OSM variables are predictive covariates for the local
 departure. They are **not** interpreted as independently measured source
 masses. PM and OPC channels are excluded from reportable PM2.5 predictors.
 
+
+---
+
 ## What the repository contains
 
 - Ingestion and timestamp alignment for MUMMA/ELICIUS sensor and video data.
@@ -60,6 +121,9 @@ masses. PM and OPC channels are excluded from reportable PM2.5 predictors.
 - TRAQID historical reproduction and MUMMA five-day experiments.
 - Exploratory particle-regime and source-proxy analyses.
 - A complete LaTeX internship report with presentation-ready figures.
+
+
+---
 
 ## Current results
 
@@ -96,6 +160,9 @@ until it is frozen and evaluated once on untouched future dates.
 For the five-day T=7 random-sequence protocol, 1,287 of 1,309 test targets had
 already appeared as training context: 98.32% target/context leakage.
 
+
+---
+
 ## Data used
 
 ### MUMMA five-day collection
@@ -120,6 +187,9 @@ weights, and run artifacts are intentionally not committed. A fresh clone
 contains the code, configuration templates, schemas, selected small model
 assets, documentation, and report. Reproducing numerical results requires
 authorized access to the corresponding raw data or archived artifacts.
+
+
+---
 
 ## Feature families
 
@@ -146,6 +216,9 @@ Composite groups include:
 The reportable groups do not include PM1, PM2.5, PM4, PM10, OPC number
 channels, or `sTPS`.
 
+
+---
+
 ## Repository layout
 
 ```text
@@ -164,6 +237,9 @@ artifacts/     Generated run outputs and caches; ignored by Git
 The main entry points are under `pipelines/`. Scripts under `scripts/` and
 `experiments/` remain available for component-level reproduction and historical
 provenance.
+
+
+---
 
 ## Installation
 
@@ -228,6 +304,9 @@ python -m pipelines.pm25_prediction.mumma_7day.run_background_local_increment --
 python -m pytest -q
 ```
 
+
+---
+
 ## Data preparation
 
 ### Expected manifest
@@ -270,6 +349,9 @@ PYTHONUNBUFFERED=1 python \
 ```
 
 Use `--help` before running a command if your delivery layout differs.
+
+
+---
 
 ## Canonical feature workflow
 
@@ -379,6 +461,9 @@ to its three-hour analysis/forecast cycle; MERRA-2 and ERA5 variables are
 hourly. These products provide regional atmospheric context, not a direct
 roadside sensor measurement.
 
+
+---
+
 ## Model reproduction
 
 The commands below assume the five-day feature table, atmospheric table,
@@ -480,6 +565,9 @@ Use `--interval-alpha 0.1` to emit validation-calibrated symmetric conformal
 intervals. Outer-test targets are not used to calibrate the interval or select
 the ensemble weight.
 
+
+---
+
 ## Validation protocols
 
 | Protocol | Purpose | Generalization claim |
@@ -501,6 +589,9 @@ Always report:
 - random-window overlap audit, where applicable;
 - extreme-event/inlier metrics;
 - interval coverage when uncertainty is produced.
+
+
+---
 
 ## Generated outputs and provenance
 
@@ -529,6 +620,9 @@ historical experiments:
 - [model registry](models/registry.csv)
 - [data lineage](docs/data_lineage.md)
 
+
+---
+
 ## Rebuilding the internship report
 
 The report source and its selected figures are tracked:
@@ -542,6 +636,9 @@ The resulting `internship_report.pdf` includes the project chronology,
 architecture, feature engineering, validation protocols, ablations, results,
 limitations, and future work.
 
+
+---
+
 ## Exploratory source-attribution work
 
 `pipelines/particle_source_attribution/` contains:
@@ -554,6 +651,9 @@ These outputs are **not chemical source apportionment**. Source identities and
 mass contributions require differential OPC bins, confirmed units, and
 chemical reference/speciation evidence such as FTIR. Do not label latent
 components as exhaust, dust, or secondary aerosol without that evidence.
+
+
+---
 
 ## Reproducibility and data governance
 
@@ -569,6 +669,9 @@ components as exhaust, dust, or secondary aerosol without that evidence.
   are not guaranteed to exist in a fresh clone.
 - Set random seeds, retain split manifests, and record software/hardware
   versions for every new experiment.
+
+
+---
 
 ## Known limitations
 
@@ -586,6 +689,9 @@ components as exhaust, dust, or secondary aerosol without that evidence.
 - The current candidate must be frozen and tested on untouched future dates
   before a deployment claim.
 
+
+---
+
 ## Documentation
 
 - [Complete internship report](docs/internship_report/internship_report.pdf)
@@ -595,6 +701,9 @@ components as exhaust, dust, or secondary aerosol without that evidence.
 - [Feature definitions](docs/feature_definitions.md)
 - [Data lineage](docs/data_lineage.md)
 - [Complete presentation export](docs/complete_project_export_for_presentation.md)
+
+
+---
 
 ## License and citation
 
