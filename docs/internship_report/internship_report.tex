@@ -4,15 +4,13 @@
 % EDIT THESE FIELDS ONCE; THEY are reused throughout the report.
 % ---------------------------------------------------------------------------
 \newcommand{\studentname}{Aryan Satyendra Kumar}
-\newcommand{\studentid}{[Student ID]}
-\newcommand{\degreeprogramme}{[Degree Programme]}
-\newcommand{\institution}{[Institution / University]}
-\newcommand{\hostorganisation}{[Host Organisation / Laboratory]}
-\newcommand{\academicsupervisor}{[Academic Supervisor]}
-\newcommand{\industrysupervisor}{[Internship Supervisor]}
-\newcommand{\internshipperiod}{June--July 2026}
+\newcommand{\homeinstitution}{National Institute of Technology Goa}
+\newcommand{\hostinstitution}{Indian Institute of Technology Madras}
+\newcommand{\supervisor}{Prof.\ Raghunathan Rengaswamy}
+\newcommand{\internshipperiod}{May--July 2026}
 \newcommand{\submissiondate}{July 2026}
-\newcommand{\projecttitle}{Multimodal Roadside PM$_{2.5}$ Prediction Using Visual, Geospatial, Sensor and Atmospheric Context}
+\newcommand{\projecttitle}{Background-Anchored Multimodal Modelling of Roadside PM$_{2.5}$}
+\newcommand{\projectrepository}{https://github.com/Kumaryan12/roadside-pm-visual-intelligence}
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -109,16 +107,18 @@
   \includegraphics[width=0.92\textwidth]{current_architecture.png}
   \vfill
   \begin{tabular}{rl}
-    \textbf{Submitted by:} & \studentname\ (\studentid)\\
-    \textbf{Programme:} & \degreeprogramme\\
-    \textbf{Institution:} & \institution\\
-    \textbf{Host:} & \hostorganisation\\
-    \textbf{Academic supervisor:} & \academicsupervisor\\
-    \textbf{Internship supervisor:} & \industrysupervisor\\
+    \textbf{Submitted by:} & \studentname\\
+    \textbf{Home institute:} & \homeinstitution\\
+    \textbf{Host institute:} & \hostinstitution\\
+    \textbf{Supervisor:} & \supervisor\\
     \textbf{Internship period:} & \internshipperiod\\
     \textbf{Report date:} & \submissiondate
   \end{tabular}
-  \vspace{12mm}
+  \vspace{4mm}
+
+  {\small\textbf{Project repository: }
+  \href{\projectrepository}{\texttt{Kumaryan12/roadside-pm-visual-intelligence}}\par}
+  \vspace{8mm}
 \end{titlepage}
 
 \pagenumbering{roman}
@@ -141,12 +141,19 @@ are not presented as validated chemical apportionment.
 
 \chapter*{Acknowledgements}
 \addcontentsline{toc}{chapter}{Acknowledgements}
-I thank my supervisors, the data collection team and the contributors to the
-TRAQID and MUMMA datasets for making this work possible. I also acknowledge the
-open-source communities behind PyTorch, scikit-learn, OpenStreetMap, Ultralytics,
-Hugging Face, Copernicus CAMS, NASA MERRA-2 and the geospatial data services used
-in this project. The editable supervisor and organisation fields on the title page
-should be completed before formal submission.
+I express my sincere gratitude to \supervisor\ for his guidance, technical
+questions and insistence on a physically defensible interpretation of the
+modelling problem. I am especially grateful to Dr.\ Sreejith Chakrapani,
+Postdoctoral Researcher at the Indian Institute of Technology Madras, and
+Navaneethakrishnan V, Project Associate and M.S.\ by Research scholar at the
+Indian Institute of Technology Madras, for their generous technical assistance,
+practical guidance and continued support throughout this project. I thank the
+data collection team and the contributors to the TRAQID and MUMMA datasets for
+making this work possible. I also acknowledge the open-source communities
+behind PyTorch, scikit-learn, OpenStreetMap, Ultralytics, Hugging Face,
+Copernicus CAMS, NASA MERRA-2 and the geospatial data services used in this
+project. I am grateful to \hostinstitution\ for hosting the internship and to
+\homeinstitution\ for supporting the academic programme.
 
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
@@ -202,6 +209,34 @@ street-level exposure beside a moving vehicle. The project therefore treated
 roadside prediction as a multimodal inference problem rather than a pure
 image-regression task.
 
+\section{Original source-aware research direction}
+The internship did not begin with the final architecture already fixed. The
+original question was whether roadside particle behaviour---including a
+provisional effective-density proxy---could be explained using traffic, road
+condition, meteorology, gases and geospatial context:
+\begin{equation}
+  \rho_{\mathrm{eff}} =
+  f(\mathrm{traffic},\mathrm{road},\mathrm{weather},\mathrm{gases},\mathrm{OSM}).
+\end{equation}
+Candidate mechanisms included exhaust, brake and tyre wear, road-dust
+resuspension, secondary aerosol and mixtures of these processes. The available
+measurements did not contain chemically speciated source contributions.
+Consequently, the project adopted the terms \emph{source-aware feature},
+\emph{source proxy}, \emph{particle-regime indicator} and \emph{local pollution
+indicator}; it does not present exact chemical source apportionment.
+
+The technical and scientific sequence was:
+\begin{align*}
+\text{source-aware modelling}
+&\rightarrow \text{visual feature extraction}
+\rightarrow \text{\pmtwo\ prediction}\\
+&\rightarrow \text{validation audit}
+\rightarrow \text{atmospheric background decomposition}.
+\end{align*}
+This evolution is central to the report. Later validation evidence and
+supervisor feedback changed the interpretation of earlier models instead of
+being retrofitted to a predetermined narrative.
+
 The work also confronted a validation problem. Consecutive frames sampled every ten
 seconds are strongly autocorrelated. A T=7 sliding window shares six frames with the
 next window. If windows are constructed first and then randomly shuffled, nearly
@@ -234,6 +269,11 @@ The internship produced the following concrete outputs:
         per retained lens and sample;
   \item complete YOLO traffic, road segmentation, OSM, AlphaEarth and atmospheric
         feature pipelines;
+  \item an IDD-fine-tuned YOLO11m traffic detector and an Indian-road-tuned
+        SegFormer model with IoU 0.893 and Dice 0.939;
+  \item controlled road-area and white-balance experiments, including a
+        \SI{4}{\square\metre} patch recovered as approximately
+        \SI{3.72}{\square\metre};
   \item reusable frozen-CNN, GRU/LSTM, classical regression, residual correction
         and nested ensemble implementations;
   \item explicit overlap audits for random temporal splits;
@@ -255,8 +295,9 @@ The internship produced the following concrete outputs:
 \end{figure}
 
 \section{Report scope and terminology}
-This report covers the historical TRAQID reproduction, the initial two-day MUMMA
-pilot, the complete five-day MUMMA experiments, the newer CAMS and MERRA-2
+This report covers the initial 281-row synchronization and modelling pilot, the
+historical TRAQID reproduction, the two-date MUMMA development set, the
+complete five-day MUMMA experiments, the newer CAMS and MERRA-2
 background studies, architecture-2 early fusion, uncertainty and exploratory
 particle/source work. In this report:
 \begin{itemize}
@@ -360,6 +401,29 @@ between daily means, even when within-day fluctuations remain difficult.
 
 \chapter{Datasets and Data Engineering}
 
+\section{Initial synchronized sensor--image pilot}
+The first substantial engineering task was constructing a synchronized dataset,
+not training a neural network. The early MUMMA pilot contained 281 sensor rows,
+252 rows with usable corresponding images and 756 successfully preprocessed
+frames from lenses 1, 4 and 6. Sensor timestamps and video run metadata were
+used to locate the corresponding video offset. Frames were then extracted,
+rotated into a common orientation, cropped, masked to remove the platform and
+assigned persistent sample and run identifiers. Raw videos were never modified.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{synchronization_pipeline.png}
+  \caption{Evolution of the synchronized data pipeline from the compact pilot
+  to the canonical five-day dataset.}
+  \label{fig:synchronization}
+\end{figure}
+
+This pilot established the invariant used throughout the later project:
+sensor, image, traffic, road and geospatial data must join through explicit
+identity and timestamp fields rather than through implicit row ordering.
+Later orientation audits replaced lens 4 with lens 2 in the canonical
+three-view configuration, yielding lenses 1, 2 and 6.
+
 \section{TRAQID historical benchmark}
 The historical benchmark contained \num{26558} T=7 front/rear image sequences.
 The presentation reproduction randomly assigned \num{21246} sequences to
@@ -368,8 +432,9 @@ shuffled, the experiment reproduced a high same-distribution score but was not a
 future-date evaluation. TRAQID remained valuable for verifying architecture code,
 residual learning and later CAMS/MERRA comparisons.
 
-\section{MUMMA two-day pilot}
-The initial pilot used 2,167 aligned records from 1 and 3 February 2026. It
+\section{MUMMA two-date development dataset}
+The subsequent two-date development set used 2,167 aligned records from 1 and
+3 February 2026. It
 established:
 \begin{itemize}
   \item SSD ingestion without modifying the raw external data;
@@ -501,7 +566,8 @@ Latitude and longitude were retained as predictive location variables but were
 recognised as a potential route-memory mechanism in random splits.
 
 \section{YOLO traffic features}
-An IDD-trained YOLO11m detector was applied to all \num{20619} preprocessed
+YOLO11m was fine-tuned on the IDD 15-class Indian-road dataset and then applied
+to all \num{20619} preprocessed
 frames. The extraction completed successfully for every frame and produced
 \num{136534} PM-relevant road-user detections. The object classes were mapped
 to motorcycle, car, auto-rickshaw, truck, bus, bicycle and an unknown-vehicle
@@ -532,8 +598,24 @@ pollution and time of day confound the association. Within-day centring changed
 some vehicle correlations from negative to positive, demonstrating why
 correlation is not a causal emission factor.
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{visual_pipeline_examples.png}
+  \caption{Representative visual processing outputs: calibrated frame, IDD
+  traffic detections, SegFormer road overlay and depth-assisted geometry.}
+  \label{fig:visualexamples}
+\end{figure}
+
 \section{Road appearance features}
-A SegFormer-B0 road model was run on the calibrated road-facing lenses 1 and 6.
+Road extraction initially used OpenCV colour/texture thresholds and CLIP-based
+semantic experiments. These approaches were unstable under shadows, glare,
+road-colour variation, occlusion and complex Indian scenes. The project
+therefore moved to a Cityscapes-pretrained SegFormer model, which was fine-tuned
+for binary Indian-road segmentation. Its independently evaluated road-mask
+performance was approximately IoU 0.893 and Dice 0.939. This was one of the
+strongest component-level computer-vision results of the internship.
+
+The SegFormer-B0 road model was run on the calibrated road-facing lenses 1 and 6.
 Of \num{13746} input frames, \num{13041} succeeded and 705 failed. The mean
 segmented road-area ratio among successes was 0.1163.
 
@@ -558,12 +640,51 @@ not measure the amount of road dust suspended in air.
 
 \section{Depth-derived road area}
 A depth-assisted procedure attempted to convert the road mask to an estimated
-metric area. It produced a value for all \num{6873} samples, with mean
+metric area. For road pixel $(u,v)$ with estimated metric depth $z$, camera
+intrinsics mapped the pixel into 3D:
+\begin{equation}
+  x=\frac{(u-c_x)z}{f_x}, \qquad
+  y=\frac{(v-c_y)z}{f_y}.
+\end{equation}
+Neighbouring road points were connected as triangles and their areas summed.
+Occluded road beneath vehicles was then explored through three successive
+heuristics. Version 1 used a vehicle-footprint prior, box visibility,
+road-contact confidence and conservative scaling. Removing road-contact
+confidence in version 2 overestimated distant vehicles. Version 3 therefore
+introduced depth gating:
+\begin{equation}
+  A_{\mathrm{hidden}} =
+  A_{\mathrm{footprint}} V_{\mathrm{bbox}} D_{\mathrm{factor}}
+  C_{\mathrm{conservative}} .
+\end{equation}
+
+A controlled \SI{2}{\metre}$\times$\SI{2}{\metre} marked patch had true area
+\SI{4.00}{\square\metre}; the pipeline estimated approximately
+\SI{3.72}{\square\metre}, an error of about 6.94\%. Despite that promising
+controlled check, the complete five-day extraction remained provisional. It
+produced a value for all \num{6873} samples, with mean
 \SI{89.48}{\square\metre}, but every result was flagged either
 \texttt{needs\_visual\_review} or \texttt{bad\_low\_road\_mask\_area}.
 The cleaning stage removed a median 54.8\% of the initial mask. Models using
 this family generally degraded. It is retained as a documented negative result,
 not as a trusted physical road-area measurement.
+
+\section{White-balance calibration}
+Road colour and dryness proxies are sensitive to illumination and camera colour
+processing. Automatic, daylight and fixed-6000\,K white balance were compared
+through the coefficient of variation of the road-brown feature. The values were
+27.53\%, 25.44\% and 12.17\%, respectively. Fixed 6000\,K was selected because
+it was the most repeatable tested setting, not because it establishes an
+objectively correct physical road colour.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{road_engineering_validation.png}
+  \caption{Controlled validation of road segmentation, metric area and
+  white-balance repeatability. Better component quality did not automatically
+  produce better held-out-date \pmtwo\ prediction.}
+  \label{fig:roadvalidation}
+\end{figure}
 
 \section{OpenStreetMap context}
 OpenStreetMap queries were cached by corridor tile and summarised locally inside
@@ -620,6 +741,68 @@ fields as ordinary early-fusion predictors.
     \bottomrule
   \end{tabular}
 \end{table}
+
+\chapter{Scientific Reframing After Supervisor Review}
+
+\section{Why generic residual correction was conceptually weak}
+The earlier architecture predicted total roadside \pmtwo\ with a CNN--RNN and
+then trained a tree model on
+\begin{equation}
+  r_{\mathrm{old}} =
+  PM_{\mathrm{observed}}-\widehat{PM}_{\mathrm{image\ base}}.
+\end{equation}
+This is mathematically valid, but the residual has no single physical meaning.
+It can contain regional background, image-model error, traffic, resuspension,
+meteorology, sensor noise, date shift and synchronization error. The model
+therefore learned to ``correct whatever the image model missed'' rather than
+answering which local roadside conditions explained the departure.
+
+\section{Supervisor's physical question and identifiability}
+\supervisor\ asked whether traffic, road and image variables were closing a
+scientifically meaningful particulate balance or merely acting as generic
+predictors. A useful conceptual relation is
+\begin{equation}
+ PM_{\mathrm{atmospheric}}
+ \approx PM_{\mathrm{background}}+PM_{\mathrm{road}}
+ +PM_{\mathrm{vehicle}}+PM_{\mathrm{other}}+\epsilon .
+\end{equation}
+The project did not observe reference values for the road and vehicle terms.
+The same total increment can be explained by many combinations; for example,
+$30=20+10=5+25$. Exact source contributions are therefore not identifiable
+without chemical or source-specific measurements.
+
+\section{Physically structured target}
+The revised target is
+\begin{equation}
+  \Delta PM_{\mathrm{local},t}
+  = PM_{\mathrm{sensor},t}-PM_{\mathrm{background},t}.
+\end{equation}
+For the strongest current experiment, MERRA-2 supplies the external background.
+Traffic, road, meteorology, images and geospatial context jointly predict one
+local roadside increment. Negative increments are retained because they may
+represent cleaner local conditions, background mismatch, spatial-resolution
+differences or measurement uncertainty. The safest interpretation is
+\emph{local roadside increment relative to MERRA-2 background}, not traffic
+pollution alone.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{scientific_reframing.png}
+  \caption{Conceptual transition from an unrestricted image-model error to a
+  background-anchored local target.}
+  \label{fig:reframing}
+\end{figure}
+
+\section{Relation to the proposed image--satellite architecture}
+The later handwritten proposal suggested learning atmospheric \pmtwo\ from
+images and satellite/reanalysis inputs, followed by interpretation using road,
+vehicle, OSM and uncertainty information. This was tested as Architecture 2:
+target-frame image embeddings and 22 atmospheric variables were fused in a
+single ExtraTrees model. Because the training target was still the roadside
+sensor, that experiment estimated roadside \pmtwo, not pure atmospheric
+\pmtwo. Its results are reported later. The final recommended formulation uses
+MERRA-2 as an external anchor and reserves detailed traffic and road variables
+for the local-increment branch.
 
 \chapter{Model Architectures}
 
@@ -856,6 +1039,16 @@ Later TRAQID date-held-out ResNet50-GRU folds obtained \Rtwo\ 0.249, -0.079,
 -0.883, -0.313 and -0.307. The gap between these values and 0.966 is evidence
 of date shift and overlap effects, not a contradiction in the implementation.
 
+\section{TRAQID single-image and engineered-feature baselines}
+Two standalone routes were also compared before atmospheric decomposition. A
+single front/rear ResNet50 image representation with an MLP achieved
+approximately \Rtwo\ 0.49, whereas a Random Forest using roughly 112
+engineered traffic, road, weather and time variables achieved approximately
+\Rtwo\ 0.84 under the historical split. This established an important design
+lesson: for small roadside datasets, explicit traffic and road summaries can
+be more useful than generic ImageNet embeddings when used alone. It did not,
+however, resolve the later unseen-date validation problem.
+
 \section{TRAQID matched direct and background random tests}
 A later matched random experiment compared direct \pmtwo, CAMS plus local
 increment, MERRA-2 plus local increment and GEOS-CF. The same 3,983 test
@@ -891,6 +1084,36 @@ The validation-selected MERRA-2 ensemble reached pooled \Rtwo\ 0.036. CAMS
 fixed 50:50 reached 0.076. These results demonstrate that an architecture can
 help one dataset and fail to provide the same benefit under a different route,
 sensor, background or date distribution.
+
+\section{MUMMA 281-row pilot modelling}
+The compact pilot modelling table contained 281 rows, about 190 original
+columns and 252 valid image alignments. Twenty-nine ResNet embeddings failed,
+and the observations represented only about 48 minutes of a volatile
+collection. Reportable predictors excluded all PM and OPC target proxies.
+
+The best fair pilot used a meteorology/gas/time ExtraTrees base on a
+log-transformed target and an ExtraTrees residual model using selected road,
+traffic and OSM features. It obtained MAE 5.646 \ugm, RMSE 9.719 \ugm\ and
+\Rtwo\ 0.650. Small-data temporal approaches were weaker:
+
+\begin{table}[H]
+  \centering
+  \caption{Compact MUMMA pilot comparison.}
+  \begin{tabular}{lrr}
+    \toprule
+    Model & RMSE & \Rtwo\\
+    \midrule
+    Optimised non-temporal residual model & 9.72 & 0.650\\
+    Hand-engineered T=7 model & 12.09 & 0.466\\
+    Best ResNet temporal model & 13.21 & 0.425\\
+    Best ResNet50-LSTM & 14.27 & 0.329\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The previous-row persistence baseline reached only about \Rtwo\ 0.466 and most
+magnitude predictability disappeared by lag two. This pilot demonstrated that
+the dataset was too short and volatile for reliable deep temporal learning.
 
 \section{Two-day MUMMA prototyping}
 In random overlapping sequences, the image-base \Rtwo\ increased from 0.679 at
@@ -1503,6 +1726,15 @@ audits, transparent negative results and a clear decisive next experiment.
 
 \chapter{Reproducibility and Artifact Index}
 
+The complete source code, experiment configurations, tests, documentation and
+report sources are available in the public GitHub repository
+\href{\projectrepository}{Roadside PM Visual Intelligence}.
+Large raw datasets, extracted frames, cached geospatial responses, learned
+embeddings and trained model binaries are intentionally excluded from Git
+because of size, licensing and data-governance constraints. The local artifact
+paths below document exact provenance and can be regenerated using the
+version-controlled pipelines.
+
 \section{Canonical data products}
 \begin{longtable}{p{0.31\textwidth}p{0.62\textwidth}}
   \toprule
@@ -1710,23 +1942,6 @@ audits, transparent negative results and a clear decisive next experiment.
   and extreme-event validation needs identified.\\
   \bottomrule
 \end{longtable}
-
-\chapter{Build Instructions}
-The report source and generated figures are self-contained inside
-\path{docs/internship_report}. To rebuild:
-\begin{verbatim}
-cd docs/internship_report
-python3 generate_figures.py
-latexmk -pdf -interaction=nonstopmode internship_report.tex
-\end{verbatim}
-If \texttt{latexmk} is unavailable, two passes of \texttt{pdflatex} are
-sufficient for the table of contents and references:
-\begin{verbatim}
-pdflatex internship_report.tex
-pdflatex internship_report.tex
-\end{verbatim}
-The final identity fields are defined at the top of the \LaTeX{} source and can
-be edited without searching through the document.
 
 \begin{thebibliography}{99}
 
