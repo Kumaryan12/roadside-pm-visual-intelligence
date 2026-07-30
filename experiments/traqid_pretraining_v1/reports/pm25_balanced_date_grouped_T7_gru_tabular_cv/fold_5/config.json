@@ -1,0 +1,78 @@
+{
+  "cv_fold": 5,
+  "fold_seed": 47,
+  "device": "mps",
+  "numeric_cols": [
+    "Temperature",
+    "Humidity",
+    "hour_sin",
+    "hour_cos",
+    "dayofweek_sin",
+    "dayofweek_cos",
+    "month_sin",
+    "month_cos"
+  ],
+  "categorical_cols": [
+    "Season",
+    "Day_or_Night"
+  ],
+  "tabular_dim": 13,
+  "embedding_dim": 1280,
+  "clip_log_range": [
+    2.806920400978379,
+    5.613218361003219
+  ],
+  "best_epoch": 13,
+  "best_val_RMSE": 56.77600230934504,
+  "baseline": {
+    "val": {
+      "MAE": 34.110803955647675,
+      "RMSE": 57.85369337834704,
+      "R2": -0.2317596148464378,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 15.050974180634988,
+      "RMSE": 21.02701570341387,
+      "R2": -0.025128927067743723,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  },
+  "rows": {
+    "train": 15214,
+    "val": 6851,
+    "test": 4493
+  },
+  "dates": {
+    "train": [
+      "2022-10-22",
+      "2022-10-25",
+      "2023-01-28",
+      "2023-01-30",
+      "2023-02-06",
+      "2023-12-21",
+      "2023-12-22",
+      "2023-12-23",
+      "2024-03-02",
+      "2024-03-06",
+      "2024-07-05",
+      "2024-07-09"
+    ],
+    "val": [
+      "2022-10-24",
+      "2022-10-26",
+      "2024-03-01",
+      "2024-03-03"
+    ],
+    "test": [
+      "2023-02-01",
+      "2023-02-07",
+      "2023-02-08",
+      "2023-12-29"
+    ]
+  }
+}

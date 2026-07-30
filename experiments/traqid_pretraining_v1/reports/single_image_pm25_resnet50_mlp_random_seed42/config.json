@@ -1,0 +1,16 @@
+{
+  "manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+  "embedding_npy": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+  "out_dir": "experiments/traqid_pretraining_v1/reports/single_image_pm25_resnet50_mlp_random_seed42",
+  "split_mode": "random",
+  "train_frac": 0.7,
+  "val_frac": 0.15,
+  "seed": 42,
+  "batch_size": 128,
+  "epochs": 80,
+  "patience": 12,
+  "lr": 0.0001,
+  "weight_decay": 0.0001,
+  "hidden_dim": 512,
+  "dropout": 0.25
+}

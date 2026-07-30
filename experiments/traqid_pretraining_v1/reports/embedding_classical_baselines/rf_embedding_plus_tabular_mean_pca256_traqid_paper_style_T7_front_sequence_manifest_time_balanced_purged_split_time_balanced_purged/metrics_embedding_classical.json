@@ -1,0 +1,90 @@
+{
+  "model": "rf",
+  "variant": "embedding_plus_tabular",
+  "pooling": "mean",
+  "include_tabular": true,
+  "pca": {
+    "n_components": 256,
+    "explained_variance_ratio_sum": 0.71209716796875
+  },
+  "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T7_front_sequence_manifest_time_balanced_purged.csv",
+  "base_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+  "features": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+  "split": {
+    "split_col": "split_time_balanced_purged",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "train_size": 15076,
+    "val_size": 3289,
+    "test_size": 6691
+  },
+  "input_dim": 265,
+  "model_params": {
+    "n_estimators": 120,
+    "max_depth": null,
+    "min_samples_leaf": 5,
+    "max_features": "sqrt"
+  },
+  "val": {
+    "PM2.5": {
+      "MAE": 20.55314556874264,
+      "RMSE": 34.06237785802928,
+      "R2": 0.4385088587387199,
+      "Pearson": 0.7226922780676328,
+      "Spearman": 0.5983701891518275,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 33.432180717789834,
+      "RMSE": 53.08481114506827,
+      "R2": 0.7035611970428346,
+      "Pearson": 0.8522251198938993,
+      "Spearman": 0.7585350435629977,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 45.34515471603982,
+      "RMSE": 66.42997303834302,
+      "R2": 0.5320995959522745,
+      "Pearson": 0.7509904467772147,
+      "Spearman": 0.6802572087200198,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.558056550577943,
+      "RMSE": 51.192387347146855
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 20.64623002120008,
+      "RMSE": 31.49054750690292,
+      "R2": 0.501014466271055,
+      "Pearson": 0.7218280534465145,
+      "Spearman": 0.6438767141269148,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 34.119486483823465,
+      "RMSE": 57.30346191749501,
+      "R2": 0.7221897275354019,
+      "Pearson": 0.8662277824369701,
+      "Spearman": 0.7674449118564713,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 49.15463400645963,
+      "RMSE": 71.2032517690241,
+      "R2": 0.5414725457960594,
+      "Pearson": 0.7471531726331291,
+      "Spearman": 0.6773683994207178,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.5882255798675055,
+      "RMSE": 53.33242039780735
+    }
+  },
+  "runtime_sec": 4.005316734313965
+}

@@ -1,0 +1,9 @@
+model,split_col,train_name,eval_name,train_sequences,eval_sequences,target,R2,RMSE,MAE
+train_mean,split_twofold,fold1_train,fold1_test,13279,13279,PM2.5,-4.474496472295364e-05,46.83998090473224,31.69695704233782
+train_mean,split_twofold,fold1_train,fold1_test,13279,13279,PM10,-6.321645669227216e-05,113.59442424236971,81.3488549992121
+train_mean,split_twofold,fold1_train,fold1_test,13279,13279,aqi,-8.289227374480568e-05,109.0956241391341,80.73443548083311
+train_mean,split_twofold,fold1_train,fold1_test,13279,13279,Average,-6.361789838667715e-05,89.84334309541202,64.59341584079435
+previous_step_persistence,split_twofold,fold1_train,fold1_test,13279,13279,PM2.5,0.9451226167194882,10.972452025835848,4.687346158160303
+previous_step_persistence,split_twofold,fold1_train,fold1_test,13279,13279,PM10,0.959088876299125,22.97544818563402,9.029372508145961
+previous_step_persistence,split_twofold,fold1_train,fold1_test,13279,13279,aqi,0.9407781605929769,26.54790643190566,11.49597461368662
+previous_step_persistence,split_twofold,fold1_train,fold1_test,13279,13279,Average,0.9483298845371967,20.165268881125176,8.404231093330962

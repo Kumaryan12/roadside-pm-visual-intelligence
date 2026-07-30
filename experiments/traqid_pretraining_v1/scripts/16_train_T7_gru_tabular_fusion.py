@@ -21,6 +21,10 @@ from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
 
 
+# ============================================================
+# Utilities
+# ============================================================
+
 def set_seed(seed: int):
     random.seed(seed)
     np.random.seed(seed)
@@ -72,31 +76,91 @@ def encode_target(y: np.ndarray, mode: str) -> np.ndarray:
     raise ValueError(mode)
 
 
-def inverse_target(y: np.ndarray, mode: str) -> np.ndarray:
+def inverse_target(
+    y: np.ndarray,
+    mode: str,
+    clip_log_range: tuple[float, float] | None = None,
+) -> np.ndarray:
+    """
+    Converts model-space prediction back to PM2.5 units.
+
+    Important:
+    For log1p target mode, unbounded neural outputs can explode after expm1().
+    Example: expm1(12) ≈ 162,753.
+
+    clip_log_range should be computed using training labels only.
+    """
     y = np.asarray(y, dtype=np.float32)
 
     if mode == "raw":
         return y
 
     if mode == "log1p":
+        if clip_log_range is not None:
+            lo, hi = clip_log_range
+            y = np.clip(y, lo, hi)
         return np.expm1(y)
 
     raise ValueError(mode)
+
+
+def compute_clip_log_range(
+    y_train_raw: np.ndarray,
+    target_mode: str,
+    enabled: bool,
+    low_pct: float,
+    high_pct: float,
+) -> tuple[float, float] | None:
+    if not enabled:
+        return None
+
+    if target_mode != "log1p":
+        return None
+
+    y_train_raw = np.asarray(y_train_raw, dtype=float)
+    train_log = np.log1p(y_train_raw)
+
+    lo = float(np.percentile(train_log, low_pct))
+    hi = float(np.percentile(train_log, high_pct))
+
+    if not np.isfinite(lo) or not np.isfinite(hi):
+        raise ValueError("Invalid clipping range computed from training labels.")
+
+    if lo >= hi:
+        raise ValueError(f"Invalid clipping range: lo={lo}, hi={hi}")
+
+    return lo, hi
 
 
 def compute_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
     y_true = np.asarray(y_true, dtype=float)
     y_pred = np.maximum(np.asarray(y_pred, dtype=float), 0)
 
+    finite_mask = np.isfinite(y_true) & np.isfinite(y_pred)
+
+    if finite_mask.sum() == 0:
+        return {
+            "MAE": float("nan"),
+            "RMSE": float("nan"),
+            "R2": float("nan"),
+            "Pearson": float("nan"),
+            "Spearman": float("nan"),
+            "finite_fraction": 0.0,
+        }
+
+    y_true_f = y_true[finite_mask]
+    y_pred_f = y_pred[finite_mask]
+
     out = {
-        "MAE": float(mean_absolute_error(y_true, y_pred)),
-        "RMSE": float(math.sqrt(mean_squared_error(y_true, y_pred))),
-        "R2": float(r2_score(y_true, y_pred)),
+        "MAE": float(mean_absolute_error(y_true_f, y_pred_f)),
+        "RMSE": float(math.sqrt(mean_squared_error(y_true_f, y_pred_f))),
+        "R2": float(r2_score(y_true_f, y_pred_f)),
+        "finite_fraction": float(finite_mask.mean()),
     }
 
-    if len(np.unique(y_true)) > 1 and len(np.unique(y_pred)) > 1:
-        out["Pearson"] = float(pearsonr(y_true, y_pred).statistic)
-        out["Spearman"] = float(spearmanr(y_true, y_pred).statistic)
+    if len(np.unique(y_true_f)) > 1 and len(np.unique(y_pred_f)) > 1:
+        out["Pearson"] = float(pearsonr(y_true_f, y_pred_f).statistic)
+        out["Spearman"] = float(spearmanr(y_true_f, y_pred_f).statistic)
     else:
         out["Pearson"] = float("nan")
         out["Spearman"] = float("nan")
@@ -146,6 +210,10 @@ def build_tabular_preprocessor(numeric_cols: list[str], categorical_cols: list[s
     )
 
 
+# ============================================================
+# Dataset
+# ============================================================
+
 class T7FusionDataset(Dataset):
     def __init__(
         self,
@@ -180,6 +248,7 @@ class T7FusionDataset(Dataset):
 
     def __getitem__(self, idx):
         idxs = self.seq_indices[idx]
+
         x_seq = np.asarray(self.embeddings[idxs], dtype=np.float32)
         x_seq = (x_seq - self.emb_mean) / self.emb_std
 
@@ -194,6 +263,10 @@ class T7FusionDataset(Dataset):
             "target_row_id": torch.tensor(self.target_row_ids[idx], dtype=torch.long),
         }
 
+
+# ============================================================
+# Model
+# ============================================================
 
 class GRUTabularFusionRegressor(nn.Module):
     def __init__(
@@ -248,6 +321,10 @@ class GRUTabularFusionRegressor(nn.Module):
         return y
 
 
+# ============================================================
+# Training helpers
+# ============================================================
+
 def compute_train_embedding_scaler(train_df: pd.DataFrame, embeddings: np.ndarray):
     used = set()
 
@@ -255,6 +332,7 @@ def compute_train_embedding_scaler(train_df: pd.DataFrame, embeddings: np.ndarra
         used.update(parse_index_sequence(s))
 
     used = sorted(used)
+
     x = np.asarray(embeddings[used], dtype=np.float32)
 
     mean = x.mean(axis=0)
@@ -264,7 +342,7 @@ def compute_train_embedding_scaler(train_df: pd.DataFrame, embeddings: np.ndarra
     return mean.astype(np.float32), std.astype(np.float32)
 
 
-def train_one_epoch(model, loader, optimizer, criterion, device):
+def train_one_epoch(model, loader, optimizer, criterion, device, grad_clip_norm: float | None):
     model.train()
 
     total_loss = 0.0
@@ -276,9 +354,15 @@ def train_one_epoch(model, loader, optimizer, criterion, device):
         y = batch["y"].to(device)
 
         optimizer.zero_grad(set_to_none=True)
+
         pred = model(x_seq, x_tab)
         loss = criterion(pred, y)
+
         loss.backward()
+
+        if grad_clip_norm is not None and grad_clip_norm > 0:
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=grad_clip_norm)
+
         optimizer.step()
 
         bs = x_seq.shape[0]
@@ -289,7 +373,13 @@ def train_one_epoch(model, loader, optimizer, criterion, device):
 
 
 @torch.inference_mode()
-def predict(model, loader, device, target_mode: str):
+def predict(
+    model,
+    loader,
+    device,
+    target_mode: str,
+    clip_log_range: tuple[float, float] | None = None,
+):
     model.eval()
 
     preds_model = []
@@ -301,10 +391,10 @@ def predict(model, loader, device, target_mode: str):
         x_seq = batch["x_seq"].to(device)
         x_tab = batch["x_tab"].to(device)
 
-        pred = model(x_seq, x_tab).detach().cpu().numpy().reshape(-1)
+        pred_model = model(x_seq, x_tab).detach().cpu().numpy().reshape(-1)
         y_raw = batch["y_raw"].cpu().numpy().reshape(-1)
 
-        preds_model.append(pred)
+        preds_model.append(pred_model)
         actual_raw.append(y_raw)
         sequence_ids.append(batch["sequence_id"].cpu().numpy().reshape(-1))
         target_row_ids.append(batch["target_row_id"].cpu().numpy().reshape(-1))
@@ -314,10 +404,34 @@ def predict(model, loader, device, target_mode: str):
     sequence_ids = np.concatenate(sequence_ids)
     target_row_ids = np.concatenate(target_row_ids)
 
-    preds_raw = inverse_target(preds_model, target_mode)
+    preds_raw = inverse_target(
+        preds_model,
+        target_mode,
+        clip_log_range=clip_log_range,
+    )
     preds_raw = np.maximum(preds_raw, 0)
 
-    return actual_raw, preds_raw, sequence_ids, target_row_ids
+    return actual_raw, preds_raw, sequence_ids, target_row_ids, preds_model
+
+
+def summarize_predictions(name: str, y_true, y_pred, y_model_pred=None):
+    print(f"\n{name} prediction summary:")
+
+    df = pd.DataFrame(
+        {
+            "actual": np.asarray(y_true, dtype=float),
+            "predicted": np.asarray(y_pred, dtype=float),
+        }
+    )
+
+    if y_model_pred is not None:
+        df["pred_model_space"] = np.asarray(y_model_pred, dtype=float)
+
+    print(
+        df.describe(
+            percentiles=[0.01, 0.05, 0.5, 0.95, 0.99, 0.999]
+        ).to_string()
+    )
 
 
 def save_scatter(y_true, y_pred, out_path: Path, title: str):
@@ -331,6 +445,7 @@ def save_scatter(y_true, y_pred, out_path: Path, title: str):
     hi = max(float(y_true.max()), float(y_pred.max()))
 
     plt.plot([lo, hi], [lo, hi], linestyle="--")
+
     plt.title(title)
     plt.xlabel("Actual PM2.5")
     plt.ylabel("Predicted PM2.5")
@@ -338,6 +453,10 @@ def save_scatter(y_true, y_pred, out_path: Path, title: str):
     plt.savefig(out_path, dpi=160)
     plt.close()
 
+
+# ============================================================
+# Main
+# ============================================================
 
 def main():
     parser = argparse.ArgumentParser()
@@ -378,6 +497,32 @@ def main():
     )
 
     parser.add_argument("--seed", type=int, default=42)
+
+    parser.add_argument(
+        "--grad-clip-norm",
+        type=float,
+        default=1.0,
+        help="Gradient clipping norm. Use 0 to disable.",
+    )
+
+    # Prediction clipping is enabled by default for log1p mode.
+    parser.add_argument(
+        "--clip-log-pred",
+        dest="clip_log_pred",
+        action="store_true",
+        default=True,
+        help="Clip log-space predictions using training-label percentiles before expm1(). Enabled by default.",
+    )
+
+    parser.add_argument(
+        "--no-clip-log-pred",
+        dest="clip_log_pred",
+        action="store_false",
+        help="Disable log prediction clipping.",
+    )
+
+    parser.add_argument("--clip-low-percentile", type=float, default=0.5)
+    parser.add_argument("--clip-high-percentile", type=float, default=99.5)
 
     parser.add_argument(
         "--out-dir",
@@ -427,7 +572,7 @@ def main():
     if missing:
         raise ValueError(f"Sequence manifest missing columns: {missing}")
 
-    # Ignore purged rows.
+    # Ignore purged rows if this is a purged-block manifest.
     seq_df = seq_df[seq_df["split_date_chrono"].isin(["train", "val", "test"])].copy()
 
     numeric_cols = [c.strip() for c in args.numeric_cols.split(",") if c.strip()]
@@ -460,16 +605,40 @@ def main():
     print("Numeric context:", numeric_cols)
     print("Categorical context:", categorical_cols)
     print("Device:", device)
+    print("Gradient clipping norm:", args.grad_clip_norm)
+    print("Clip log predictions:", args.clip_log_pred)
 
     print("\nSplit dates:")
     print("train:", sorted(train_df["date"].unique().tolist()) if "date" in train_df.columns else "")
     print("val  :", sorted(val_df["date"].unique().tolist()) if "date" in val_df.columns else "")
     print("test :", sorted(test_df["date"].unique().tolist()) if "date" in test_df.columns else "")
 
-    # Mean baseline.
+    # ============================================================
+    # Baseline and clipping range
+    # ============================================================
+
     y_train = train_df["target_value"].astype(float).to_numpy()
     y_val = val_df["target_value"].astype(float).to_numpy()
     y_test = test_df["target_value"].astype(float).to_numpy()
+
+    clip_log_range = compute_clip_log_range(
+        y_train_raw=y_train,
+        target_mode=args.target_mode,
+        enabled=args.clip_log_pred,
+        low_pct=args.clip_low_percentile,
+        high_pct=args.clip_high_percentile,
+    )
+
+    print("\nTarget distribution:")
+    print("train target min/max:", float(np.min(y_train)), float(np.max(y_train)))
+    print("val target min/max  :", float(np.min(y_val)), float(np.max(y_val)))
+    print("test target min/max :", float(np.min(y_test)), float(np.max(y_test)))
+
+    print("\nPrediction clipping:")
+    print("clip_log_range:", clip_log_range)
+    if clip_log_range is not None:
+        lo, hi = clip_log_range
+        print("raw PM range after clip:", float(np.expm1(lo)), float(np.expm1(hi)))
 
     if args.target_mode == "log1p":
         mean_model_value = np.log1p(y_train).mean()
@@ -488,7 +657,10 @@ def main():
     print("\nMean baseline:")
     print(json.dumps(baseline, indent=2))
 
-    # Tabular preprocessing fitted only on train.
+    # ============================================================
+    # Tabular preprocessing fitted only on train
+    # ============================================================
+
     preprocessor = build_tabular_preprocessor(numeric_cols, categorical_cols)
 
     X_tab_train = preprocessor.fit_transform(train_df[numeric_cols + categorical_cols])
@@ -511,9 +683,29 @@ def main():
     val_ds = T7FusionDataset(val_df, embeddings, X_tab_val, args.target_mode, emb_mean, emb_std)
     test_ds = T7FusionDataset(test_df, embeddings, X_tab_test, args.target_mode, emb_mean, emb_std)
 
-    train_loader = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True, num_workers=0, pin_memory=False)
-    val_loader = DataLoader(val_ds, batch_size=args.batch_size, shuffle=False, num_workers=0, pin_memory=False)
-    test_loader = DataLoader(test_ds, batch_size=args.batch_size, shuffle=False, num_workers=0, pin_memory=False)
+    train_loader = DataLoader(
+        train_ds,
+        batch_size=args.batch_size,
+        shuffle=True,
+        num_workers=0,
+        pin_memory=False,
+    )
+
+    val_loader = DataLoader(
+        val_ds,
+        batch_size=args.batch_size,
+        shuffle=False,
+        num_workers=0,
+        pin_memory=False,
+    )
+
+    test_loader = DataLoader(
+        test_ds,
+        batch_size=args.batch_size,
+        shuffle=False,
+        num_workers=0,
+        pin_memory=False,
+    )
 
     embedding_dim = embeddings.shape[1]
     tabular_dim = X_tab_train.shape[1]
@@ -542,11 +734,35 @@ def main():
 
     history = []
 
-    for epoch in range(1, args.epochs + 1):
-        loss = train_one_epoch(model, train_loader, optimizer, criterion, device)
+    # ============================================================
+    # Training
+    # ============================================================
 
-        val_actual, val_pred, _, _ = predict(model, val_loader, device, args.target_mode)
-        test_actual, test_pred, _, _ = predict(model, test_loader, device, args.target_mode)
+    for epoch in range(1, args.epochs + 1):
+        loss = train_one_epoch(
+            model,
+            train_loader,
+            optimizer,
+            criterion,
+            device,
+            grad_clip_norm=args.grad_clip_norm,
+        )
+
+        val_actual, val_pred, _, _, val_pred_model = predict(
+            model,
+            val_loader,
+            device,
+            args.target_mode,
+            clip_log_range=clip_log_range,
+        )
+
+        test_actual, test_pred, _, _, test_pred_model = predict(
+            model,
+            test_loader,
+            device,
+            args.target_mode,
+            clip_log_range=clip_log_range,
+        )
 
         val_metrics = compute_metrics(val_actual, val_pred)
         test_metrics = compute_metrics(test_actual, test_pred)
@@ -556,6 +772,12 @@ def main():
             "train_loss": loss,
             **{f"val_{k}": v for k, v in val_metrics.items()},
             **{f"test_{k}": v for k, v in test_metrics.items()},
+            "val_pred_model_min": float(np.min(val_pred_model)),
+            "val_pred_model_max": float(np.max(val_pred_model)),
+            "test_pred_model_min": float(np.min(test_pred_model)),
+            "test_pred_model_max": float(np.max(test_pred_model)),
+            "clip_log_low": None if clip_log_range is None else clip_log_range[0],
+            "clip_log_high": None if clip_log_range is None else clip_log_range[1],
         }
 
         history.append(row)
@@ -564,11 +786,13 @@ def main():
             f"[epoch {epoch:02d}/{args.epochs}] "
             f"loss={loss:.4f} | "
             f"VAL RMSE={val_metrics['RMSE']:.3f}, Spearman={val_metrics['Spearman']:.3f} | "
-            f"TEST RMSE={test_metrics['RMSE']:.3f}, Spearman={test_metrics['Spearman']:.3f}"
+            f"TEST RMSE={test_metrics['RMSE']:.3f}, Spearman={test_metrics['Spearman']:.3f} | "
+            f"test_log_pred=[{row['test_pred_model_min']:.3f}, {row['test_pred_model_max']:.3f}]"
         )
 
         if val_metrics["RMSE"] < best_val_rmse:
             best_val_rmse = val_metrics["RMSE"]
+
             torch.save(
                 {
                     "model_state_dict": model.state_dict(),
@@ -582,15 +806,37 @@ def main():
                     "numeric_cols": numeric_cols,
                     "categorical_cols": categorical_cols,
                     "tabular_dim": int(tabular_dim),
+                    "clip_log_range": clip_log_range,
+                    "clip_log_pred": args.clip_log_pred,
                 },
                 best_path,
             )
 
+    # ============================================================
+    # Final evaluation from best checkpoint
+    # ============================================================
+
     checkpoint = torch.load(best_path, map_location=device, weights_only=False)
     model.load_state_dict(checkpoint["model_state_dict"])
 
-    val_actual, val_pred, val_seq_ids, val_row_ids = predict(model, val_loader, device, args.target_mode)
-    test_actual, test_pred, test_seq_ids, test_row_ids = predict(model, test_loader, device, args.target_mode)
+    val_actual, val_pred, val_seq_ids, val_row_ids, val_pred_model = predict(
+        model,
+        val_loader,
+        device,
+        args.target_mode,
+        clip_log_range=clip_log_range,
+    )
+
+    test_actual, test_pred, test_seq_ids, test_row_ids, test_pred_model = predict(
+        model,
+        test_loader,
+        device,
+        args.target_mode,
+        clip_log_range=clip_log_range,
+    )
+
+    summarize_predictions("VAL", val_actual, val_pred, val_pred_model)
+    summarize_predictions("TEST", test_actual, test_pred, test_pred_model)
 
     final_metrics = {
         "baseline": baseline,
@@ -600,10 +846,16 @@ def main():
         },
         "val": compute_metrics(val_actual, val_pred),
         "test": compute_metrics(test_actual, test_pred),
+        "clip_log_range": clip_log_range,
+        "clip_log_pred": args.clip_log_pred,
     }
 
     print("\nFINAL BEST MODEL METRICS:")
     print(json.dumps(final_metrics, indent=2))
+
+    # ============================================================
+    # Save outputs
+    # ============================================================
 
     history_path = report_dir / "training_history_t7_gru_tabular_fusion.csv"
     pd.DataFrame(history).to_csv(history_path, index=False)
@@ -617,6 +869,7 @@ def main():
                     "split": "val",
                     "actual_PM25": val_actual,
                     "predicted_PM25": val_pred,
+                    "pred_model_space": val_pred_model,
                 }
             ),
             pd.DataFrame(
@@ -626,6 +879,7 @@ def main():
                     "split": "test",
                     "actual_PM25": test_actual,
                     "predicted_PM25": test_pred,
+                    "pred_model_space": test_pred_model,
                 }
             ),
         ],
@@ -647,6 +901,8 @@ def main():
         "numeric_cols": numeric_cols,
         "categorical_cols": categorical_cols,
         "tabular_dim": int(tabular_dim),
+        "clip_log_range": clip_log_range,
+        "clip_log_pred": args.clip_log_pred,
         "rows": {
             "sequences": int(len(seq_df)),
             "train": int(len(train_df)),
@@ -654,6 +910,7 @@ def main():
             "test": int(len(test_df)),
         },
     }
+
     config_path.write_text(json.dumps(config, indent=2), encoding="utf-8")
 
     save_scatter(
@@ -680,4 +937,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main() 

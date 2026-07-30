@@ -1,0 +1,20 @@
+dataset_id: mumma_281
+status: current_small_sample_pipeline
+modeling_table: data/processed/final_feature_table.csv
+expected_rows: 281
+target: PM2.5
+modalities:
+  images: true
+  vehicle_features: true
+  road_features: true
+  osm: true
+  meteorology_and_gases: true
+  opc_bins: true
+validation:
+  required_groups:
+    - collection_or_trip
+    - date
+    - spatial_block
+uncertainty:
+  - Canonical identifier column names must be confirmed against the private table.
+

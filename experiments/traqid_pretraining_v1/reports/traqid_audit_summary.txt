@@ -1,0 +1,45 @@
+TRAQID DATASET AUDIT
+==========================================================================================
+TRAQID root: experiments/traqid_pretraining_v1/data/raw
+CSV path: experiments/traqid_pretraining_v1/data/raw/TRAQID.csv
+CSV shape: (100, 11)
+Image files found: 200
+
+Columns:
+ - created_at
+ - Image
+ - Sequence
+ - Temperature
+ - Humidity
+ - Season
+ - Day_or_Night
+ - PM2.5
+ - PM10
+ - aqi
+ - aqi_cat
+
+Missing values:
+created_at      0
+Image           0
+Sequence        0
+Temperature     0
+Humidity        0
+Season          0
+Day_or_Night    0
+PM2.5           0
+PM10            0
+aqi             0
+aqi_cat         0
+
+Numeric summary:
+             count         mean          std         min        25%          50%          75%         max
+Image        100.0  5700.500000  5552.852870  151.000000  175.75000  5700.500000  11225.25000  11250.0000
+Sequence     100.0     1.500000     0.502519    1.000000    1.00000     1.500000      2.00000      2.0000
+Temperature  100.0    29.751300     0.836501   28.670000   28.93000    29.805000     30.59000     30.6200
+Humidity     100.0    46.080950    12.803182   32.952000   33.33275    46.116000     58.69100     59.2980
+PM2.5        100.0    45.010340     5.858708   34.847000   40.14225    45.821000     47.31075     58.1520
+PM10         100.0    59.288716     7.569912   45.542600   53.52145    57.995800     63.73340     79.4466
+aqi          100.0    75.017233     9.764514   58.078333   66.90375    76.368333     78.85125     96.9200
+
+Matched likely target/weather columns:
+['PM2.5', 'PM10', 'aqi', 'Temperature', 'Humidity']

@@ -1,0 +1,86 @@
+{
+  "model": "rf",
+  "features": {
+    "numeric": [
+      "Temperature",
+      "Humidity",
+      "hour_sin",
+      "hour_cos"
+    ],
+    "categorical": [
+      "Season",
+      "Day_or_Night"
+    ]
+  },
+  "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T7_front_sequence_manifest_time_balanced_purged.csv",
+  "base_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+  "split": {
+    "split_col": "split_time_balanced_purged",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "train_size": 15076,
+    "val_size": 3289,
+    "test_size": 6691
+  },
+  "val": {
+    "PM2.5": {
+      "MAE": 17.418437908762353,
+      "RMSE": 29.136667602990666,
+      "R2": 0.5891599787332427,
+      "Pearson": 0.7716827192183453,
+      "Spearman": 0.7165921794072354,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 29.231456635488644,
+      "RMSE": 52.419708860481805,
+      "R2": 0.7109428564569105,
+      "Pearson": 0.8570413225062605,
+      "Spearman": 0.8121961250076712,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 38.55188653766586,
+      "RMSE": 61.52649742426589,
+      "R2": 0.5986256155994809,
+      "Pearson": 0.78720343844073,
+      "Spearman": 0.761075099336836,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.6329094835965446,
+      "RMSE": 47.69429129591279
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 18.93839865859705,
+      "RMSE": 31.07153849343432,
+      "R2": 0.5142049923912926,
+      "Pearson": 0.74278456302957,
+      "Spearman": 0.68652583370844,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 29.1802387859259,
+      "RMSE": 53.664092789487476,
+      "R2": 0.7563568734894901,
+      "Pearson": 0.8726136183800003,
+      "Spearman": 0.8393854464124296,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 43.95737223435137,
+      "RMSE": 71.31532659057025,
+      "R2": 0.5400279537276855,
+      "Pearson": 0.7552924101712788,
+      "Spearman": 0.7239435563971838,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.6035299398694894,
+      "RMSE": 52.016985957830684
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "split_col": "split_chrono_date",
+  "train_name": "train",
+  "test_name": "test",
+  "train_sequences": 16825,
+  "test_sequences": 5462,
+  "mean_max_overlap_frames": 0.0,
+  "median_max_overlap_frames": 0.0,
+  "max_overlap_frames": 0,
+  "fraction_test_overlap_ge_1": 0.0,
+  "fraction_test_overlap_ge_3": 0.0,
+  "fraction_test_overlap_ge_5": 0.0,
+  "fraction_test_overlap_ge_6": 0.0,
+  "fraction_test_overlap_eq_0": 1.0
+}

@@ -1,0 +1,5 @@
+model,target,features,n_train,n_test,MAE,RMSE,R2,Spearman
+mean_baseline,PM2.5,Temperature+Humidity+hour+Season+Day_or_Night,16907,5465,35.128298459226485,44.14226168899303,-0.13740263819189735,
+ridge,PM2.5,Temperature+Humidity+hour+Season+Day_or_Night,16907,5465,93.84130296362359,111.1602740517778,-6.212806588552578,-0.4729858545928925
+hist_gradient_boosting,PM2.5,Temperature+Humidity+hour+Season+Day_or_Night,16907,5465,96.79234047878842,120.8173421646925,-7.52047142340729,-0.4754791037441929
+random_forest,PM2.5,Temperature+Humidity+hour+Season+Day_or_Night,16907,5465,102.08480143045556,128.55835466777484,-8.647297696976107,-0.4559953496147866

@@ -1,0 +1,13 @@
+dataset_id: hvaq
+status: benchmark
+root: experiments/hvaq_vgg16_lstm_v1
+modalities:
+  images: true
+  temporal_sequences: true
+  vgg16_embeddings: true
+validation:
+  protocols:
+    - random
+    - chronological_date
+    - purged_block
+

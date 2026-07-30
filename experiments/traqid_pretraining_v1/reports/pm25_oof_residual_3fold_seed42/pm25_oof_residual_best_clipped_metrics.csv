@@ -1,0 +1,2 @@
+model,base_model,residual_model,clip_value,R2,RMSE,MAE,mean_abs_correction,max_abs_correction,test_rows
+extra_trees_conservative_plus_basepred_clipped_12.5,3fold_oof_resnet50_gru_ensemble,extra_trees_conservative_plus_basepred,12.5,0.9655555639658453,8.716916877222797,4.211588921728191,2.294710943130772,12.5,5312

@@ -1,0 +1,97 @@
+[
+  {
+    "cv_fold": 1,
+    "val": {
+      "MAE": 33.31856461817281,
+      "RMSE": 43.23787104753264,
+      "R2": -0.0025814318902399602,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 33.34240075936944,
+      "RMSE": 56.07425584769436,
+      "R2": -0.15715309054326432,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  },
+  {
+    "cv_fold": 2,
+    "val": {
+      "MAE": 27.049372550077933,
+      "RMSE": 41.43451813310202,
+      "R2": -0.03980805495562234,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 34.58388516136752,
+      "RMSE": 43.48063711583348,
+      "R2": -0.013871351147619615,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  },
+  {
+    "cv_fold": 3,
+    "val": {
+      "MAE": 33.26840992429818,
+      "RMSE": 63.863274526470136,
+      "R2": -0.08740001567076883,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 26.32526337264549,
+      "RMSE": 42.9701564263397,
+      "R2": -0.11831065216316095,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  },
+  {
+    "cv_fold": 4,
+    "val": {
+      "MAE": 15.275528141144823,
+      "RMSE": 20.767853888706348,
+      "R2": -1.4851464558596206e-05,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 33.70894000538388,
+      "RMSE": 63.34588982091825,
+      "R2": -0.0698523659992969,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  },
+  {
+    "cv_fold": 5,
+    "val": {
+      "MAE": 34.110803955647675,
+      "RMSE": 57.85369337834704,
+      "R2": -0.2317596148464378,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 15.050974180634988,
+      "RMSE": 21.02701570341387,
+      "R2": -0.025128927067743723,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  }
+]

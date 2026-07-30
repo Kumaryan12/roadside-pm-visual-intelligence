@@ -1,0 +1,21 @@
+dataset_id: traqid
+status: historical_benchmark
+manifest: experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv
+identifiers:
+  sample_id: row_id
+  timestamp: timestamp
+  date: date
+modalities:
+  front_image: true
+  rear_image: true
+  pm25: true
+  pm10: true
+  aqi: true
+validation:
+  warning: Never split overlapping sequences independently.
+  canonical_protocols:
+    - time_balanced_purged
+    - chronological_date
+uncertainty:
+  - Exact raw-data provenance and redistribution terms need a dataset card.
+

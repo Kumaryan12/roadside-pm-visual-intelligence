@@ -1,0 +1,32 @@
+{
+  "args": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest_purged_block_split.csv",
+    "embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_supervised_pm25_random_front_embeddings.npy",
+    "target_mode": "log1p",
+    "device": "auto",
+    "batch_size": 128,
+    "epochs": 20,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "hidden_dim": 128,
+    "num_layers": 1,
+    "dropout": 0.25,
+    "bidirectional": false,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/t7_supervised_front_gru_purged_block",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/t7_supervised_front_gru_purged_block",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/t7_supervised_front_gru_purged_block"
+  },
+  "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest_purged_block_split.csv",
+  "embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_supervised_pm25_random_front_embeddings.npy",
+  "embedding_shape": [
+    26678,
+    1280
+  ],
+  "rows": {
+    "sequences": 26558,
+    "train": 18461,
+    "val": 3744,
+    "test": 3873
+  }
+}

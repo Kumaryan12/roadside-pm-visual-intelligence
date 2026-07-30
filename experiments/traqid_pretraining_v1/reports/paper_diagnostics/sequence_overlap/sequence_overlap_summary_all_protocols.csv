@@ -1,0 +1,5 @@
+split_col,train_name,test_name,train_sequences,test_sequences,mean_max_overlap_frames,median_max_overlap_frames,max_overlap_frames,fraction_test_overlap_ge_1,fraction_test_overlap_ge_3,fraction_test_overlap_ge_5,fraction_test_overlap_ge_6,fraction_test_overlap_eq_0,protocol
+split_random,train,test,18591,3983,5.899071051970877,6.0,6,1.0,0.9997489329651017,0.9907105197087622,0.9091137333668089,0.0,random_70_15_15
+split_twofold,fold1_train,fold1_test,13279,13279,5.666616462082988,6.0,6,0.9999246931244823,0.9960087355975601,0.9379471345733865,0.7480985013931772,7.530687551773477e-05,twofold_random
+split_date_chrono,train,test,18461,3873,0.0,0.0,0,0.0,0.0,0.0,0.0,1.0,purged_block
+split_chrono_date,train,test,16825,5462,0.0,0.0,0,0.0,0.0,0.0,0.0,1.0,chrono_date

@@ -1,0 +1,45 @@
+{
+  "baseline": {
+    "val": {
+      "MAE": 20.38064441927354,
+      "RMSE": 39.17644352288247,
+      "R2": -0.1218361432192403,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 30.130311751322743,
+      "RMSE": 41.62366640491317,
+      "R2": -0.010798306052963058,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  },
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/t7_gru_tabular_fusion_date_safe_clipped/best_t7_gru_tabular_fusion.pt",
+    "epoch": 24
+  },
+  "val": {
+    "MAE": 23.2093221404965,
+    "RMSE": 41.01645729645924,
+    "R2": -0.22969018972665234,
+    "finite_fraction": 1.0,
+    "Pearson": 0.1942388447049469,
+    "Spearman": 0.3765060377891478
+  },
+  "test": {
+    "MAE": 58.86054491935654,
+    "RMSE": 82.55789607065054,
+    "R2": -2.9765008019133963,
+    "finite_fraction": 1.0,
+    "Pearson": -0.17073926466766187,
+    "Spearman": -0.34608892441909805
+  },
+  "clip_log_range": [
+    3.2325814719243127,
+    5.617490705455899
+  ],
+  "clip_log_pred": true
+}

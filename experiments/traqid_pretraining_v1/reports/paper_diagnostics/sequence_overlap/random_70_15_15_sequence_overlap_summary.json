@@ -1,0 +1,15 @@
+{
+  "split_col": "split_random",
+  "train_name": "train",
+  "test_name": "test",
+  "train_sequences": 18591,
+  "test_sequences": 3983,
+  "mean_max_overlap_frames": 5.899071051970877,
+  "median_max_overlap_frames": 6.0,
+  "max_overlap_frames": 6,
+  "fraction_test_overlap_ge_1": 1.0,
+  "fraction_test_overlap_ge_3": 0.9997489329651017,
+  "fraction_test_overlap_ge_5": 0.9907105197087622,
+  "fraction_test_overlap_ge_6": 0.9091137333668089,
+  "fraction_test_overlap_eq_0": 0.0
+}

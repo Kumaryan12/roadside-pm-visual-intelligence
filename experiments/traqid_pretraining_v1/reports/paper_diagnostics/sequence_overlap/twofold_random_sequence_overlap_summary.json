@@ -1,0 +1,15 @@
+{
+  "split_col": "split_twofold",
+  "train_name": "fold1_train",
+  "test_name": "fold1_test",
+  "train_sequences": 13279,
+  "test_sequences": 13279,
+  "mean_max_overlap_frames": 5.666616462082988,
+  "median_max_overlap_frames": 6.0,
+  "max_overlap_frames": 6,
+  "fraction_test_overlap_ge_1": 0.9999246931244823,
+  "fraction_test_overlap_ge_3": 0.9960087355975601,
+  "fraction_test_overlap_ge_5": 0.9379471345733865,
+  "fraction_test_overlap_ge_6": 0.7480985013931772,
+  "fraction_test_overlap_eq_0": 7.530687551773477e-05
+}

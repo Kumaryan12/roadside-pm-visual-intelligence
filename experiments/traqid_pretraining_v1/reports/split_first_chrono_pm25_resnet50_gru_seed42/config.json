@@ -1,0 +1,16 @@
+{
+  "sequence_table": "experiments/traqid_pretraining_v1/data/processed/split_first_sequences/traqid_split_first_T7_chrono_purge6.csv",
+  "embedding_npy": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+  "out_dir": "experiments/traqid_pretraining_v1/reports/split_first_chrono_pm25_resnet50_gru_seed42",
+  "seed": 42,
+  "batch_size": 64,
+  "epochs": 60,
+  "patience": 10,
+  "lr": 0.0001,
+  "weight_decay": 0.0001,
+  "projection_dim": 512,
+  "hidden_dim": 256,
+  "num_layers": 2,
+  "dropout": 0.25,
+  "device": "mps"
+}

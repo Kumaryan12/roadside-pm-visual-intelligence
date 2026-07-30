@@ -1,126 +1,150 @@
-cat > .gitignore <<'EOF'
+# ============================================================
+# Operating system and editors
+# ============================================================
+.DS_Store
+**/.DS_Store
+.vscode/
+.idea/
+*~
+*.bak
+*.save
+*_backup.py
+
+# ============================================================
 # Python
+# ============================================================
 __pycache__/
 *.py[cod]
 *.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# ============================================================
+# Virtual environments and local secrets
+# ============================================================
 .venv/
+.venv_torch/
 venv/
 env/
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+*service_account*.json
 
-# Mac
-.DS_Store
+# ============================================================
+# Local caches and temporary directories
+# ============================================================
+.cache/
+.matplotlib-cache/
+tmp/
+temp/
 
-# Jupyter
-.ipynb_checkpoints/
+# ============================================================
+# Generated project artifacts
+# Keep artifacts/README.md, but not run contents
+# ============================================================
+artifacts/cache/
+artifacts/runs/
+output/
+outputs/
 
-# Raw/intermediate data - do not commit
+# ============================================================
+# Raw/intermediate datasets
+# Keep data/schemas and data/manifests
+# ============================================================
 data/raw/
 data/interim/
 data/processed/
+data/external/
+data/sensor/
 
-# Outputs - large/generated
-outputs/features/
-outputs/models/
-outputs/road_roi_frames/
-outputs/road_roi_cleaned/
-outputs/masks/
+experiments/**/data/
+experiments/**/embeddings/
+experiments/**/models/
+experiments/**/logs/
+experiments/**/outputs/
+experiments/**/figures/
+experiments/**/notebooks/
 
-# Videos/images
-*.mp4
-*.avi
-*.mov
-*.mkv
-*.jpg
-*.jpeg
-*.png
-*.webp
-
-# Model files
+# ============================================================
+# Large model and array files
+# ============================================================
+*.npy
+*.npz
 *.pt
 *.pth
 *.onnx
 *.pkl
 *.joblib
+*.ckpt
+*.h5
+*.hdf5
 
-# Logs
-*.log
-EOF
-# Generated detector outputs
-outputs/features/
-outputs/figures/idd_detector_annotations/
-
-# Local detector weights
+# Keep model registry, ignore downloaded detector weights
 models/detectors/
-*.pt
-outputs/
-/Users/aryansatyendrakumar/Projects/roadside-pm-visual-intelligence/outputs/road_area_lens1_batch
-app/
-configs/lens_preprocessing.yaml
-data/
-models/
-# Python
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
 
-# Mac
-.DS_Store
+# ============================================================
+# Raw media and large archives
+# Documentation figures remain allowed
+# ============================================================
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.7z
 
-# Virtual environments
-.venv/
-.venv_torch/
+# ============================================================
+# Per-row prediction dumps
+# Aggregate metrics/results remain allowed
+# ============================================================
+**/predictions.csv
+**/predictions_*.csv
+**/*_predictions.csv
+**/*predictions*.csv
+**/all_fold_predictions.csv
+**/all_fold_*_predictions.csv
 
-# TRAQID raw data and large generated artifacts
-experiments/traqid_pretraining_v1/data/raw/
-experiments/traqid_pretraining_v1/embeddings/*.npy
-experiments/traqid_pretraining_v1/models/**/*.pt
-experiments/traqid_pretraining_v1/logs/
+# Generated raw indexes/audit extracts
+**/*_image_file_index.csv
+**/*_csv_head*.csv
 
-# Large prediction dumps if any
-experiments/traqid_pretraining_v1/reports/**/predictions_*.csv
+# ============================================================
+# Logs
+# ============================================================
+*.log
 
-# Optional: large processed manifests if you want reproducible scripts only
-# experiments/traqid_pretraining_v1/data/processed/*.csv
-# TRAQID large artifacts
-experiments/traqid_pretraining_v1/data/raw/
-experiments/traqid_pretraining_v1/embeddings/
-experiments/traqid_pretraining_v1/models/
-experiments/traqid_pretraining_v1/logs/
+# ============================================================
+# LaTeX build products
+# Do not ignore PDF globally: the final report PDF is retained
+# ============================================================
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.toc
+*.xdv
 
-# Large prediction outputs
-experiments/traqid_pretraining_v1/reports/**/predictions_*.csv
+# Generated local inventory
+project_file_inventory.txt
 
-# Python / system
-__pycache__/
-*.pyc
-.DS_Store
-.venv/
-.venv_torch/
-# Python/cache
-__pycache__/
-*.pyc
-.DS_Store
-
-# Experiment caches
-.matplotlib-cache/
-**/.matplotlib-cache/
-
-# Large generated experiment artifacts
-experiments/**/outputs/
-experiments/**/models/
-experiments/**/figures/
-experiments/**/notebooks/
-
-# Large arrays / model weights
-*.npy
-*.npz
-*.pt
-*.pth
-*.pkl
-*.joblib
-
-# Raw/interim/generated bulk data
-experiments/**/data/raw/
-experiments/**/data/interim/
-experiments/**/data/external/
+# ============================================================
+# Explicitly retain the internship report
+# ============================================================
+!docs/internship_report/
+!docs/internship_report/**

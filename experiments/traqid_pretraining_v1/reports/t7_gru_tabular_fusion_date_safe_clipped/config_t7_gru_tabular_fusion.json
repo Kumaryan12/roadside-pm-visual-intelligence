@@ -1,0 +1,56 @@
+{
+  "args": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest.csv",
+    "embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_supervised_pm25_random_front_rear_mean_embeddings.npy",
+    "target_mode": "log1p",
+    "device": "auto",
+    "batch_size": 128,
+    "epochs": 25,
+    "lr": 0.0008,
+    "weight_decay": 0.0001,
+    "hidden_dim": 128,
+    "tab_hidden_dim": 64,
+    "fusion_hidden_dim": 128,
+    "num_layers": 1,
+    "dropout": 0.25,
+    "bidirectional": false,
+    "numeric_cols": "Temperature,Humidity,hour_sin,hour_cos",
+    "categorical_cols": "Season,Day_or_Night",
+    "seed": 42,
+    "grad_clip_norm": 1.0,
+    "clip_log_pred": true,
+    "clip_low_percentile": 0.5,
+    "clip_high_percentile": 99.5,
+    "out_dir": "experiments/traqid_pretraining_v1/models/t7_gru_tabular_fusion_date_safe_clipped",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/t7_gru_tabular_fusion_date_safe_clipped",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/t7_gru_tabular_fusion_date_safe_clipped"
+  },
+  "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest.csv",
+  "embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_supervised_pm25_random_front_rear_mean_embeddings.npy",
+  "embedding_shape": [
+    26678,
+    1280
+  ],
+  "numeric_cols": [
+    "Temperature",
+    "Humidity",
+    "hour_sin",
+    "hour_cos"
+  ],
+  "categorical_cols": [
+    "Season",
+    "Day_or_Night"
+  ],
+  "tabular_dim": 8,
+  "clip_log_range": [
+    3.2325814719243127,
+    5.617490705455899
+  ],
+  "clip_log_pred": true,
+  "rows": {
+    "sequences": 26558,
+    "train": 16825,
+    "val": 4271,
+    "test": 5462
+  }
+}

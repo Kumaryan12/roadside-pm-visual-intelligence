@@ -1,0 +1,2 @@
+collection_id,date,trip_id,sensor_csv,video_path,lens_id,timezone,video_start_time
+day01_run01,YYYY-MM-DD,run01,/path/to/day01_sensor.csv,/path/to/day01_video.mp4,1,Asia/Kolkata,

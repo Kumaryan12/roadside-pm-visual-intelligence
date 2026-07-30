@@ -1,0 +1,22 @@
+pipeline_id: image_base_tabular_residual_v1
+formula: corrected_pm25 = image_base_pm25 + tabular_predicted_residual
+base_prediction_contract:
+  required_origin: [oof, heldout, outer_val, outer_test]
+  forbidden_origin: [in_sample, train_fit]
+  key: sequence_id
+join:
+  sequence_to_sample: target_sample_id
+  sample_to_features: sample_index
+residual_model:
+  candidates: [ridge, extra_trees, hist_gradient_boosting]
+  default: extra_trees
+  grouped_cross_fitting: true
+  clip_final_prediction_at_zero: true
+features:
+  source: canonical final engineered feature table
+  exclude_patterns: [target, actual, predicted, residual, split, fold, embedding, image, pm2, pm25]
+validation:
+  preprocessing_inside_fold: true
+  group_column_required: true
+  compare_base_and_corrected: true
+

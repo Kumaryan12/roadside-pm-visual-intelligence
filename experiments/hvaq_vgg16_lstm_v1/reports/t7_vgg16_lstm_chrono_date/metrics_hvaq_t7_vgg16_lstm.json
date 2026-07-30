@@ -1,0 +1,40 @@
+{
+  "baseline": {
+    "val": {
+      "MAE": 44.73410008440171,
+      "RMSE": 45.97983816812539,
+      "R2": -17.70829086362633,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 36.375650026400095,
+      "RMSE": 37.166637272213435,
+      "R2": -22.746517306499946,
+      "finite_fraction": 1.0,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  },
+  "best_checkpoint": {
+    "path": "experiments/hvaq_vgg16_lstm_v1/models/t7_vgg16_lstm_chrono_date/best_hvaq_t7_vgg16_lstm.pt",
+    "epoch": 76
+  },
+  "val": {
+    "MAE": 55.25256564361708,
+    "RMSE": 56.29223514434207,
+    "R2": -27.041176537570507,
+    "finite_fraction": 1.0,
+    "Pearson": -0.07943942809674892,
+    "Spearman": -0.17359528811152583
+  },
+  "test": {
+    "MAE": 48.00465732398589,
+    "RMSE": 48.57763976980637,
+    "R2": -39.56637647008669,
+    "finite_fraction": 1.0,
+    "Pearson": 0.3134346800058012,
+    "Spearman": 0.3194268705292371
+  }
+}

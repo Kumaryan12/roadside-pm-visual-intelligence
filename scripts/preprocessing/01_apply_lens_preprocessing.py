@@ -1,5 +1,6 @@
 from pathlib import Path
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 
 import cv2
 import pandas as pd
@@ -14,6 +15,11 @@ OUTPUT_MANIFEST = Path("outputs/features/processed_frame_manifest_preprocessed_v
 # Format: lens_id: (x1_ratio, y1_ratio, x2_ratio, y2_ratio)
 LENS_CROP_CONFIG = {
     1: (0.25, 0.10, 0.70, 0.88),
+    # Lens 2 is now the lateral roadside-context camera. In the raw sideways
+    # frame, x maps to vertical position after rotation. The 0.40 boundary was
+    # calibrated across 2026-02-01 and 2026-02-03 to remove the mounting rig
+    # physically while retaining buildings, shoulders, pedestrians and traffic.
+    2: (0.40, 0.04, 1.00, 0.96),
     4: (0.40, 0.10, 0.90, 0.88),
     6: (0.15, 0.10, 0.85, 0.88),
 }
@@ -22,6 +28,7 @@ LENS_CROP_CONFIG = {
 # Rotation chosen from previous manual preview inspection.
 LENS_ROTATION_CONFIG = {
     1: "rot90_counterclockwise",
+    2: "rot90_counterclockwise",
     4: "rot90_counterclockwise",
     6: "rot90_counterclockwise",
 }
@@ -308,8 +315,8 @@ def main():
         "--lenses",
         nargs="+",
         type=int,
-        default=[1, 4, 6],
-        help="Lens IDs to preprocess. Example: --lenses 1 4 6",
+        default=[1, 2, 6],
+        help="Lens IDs to preprocess. Example: --lenses 1 2 6",
     )
 
     parser.add_argument(
@@ -325,7 +332,16 @@ def main():
         help="Disable platform mask for debugging.",
     )
 
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="Concurrent OpenCV preprocessing workers.",
+    )
+
     args = parser.parse_args()
+    if args.workers < 1:
+        raise ValueError("--workers must be at least 1")
 
     output_root = Path(args.output_root)
     input_manifest = Path(args.input_manifest)
@@ -360,23 +376,28 @@ def main():
     print("Lenses selected:", args.lenses)
     print("Apply platform mask:", not args.no_mask)
 
-    output_rows = []
-
-    for i, (_, row) in enumerate(df.iterrows(), start=1):
-        print(f"\n[{i}/{len(df)}] Preprocessing: {row['processed_frame_key']}")
-
+    def process_item(item):
+        i, (_, row) = item
         result = preprocess_one_row(row, no_mask=args.no_mask, output_root=output_root)
-        output_rows.append(result)
+        return i, result
 
-        print("  Lens:", result.get("lens_id"))
-        print("  Status:", result.get("preprocess_status"))
-        print("  Source:", result.get("source_frame_path"))
-        print("  Output:", result.get("processed_frame_path"))
-        print("  Rotation:", result.get("rotation_name"))
-        print("  Mask:", result.get("mask_applied"))
+    output_rows = []
+    items = list(enumerate(df.iterrows(), start=1))
+    with ThreadPoolExecutor(max_workers=args.workers) as executor:
+        results = executor.map(process_item, items)
+        for i, result in results:
+            print(f"\n[{i}/{len(df)}] Preprocessing: {result.get('source_frame_key')}")
+            output_rows.append(result)
 
-        if result.get("preprocess_error"):
-            print("  Error:", result.get("preprocess_error"))
+            print("  Lens:", result.get("lens_id"))
+            print("  Status:", result.get("preprocess_status"))
+            print("  Source:", result.get("source_frame_path"))
+            print("  Output:", result.get("processed_frame_path"))
+            print("  Rotation:", result.get("rotation_name"))
+            print("  Mask:", result.get("mask_applied"))
+
+            if result.get("preprocess_error"):
+                print("  Error:", result.get("preprocess_error"))
 
     out_df = pd.DataFrame(output_rows)
     out_df.to_csv(output_manifest, index=False)

@@ -1,0 +1,6 @@
+target,R2,RMSE,MAE,split_mode,model,embedding_dim,engineered_dim,input_dim,train_rows,val_rows,test_rows,best_epoch,best_val_loss,model_seed,split_seed,run_dir
+Average,0.951705793539683,19.295597647173935,9.174482345581056,random,t7_multimodal_lstm_no_pm_inputs,4096,112,4208,18059,3187,5312,74,0.0206795738150294,11,42,experiments/traqid_pretraining_v1/reports/rerun_resnet50_concat_lstm_seed11
+Average,0.95152348279953,19.239094939117503,9.27696736653646,random,t7_multimodal_gru_no_pm_inputs,4096,112,4208,18059,3187,5312,55,0.02108282280656,11,42,experiments/traqid_pretraining_v1/reports/rerun_resnet50_concat_gru_seed11
+Average,0.949230174223582,19.816515424311785,10.48645830154419,random,t7_multimodal_gru_no_pm_inputs,1024,112,1136,18059,3187,5312,80,0.0246592642596134,11,42,experiments/traqid_pretraining_v1/reports/rerun_vgg16_concat_gru_seed11
+Average,0.9445771972338358,20.774030154505123,9.968725681304932,random,t7_multimodal_gru_bidir_no_pm_inputs,4096,112,4208,18059,3187,5312,65,0.0232911985367536,11,42,experiments/traqid_pretraining_v1/reports/rerun_resnet50_concat_bigru_seed11
+Average,0.943829337755839,20.891426828540475,11.059592405954996,random,t7_multimodal_gru_bidir_no_pm_inputs,1024,112,1136,18059,3187,5312,79,0.0263690240681171,11,42,experiments/traqid_pretraining_v1/reports/rerun_vgg16_concat_bigru_seed11

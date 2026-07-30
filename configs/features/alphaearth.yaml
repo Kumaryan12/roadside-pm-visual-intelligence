@@ -1,0 +1,17 @@
+feature_id: alphaearth_v1
+dataset: GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL
+dimensions: 64
+spatial_resolution_m: 10
+year_policy: latest_available_not_after_measurement_year
+available_years: [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+point_features: true
+buffers_m: [50, 100, 250]
+buffer_statistics: [mean, std]
+include_missingness: true
+validation:
+  require_spatial_blocking: true
+  fit_dimensionality_reduction_inside_fold: true
+  forbid_future_year_layer: true
+license:
+  name: CC-BY-4.0
+  attribution: AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind.

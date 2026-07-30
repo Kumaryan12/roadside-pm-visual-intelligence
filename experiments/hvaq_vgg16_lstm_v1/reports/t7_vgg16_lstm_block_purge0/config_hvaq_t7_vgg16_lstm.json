@@ -1,0 +1,31 @@
+{
+  "args": {
+    "sequence_manifest": "experiments/hvaq_vgg16_lstm_v1/data/processed/hvaq_T7_sequence_manifest_purge0.csv",
+    "embeddings": "experiments/hvaq_vgg16_lstm_v1/embeddings/hvaq_vgg16_avgpool512_row_embeddings.npy",
+    "split_col": "split_purged_block",
+    "target_mode": "log1p",
+    "device": "auto",
+    "batch_size": 32,
+    "epochs": 80,
+    "lr": 0.0008,
+    "weight_decay": 0.0001,
+    "hidden_dim": 64,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "grad_clip_norm": 1.0,
+    "seed": 42,
+    "out_dir": "experiments/hvaq_vgg16_lstm_v1/models/t7_vgg16_lstm_block_purge0",
+    "report_dir": "experiments/hvaq_vgg16_lstm_v1/reports/t7_vgg16_lstm_block_purge0",
+    "fig_dir": "experiments/hvaq_vgg16_lstm_v1/figures/t7_vgg16_lstm_block_purge0"
+  },
+  "embedding_shape": [
+    720,
+    512
+  ],
+  "rows": {
+    "all": 572,
+    "train": 390,
+    "val": 85,
+    "test": 97
+  }
+}

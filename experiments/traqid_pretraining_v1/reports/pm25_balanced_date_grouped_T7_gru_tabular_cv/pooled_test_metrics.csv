@@ -1,0 +1,2 @@
+evaluation,rows,unique_dates,MAE,RMSE,R2,finite_fraction,Pearson,Spearman
+pooled_held_out_date_predictions,26558,20,38.94861700628364,61.2260919433459,-0.7143660095582145,1.0,-0.025463360679458504,-0.05306002347952538

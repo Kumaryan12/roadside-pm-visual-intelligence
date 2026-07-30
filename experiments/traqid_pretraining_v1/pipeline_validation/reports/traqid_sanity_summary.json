@@ -1,0 +1,27 @@
+{
+  "rows":26678,
+  "front_exists_rate":1.0,
+  "rear_exists_rate":1.0,
+  "split_counts":{
+    "train":16909,
+    "test":5480,
+    "val":4289
+  },
+  "aqi_cat_counts":{
+    "Satisfactory":13033,
+    "Moderate":7453,
+    "Poor":2283,
+    "Very Poor":2233,
+    "Severe":932,
+    "Good":744
+  },
+  "season_counts":{
+    "Monsoon":10567,
+    "Winter":10210,
+    "Summer":5901
+  },
+  "day_night_counts":{
+    "Day":13789,
+    "Night":12889
+  }
+}

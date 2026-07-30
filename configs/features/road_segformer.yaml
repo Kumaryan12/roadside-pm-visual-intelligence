@@ -1,0 +1,54 @@
+feature_id: road_segformer_features_v1
+status: canonical
+
+segmentation:
+  model_id: idd_segformer_binary_road_v1
+  artifact: models/road_segmentation/best_segformer_b0_idd_binary_road/best_segformer_b0_idd_binary_road
+  output: binary_road_mask
+
+feature_scope:
+  color_and_texture_region: segmented_road_pixels_only
+  scene_visibility_region: full_image_and_non_road_context
+
+features:
+  geometry:
+    - road_pixel_fraction
+    - road_area_segmented_unoccluded_m2
+    - road_area_vehicle_occluded_m2
+    - road_area_effective_visible_m2
+  road_color:
+    - road_brown_pixel_fraction
+    - road_gray_pixel_fraction
+    - road_brightness_mean
+    - road_saturation_mean
+    - road_color_variability
+  road_texture:
+    - road_edge_density
+    - road_laplacian_variance
+    - road_texture_roughness
+  visibility:
+    - image_contrast
+    - dark_channel_haze_proxy
+    - visibility_proxy
+    - glare_fraction
+    - shadow_fraction
+  interactions:
+    - road_brown_x_visible_area
+    - road_dust_x_vehicle_load
+    - road_dust_x_heavy_vehicle_load
+
+excluded_from_canonical_pipeline:
+  - clip_zero_shot_road_labels
+  - clip_road_dust_score
+  - whole_image_opencv_visual_dust_score
+
+quality_controls:
+  - store_segmentation_confidence
+  - store_valid_road_pixel_count
+  - flag_small_or_empty_masks
+  - retain_mask_model_version
+  - validate_against_manual_road_polygons
+
+road_area_geometry:
+  config: configs/features/road_area_depth.yaml
+  note: Metric road area requires the SegFormer mask, calibrated camera intrinsics, and metric depth; it is not derived from road-pixel fraction alone.

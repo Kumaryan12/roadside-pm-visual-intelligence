@@ -1,0 +1,23 @@
+pipeline_id: traqid_resnet50_rnn_residual_outercv_v1
+dataset: TRAQID
+sequence_manifest: experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T7_front_sequence_manifest_time_balanced_purged.csv
+embeddings: experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy
+engineered_table: experiments/traqid_pretraining_v1/data/processed/traqid_engineered_T7_sequence_table.csv
+image_base:
+  backbone: resnet50_front_rear_concat_gap
+  sequence_length: 7
+  cells: [gru, lstm]
+  target: target_PM2.5
+validation:
+  outer_group: date
+  outer_folds: 5
+  validation_groups_from_outer_training_only: true
+  prediction_origin: oof
+  random_window_results_valid_for_generalization: false
+residual:
+  feature_table_grain: sequence_target_row
+  join_key: target_row_id
+  group: date
+  models: [ridge, extra_trees, hist_gradient_boosting]
+  default: extra_trees
+

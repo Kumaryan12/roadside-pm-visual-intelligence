@@ -1,0 +1,30 @@
+{
+  "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest.csv",
+  "rows": {
+    "all": 26558,
+    "train": 16825,
+    "val": 4271,
+    "test": 5462
+  },
+  "numeric_cols": [
+    "Temperature",
+    "Humidity",
+    "hour_sin",
+    "hour_cos"
+  ],
+  "categorical_cols": [
+    "Season",
+    "Day_or_Night"
+  ],
+  "target_mode": "log1p",
+  "models_tested": [
+    "ridge_alpha_0.1",
+    "ridge_alpha_1",
+    "ridge_alpha_10",
+    "ridge_alpha_100",
+    "hist_gradient_boosting",
+    "random_forest"
+  ],
+  "best_model": "hist_gradient_boosting",
+  "warning": "Uses only non-target context features. PM10, AQI, and AQI category are intentionally excluded to avoid label leakage."
+}

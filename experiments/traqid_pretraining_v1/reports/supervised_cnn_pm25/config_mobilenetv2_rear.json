@@ -1,0 +1,34 @@
+{
+  "args": {
+    "manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_random_debug_split.csv",
+    "view": "rear",
+    "target": "PM2.5",
+    "target_mode": "log1p",
+    "backbone": "mobilenetv2",
+    "device": "auto",
+    "batch_size": 64,
+    "num_workers": 0,
+    "head_epochs": 5,
+    "finetune_epochs": 3,
+    "head_lr": 0.001,
+    "finetune_lr": 2e-05,
+    "weight_decay": 0.0001,
+    "dropout": 0.25,
+    "unfreeze_last_blocks": 4,
+    "limit": null,
+    "require_env_plausible": false,
+    "seed": 42,
+    "debug": false,
+    "out_dir": "experiments/traqid_pretraining_v1/models/supervised_cnn_pm25",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/supervised_cnn_pm25",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/supervised_cnn_pm25"
+  },
+  "resolved_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_random_debug_split.csv",
+  "elapsed_sec": 882.3041679859161,
+  "rows": {
+    "all": 26678,
+    "train": 18674,
+    "val": 4002,
+    "test": 4002
+  }
+}

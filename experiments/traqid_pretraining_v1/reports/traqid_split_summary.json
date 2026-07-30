@@ -1,0 +1,39 @@
+{
+  "input_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest.csv",
+  "output_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+  "rows": 26678,
+  "unique_dates": 20,
+  "train_dates": [
+    "2022-10-22",
+    "2022-10-24",
+    "2022-10-25",
+    "2022-10-26",
+    "2023-01-28",
+    "2023-01-30",
+    "2023-02-01",
+    "2023-02-06",
+    "2023-02-07",
+    "2023-02-08",
+    "2023-12-21",
+    "2023-12-22",
+    "2023-12-23",
+    "2023-12-29"
+  ],
+  "val_dates": [
+    "2024-03-01",
+    "2024-03-02",
+    "2024-03-03"
+  ],
+  "test_dates": [
+    "2024-03-06",
+    "2024-07-05",
+    "2024-07-09"
+  ],
+  "split_counts": {
+    "train": 16909,
+    "test": 5480,
+    "val": 4289
+  },
+  "env_implausible_rows": 17,
+  "warning": "Splits are date-based to reduce leakage from repeated timestamps, front/rear paired images, and near-duplicate sequential samples."
+}

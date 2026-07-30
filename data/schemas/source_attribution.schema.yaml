@@ -1,0 +1,19 @@
+schema_version: 1
+table: source_attribution_output
+grain: one row per sample_id
+required_columns:
+  - sample_id
+  - measured_pm25_ug_m3
+  - predicted_pm25_ug_m3
+  - unresolved_pm25_ug_m3
+source_component_pattern: source_<name>_pm25_ug_m3
+source_fraction_pattern: source_<name>_fraction
+constraints:
+  - source component masses are non-negative
+  - source fractions are between 0 and 1
+  - source fractions plus unresolved fraction sum to 1 within tolerance
+  - component masses satisfy predicted-mass closure within tolerance
+terminology:
+  default: source-proxy contribution
+  chemical_attribution_allowed_only_with: validated chemical or receptor-model labels
+

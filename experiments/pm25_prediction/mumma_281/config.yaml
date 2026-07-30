@@ -1,0 +1,23 @@
+experiment_family: mumma_281_pm25
+status: compatibility_migration
+historical_root: experiments/mumma_281_pipeline_v1
+canonical_runner: pipelines.pm25_prediction.mumma_281.run
+target: value.sPM2
+road_features:
+  config: configs/features/road_segformer.yaml
+  road_area_config: configs/features/road_area_depth.yaml
+  use_segformer_mask_features: true
+  use_metric_depth_road_area: true
+  use_depth_gated_vehicle_occlusion_v3: true
+  use_clip_features: false
+  use_whole_image_opencv_dust_score: false
+reported_candidate:
+  experiment: residual_top30_source_base-et_leaf2_res-et_leaf1_log1p
+  r2: 0.6499359737697907
+  rmse: 9.718681696891478
+validation_status: historical_kfold_not_generalized
+next_validation:
+  - collection_grouped
+  - grouped_date
+  - spatial_block
+  - chronological

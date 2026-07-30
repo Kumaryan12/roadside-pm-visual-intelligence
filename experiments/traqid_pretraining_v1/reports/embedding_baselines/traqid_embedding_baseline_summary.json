@@ -1,0 +1,41 @@
+{
+  "index_csv": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_embedding_index.csv",
+  "embeddings_dir": "experiments/traqid_pretraining_v1/embeddings",
+  "prefix": "traqid_mobilenetv2_torch",
+  "rows_used": 26678,
+  "embedding_kinds": [
+    "front",
+    "rear",
+    "mean",
+    "concat"
+  ],
+  "targets": [
+    "PM2.5",
+    "PM10",
+    "aqi"
+  ],
+  "target_modes": [
+    "raw",
+    "log1p"
+  ],
+  "pca_components": [
+    64,
+    128,
+    256
+  ],
+  "alphas": [
+    1.0,
+    10.0,
+    100.0,
+    1000.0
+  ],
+  "include_no_pca": false,
+  "include_hgb": false,
+  "require_env_plausible": false,
+  "split_counts": {
+    "train": 16909,
+    "test": 5480,
+    "val": 4289
+  },
+  "main_question": "Do frozen visual embeddings beat the date-safe mean baseline under validation and test splits?"
+}

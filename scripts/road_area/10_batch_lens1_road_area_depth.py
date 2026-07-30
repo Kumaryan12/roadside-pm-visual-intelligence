@@ -443,6 +443,12 @@ def main():
         "--output-csv",
         default="outputs/road_area_lens1_batch/lens1_depth_estimated_road_area.csv",
     )
+    parser.add_argument("--checkpoint-every", type=int, default=25)
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Ignore an existing output CSV and recompute selected frames.",
+    )
 
     args = parser.parse_args()
 
@@ -504,7 +510,17 @@ def main():
         & (df["preprocess_status"] == "success")
     ].copy()
 
-    df = df.sort_values(["sample_index", "video_offset_sec"]).reset_index(drop=True)
+    if "sample_index" not in df.columns:
+        raise ValueError(
+            "Manifest missing legacy sample_index alias; regenerate it with "
+            "pipelines.pm25_prediction.mumma_7day.extract_frames."
+        )
+    offset_column = (
+        "video_offset_seconds"
+        if "video_offset_seconds" in df.columns
+        else "video_offset_sec"
+    )
+    df = df.sort_values(["sample_index", offset_column]).reset_index(drop=True)
 
     if args.stride > 1:
         df = df.iloc[::args.stride].copy()
@@ -515,10 +531,25 @@ def main():
     print("\nFrames to process:", len(df))
 
     rows = []
+    completed = set()
+    if output_csv.exists() and not args.overwrite:
+        previous = pd.read_csv(output_csv)
+        rows = previous.to_dict(orient="records")
+        if {"processed_frame_key", "lens_id"}.issubset(previous.columns):
+            completed = set(zip(
+                previous["processed_frame_key"].astype(str),
+                previous["lens_id"].astype(int),
+            ))
+        print("Resuming completed rows:", len(completed))
+
+    processed_since_checkpoint = 0
 
     for i, row in df.iterrows():
         sample_index = int(row["sample_index"])
         lens_id = int(row["lens_id"])
+        row_key = (str(row["processed_frame_key"]), lens_id)
+        if row_key in completed:
+            continue
 
         out_id = f"sample_{sample_index:05d}_lens_{lens_id}_row_{i:06d}"
 
@@ -676,8 +707,12 @@ def main():
             print("[ERROR]", exc)
 
         rows.append(result)
-
-        pd.DataFrame(rows).to_csv(output_csv, index=False)
+        completed.add(row_key)
+        processed_since_checkpoint += 1
+        if processed_since_checkpoint >= args.checkpoint_every:
+            pd.DataFrame(rows).to_csv(output_csv, index=False)
+            print("Checkpoint saved:", output_csv)
+            processed_since_checkpoint = 0
 
     out = pd.DataFrame(rows)
     out.to_csv(output_csv, index=False)

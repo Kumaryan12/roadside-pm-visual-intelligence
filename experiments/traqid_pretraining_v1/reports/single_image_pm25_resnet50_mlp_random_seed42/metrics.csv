@@ -1,0 +1,3 @@
+split,target,R2,RMSE,MAE,model,split_mode,best_epoch,best_val_loss,train_rows,val_rows,test_rows
+val,PM2.5,0.525786165774037,33.13291585943762,20.01529723175733,single_image_resnet50_front_rear_mlp,random,33,0.5180351822637022,18674,4002,4002
+test,PM2.5,0.48781143135332794,33.92141035692337,20.50742247701722,single_image_resnet50_front_rear_mlp,random,33,0.5180351822637022,18674,4002,4002

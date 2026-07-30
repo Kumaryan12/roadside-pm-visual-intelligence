@@ -1,0 +1,25 @@
+schema_version: 1
+table: modeling_table
+grain: one row per sample_id or explicitly registered sequence_id
+required_identifier_columns:
+  - sample_id
+  - dataset_id
+  - collection_id
+  - trip_id
+  - timestamp
+  - spatial_block_id
+feature_prefixes:
+  image: img_
+  vehicle: veh_
+  road: road_
+  osm: osm_
+  alphaearth: aef_
+  meteorology: met_
+  opc: opc_
+  temporal: lag_
+target_prefix: target_
+constraints:
+  - target-derived columns are excluded from predictors
+  - all feature provenance is registered
+  - split assignment columns are never model inputs
+

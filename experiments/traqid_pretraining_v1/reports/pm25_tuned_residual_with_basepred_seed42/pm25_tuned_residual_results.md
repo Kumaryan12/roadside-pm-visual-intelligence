@@ -1,0 +1,19 @@
+| model                                  | uses_base_pred_feature   |       R2 |     RMSE |     MAE |
+|:---------------------------------------|:-------------------------|---------:|---------:|--------:|
+| extra_trees_conservative_plus_basepred | True                     | 0.956042 |  9.84743 | 5.43987 |
+| extra_trees_default_plus_basepred      | True                     | 0.955796 |  9.87491 | 5.40876 |
+| extra_trees_smooth_plus_basepred       | True                     | 0.955651 |  9.89117 | 5.50779 |
+| extra_trees_wide_plus_basepred         | True                     | 0.955312 |  9.92884 | 5.43216 |
+| random_forest_smooth_plus_basepred     | True                     | 0.954566 | 10.0113  | 5.61129 |
+| extra_trees_conservative               | False                    | 0.954451 | 10.024   | 5.56496 |
+| extra_trees_smooth                     | False                    | 0.954216 | 10.0499  | 5.63713 |
+| extra_trees_default                    | False                    | 0.953959 | 10.0781  | 5.56336 |
+| random_forest_smooth                   | False                    | 0.953814 | 10.0938  | 5.71488 |
+| extra_trees_wide                       | False                    | 0.953513 | 10.1267  | 5.58615 |
+| hgb_plus_basepred                      | True                     | 0.953162 | 10.1649  | 5.78307 |
+| random_forest_default_plus_basepred    | True                     | 0.952617 | 10.2238  | 5.65596 |
+| hgb                                    | False                    | 0.952109 | 10.2785  | 5.95771 |
+| random_forest_default                  | False                    | 0.951581 | 10.335   | 5.76701 |
+| image_base_only                        | False                    | 0.951356 | 10.359   | 5.99134 |
+| ridge_plus_basepred                    | True                     | 0.947806 | 10.7304  | 6.57813 |
+| ridge                                  | False                    | 0.947642 | 10.7472  | 6.58677 |

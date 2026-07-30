@@ -1,0 +1,16 @@
+name: traqid_benchmark_matrix_v1
+target: PM2.5
+sequence_length: 7
+image_features: resnet50_front_rear_concat_gap
+protocols:
+  historical_diagnostics: [random_70_15_15, random_twofold_fold1, random_twofold_fold2]
+  leakage_controlled: [old_purged_block, time_balanced_purged, chronological_date]
+  primary: [date_grouped_outer_cv]
+methods:
+  sanity_baselines: [train_mean, previous_step_persistence]
+  classical_image: [ridge, random_forest, extra_trees]
+  temporal_image: [resnet50_gru, resnet50_lstm]
+  fusion: [temporal_image_plus_tabular, temporal_image_plus_oof_residual_correction]
+selection_rule: >-
+  Select using aggregate date-grouped outer-CV performance, variability across
+  dates, and worst-fold error. Never select from random-window CV.

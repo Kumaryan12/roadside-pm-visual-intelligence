@@ -1,0 +1,4 @@
+split_col,split_value,rows,fraction
+split_date_chrono,train,16909,0.6338181272958993
+split_date_chrono,test,5480,0.20541269960266886
+split_date_chrono,val,4289,0.16076917310143188

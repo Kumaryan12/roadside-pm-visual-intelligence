@@ -1,0 +1,8 @@
+file,rows,cols,missing_frac,target_pm25,gps,met,gas,vehicle,road,osm,density,score
+outputs/features/particle_density_modeling_table_idd_finetuned_osm_roadarea_v1_primary_only.csv,206,190,0.0061,1,9,3,78,53,86,19,6,24.9939
+outputs/features/particle_density_modeling_table_idd_finetuned_osm_density_d040_v2.csv,281,183,0.0073,3,9,3,72,49,75,19,7,24.9927
+outputs/features/particle_density_modeling_table_idd_finetuned_osm_density_v2.csv,281,175,0.0076,2,9,3,72,49,75,19,6,24.9924
+outputs/features/particle_density_modeling_table_idd_finetuned_osm_v2.csv,281,174,0.0077,1,9,3,72,49,75,19,6,24.9923
+outputs/features/particle_density_modeling_table_idd_finetuned_osm_roadarea_v1.csv,281,190,0.0158,1,9,3,78,53,86,19,6,24.9842
+outputs/features/particle_density_modeling_table_idd_finetuned_v2.csv,281,133,0.0008,1,7,3,45,47,58,0,6,21.6592
+outputs/features/particle_density_modeling_table_v2.csv,281,116,0.0009,1,6,2,43,38,52,0,4,21.3191

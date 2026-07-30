@@ -1,0 +1,37 @@
+{
+  "index_csv": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_embedding_index.csv",
+  "out": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest.csv",
+  "seq_len": 7,
+  "target": "PM2.5",
+  "input_rows": 26678,
+  "sequence_rows": 26558,
+  "unique_dates": 20,
+  "split_counts": {
+    "train": 16825,
+    "test": 5462,
+    "val": 4271
+  },
+  "date_counts": {
+    "2022-10-22": 1716,
+    "2022-10-24": 1635,
+    "2022-10-25": 1125,
+    "2022-10-26": 2199,
+    "2023-01-28": 1114,
+    "2023-01-30": 1265,
+    "2023-02-01": 1362,
+    "2023-02-06": 1416,
+    "2023-02-07": 1380,
+    "2023-02-08": 1348,
+    "2023-12-21": 702,
+    "2023-12-22": 730,
+    "2023-12-23": 430,
+    "2023-12-29": 403,
+    "2024-03-01": 1084,
+    "2024-03-02": 1254,
+    "2024-03-03": 1933,
+    "2024-03-06": 1606,
+    "2024-07-05": 2112,
+    "2024-07-09": 1744
+  },
+  "note": "Each sequence uses consecutive rows within the same TRAQID date. Target is the final row in the sequence."
+}

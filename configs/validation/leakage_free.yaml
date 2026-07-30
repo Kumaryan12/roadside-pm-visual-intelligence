@@ -1,0 +1,21 @@
+protocol_id: leakage_free_v1
+group_columns:
+  temporal: [dataset_id, collection_id, trip_id, date]
+  spatial: [spatial_block_id]
+purge:
+  enabled: true
+  minutes: null
+sequence_rules:
+  raw_frame_disjoint: true
+  input_window_disjoint: true
+  target_window_disjoint: true
+preprocessing_rules:
+  fit_scaler_inside_fold: true
+  fit_imputer_inside_fold: true
+  fit_pca_inside_fold: true
+  select_features_inside_fold: true
+report:
+  write_split_assignments: true
+  write_overlap_report: true
+  fail_on_overlap: true
+

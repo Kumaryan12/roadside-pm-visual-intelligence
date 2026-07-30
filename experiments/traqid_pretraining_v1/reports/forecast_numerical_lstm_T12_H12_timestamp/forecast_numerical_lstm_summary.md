@@ -1,0 +1,5 @@
+| model          | split_col              | train_name   | eval_name   |   best_epoch |   PM2.5_R2 |   PM10_R2 |    Avg_R2 |   PM2.5_RMSE |   PM10_RMSE |   Avg_RMSE |
+|:---------------|:-----------------------|:-------------|:------------|-------------:|-----------:|----------:|----------:|-------------:|------------:|-----------:|
+| numerical_lstm | split_random_forecast  | train        | test        |           77 |  0.813405  | 0.916511  | 0.864958  |      26.2037 |     43.0538 |    34.6288 |
+| numerical_lstm | split_twofold_forecast | fold1_train  | fold1_test  |           78 |  0.747801  | 0.901432  | 0.824617  |      30.2055 |     46.0482 |    38.1268 |
+| numerical_lstm | split_chrono_forecast  | train        | test        |           14 |  0.0981362 | 0.0961359 | 0.0971361 |      48.4355 |     29.6485 |    39.042  |

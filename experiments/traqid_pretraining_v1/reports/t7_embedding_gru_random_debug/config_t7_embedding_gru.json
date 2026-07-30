@@ -1,0 +1,32 @@
+{
+  "args": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest_random_debug_split.csv",
+    "embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_front_embeddings.npy",
+    "target_mode": "log1p",
+    "device": "auto",
+    "batch_size": 128,
+    "epochs": 20,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "hidden_dim": 128,
+    "num_layers": 1,
+    "dropout": 0.25,
+    "bidirectional": false,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/t7_embedding_gru_random_debug",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/t7_embedding_gru_random_debug",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/t7_embedding_gru_random_debug"
+  },
+  "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_T7_front_sequence_manifest_random_debug_split.csv",
+  "embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_front_embeddings.npy",
+  "embedding_shape": [
+    26678,
+    1280
+  ],
+  "rows": {
+    "sequences": 26558,
+    "train": 18590,
+    "val": 3984,
+    "test": 3984
+  }
+}

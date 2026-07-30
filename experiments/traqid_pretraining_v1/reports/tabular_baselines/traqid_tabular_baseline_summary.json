@@ -1,0 +1,21 @@
+{
+  "manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+  "rows_after_cleaning": 26661,
+  "train_rows": 16907,
+  "val_rows": 4289,
+  "test_rows": 5465,
+  "features": [
+    "Temperature",
+    "Humidity",
+    "hour_sin",
+    "hour_cos",
+    "Season",
+    "Day_or_Night"
+  ],
+  "targets": [
+    "PM2.5",
+    "PM10",
+    "aqi"
+  ],
+  "warning": "This is a non-image baseline. Vision models must beat or add value beyond this baseline before we claim visual information is useful."
+}

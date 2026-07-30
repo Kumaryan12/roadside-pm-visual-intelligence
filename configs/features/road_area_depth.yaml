@@ -1,0 +1,72 @@
+feature_id: road_area_depth_v3
+status: canonical_with_validation_required
+
+inputs:
+  preprocessed_image: required
+  road_mask:
+    producer: idd_segformer_binary_road_v1
+  metric_depth:
+    model_id: depth-anything/Depth-Anything-V2-Metric-Outdoor-Base-hf
+  vehicle_detections:
+    producer: idd_yolo11m_v1
+    require_nms: true
+  camera_calibration:
+    fx_px: required_per_lens
+    fy_px: required_per_lens_or_explicit_fx_fallback
+    cx_px: image_center_unless_calibrated
+    cy_px: image_center_unless_calibrated
+    historical_lens1_fx_fy_px: 1345.4897862232779
+    historical_provenance: outputs/road_area_lens1_batch/lens1_depth_estimated_road_area.csv
+
+surface_area:
+  method: triangulated_metric_depth_surface
+  min_depth_m: 0.5
+  max_depth_m: 30.0
+  erode_road_mask: true
+  calculation_width_px: 1024
+  exclude_lens_platform: true
+  exclude_bottom_connected_black_region: true
+
+occlusion:
+  canonical_candidate: depth_gated_vehicle_footprint_v3
+  historical_variants:
+    - footprint_v1
+    - bbox_visibility_only_v2
+    - depth_gated_vehicle_footprint_v3
+  conservative_adjustment: true
+  required_comparison: manual_polygon_and_visual_audit
+
+canonical_features:
+  - road_area_segmented_unoccluded_m2
+  - road_area_vehicle_occluded_m2
+  - road_area_effective_visible_m2
+  - road_area_vehicle_occlusion_fraction
+  - road_depth_p10_m
+  - road_depth_p50_m
+  - road_depth_p90_m
+  - road_pixels_used_for_area
+  - valid_road_quads_used
+  - vehicle_count_used_for_occlusion
+
+quality_features:
+  - road_area_quality_flag
+  - vehicle_occlusion_quality
+  - valid_depth_fraction_on_road
+  - segmentation_confidence
+  - calibration_version
+  - depth_model_version
+  - road_model_version
+
+scientific_constraints:
+  - area values are model-derived estimates, not direct physical measurements
+  - camera intrinsics must not be tuned using evaluation targets
+  - depth and segmentation failures must be flagged rather than median-filled silently
+  - preserve raw area, occluded area, and conservative effective area separately
+
+historical_pipeline:
+  - scripts/road_area/10_batch_lens1_road_area_depth.py
+  - scripts/road_area/10_filter_object_detections_nms.py
+  - scripts/road_area/11c_add_vehicle_footprint_occlusion_area_depth_gated_v3.py
+  - scripts/road_area/12_make_conservative_occlusion_adjustment.py
+  - scripts/road_area/14_finalize_road_area_features.py
+  - scripts/road_area/15_merge_road_area_features_into_modeling_table.py

@@ -1,0 +1,25 @@
+schema_version: 1
+table: sample_manifest
+grain: one row per aligned sensor observation
+required_columns:
+  sample_id: string
+  dataset_id: string
+  collection_id: string
+  trip_id: string
+  timestamp: datetime_utc_or_documented_local
+  latitude: float
+  longitude: float
+optional_columns:
+  date: date
+  location_id: string
+  spatial_block_id: string
+  front_image_path: path
+  rear_image_path: path
+  pm25_ug_m3: float
+  pm10_ug_m3: float
+constraints:
+  - sample_id is unique
+  - latitude is between -90 and 90
+  - longitude is between -180 and 180
+  - timezone and timestamp-alignment tolerance are documented
+

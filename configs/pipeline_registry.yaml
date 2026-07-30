@@ -1,0 +1,95 @@
+schema_version: 1
+
+compatibility_policy:
+  move_existing_files: false
+  delete_existing_files: false
+  preserve_historical_entry_points: true
+  require_result_equivalence_before_superseding: true
+
+pipelines:
+  pm25_prediction:
+    status: foundation
+    objective: Leakage-free multimodal PM2.5 prediction.
+    canonical_path: pipelines/pm25_prediction
+    historical_implementations:
+      - experiments/mumma_281_pipeline_v1/scripts
+      - experiments/traqid_pretraining_v1/scripts
+      - experiments/traqid_pretraining_v1/pipeline_validation/scripts
+    required_validation:
+      - grouped_date
+      - time_purged
+      - chronological_date
+      - spatial_block
+
+  particle_source_attribution:
+    status: planned
+    objective: Particle-density modeling and constrained source-proxy attribution.
+    canonical_path: pipelines/particle_source_attribution
+    historical_implementations:
+      - scripts/feature_fusion
+      - scripts/modeling/02_density_target_ablation_pipeline.py
+    terminology: Source-proxy attribution until chemically grounded labels exist.
+
+  image_embeddings_temporal:
+    status: registered_for_next_migration
+    canonical_path: pipelines/image_embeddings
+    canonical_config: configs/pipelines/image_embeddings_v1.yaml
+    merge_policy: Join arrays by stable sample/sequence IDs inside modeling runs; do not widen the canonical engineered table.
+
+  image_base_tabular_residual:
+    status: canonical_candidate
+    canonical_path: pipelines/image_embeddings/residual_fusion
+    canonical_config: configs/pipelines/image_residual_fusion_v1.yaml
+    formula: corrected_pm25 = heldout_image_base_pm25 + grouped_tabular_residual
+    safety: In-sample image predictions are rejected.
+
+  traqid_outer_crossfit:
+    status: canonical_experiment
+    canonical_path: pipelines/image_embeddings/traqid_outer_crossfit.py
+    canonical_config: configs/pipelines/traqid_outer_crossfit_v1.yaml
+    protocol: Date-grouped outer cross-fitting of ResNet50 GRU/LSTM followed by grouped residual correction.
+    comparison_only: Historical random and two-fold sliding-window results.
+
+  shared_features:
+    status: foundation
+    canonical_path: pipelines/shared
+    canonical_runner: pipelines.shared.feature_table.run
+    canonical_config: configs/pipelines/feature_table_v1.yaml
+    historical_implementations:
+      - scripts/frame_extraction
+      - scripts/preprocessing
+      - scripts/vehicle_detection
+      - scripts/road_segmentation
+      - scripts/road_area
+      - scripts/feature_fusion
+    canonical_road_features:
+      config: configs/features/road_segformer.yaml
+      method: SegFormer mask followed by mask-restricted physical features.
+      road_area_config: configs/features/road_area_depth.yaml
+      road_area_method: SegFormer mask plus metric Depth Anything surface reconstruction and depth-gated vehicle occlusion.
+      excluded_methods:
+        - CLIP zero-shot road classification
+        - whole-image OpenCV dust scoring
+
+  traqid_benchmark:
+    status: historical_active
+    canonical_evidence: experiments/traqid_pretraining_v1/reports/paper_final
+    warning: Random and two-fold sliding-window scores are overlap-contaminated.
+
+  traqid_presentation_reproduction:
+    status: historical_reproduction
+    canonical_path: pipelines/image_embeddings/traqid_presentation_reproduction.py
+    canonical_config: configs/pipelines/traqid_presentation_reproduction_v1.yaml
+    expected_pm25_r2: 0.965556
+    warning: Exact presentation benchmark uses random overlapping T7 windows; fair grouped-date evaluation follows separately.
+
+  mumma_281_benchmark:
+    status: historical_active
+    canonical_evidence: experiments/mumma_281_pipeline_v1/reports
+    current_candidate: residual_top30_source_base-et_leaf2_res-et_leaf1_log1p
+
+  mumma_7day_ingestion:
+    status: ready_awaiting_data
+    canonical_path: pipelines/pm25_prediction/mumma_7day
+    canonical_config: configs/datasets/mumma_7day.yaml
+    protocol: Read-only collection audit followed by day, trip, chronological, and spatial group assignment before sequence construction.

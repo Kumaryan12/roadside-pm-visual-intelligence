@@ -1,0 +1,13 @@
+Label,Source,Model,Feature_Set,MAE,RMSE,R2,Spearman,Interpretation
+Mean baseline,image_dominant,mean_baseline,mean_baseline,33.82045966532737,49.00079260320588,-2.0283305407264866e-05,,Naive baseline; predicts train-set mean PM2.5.
+YOLO counts only,image_dominant,hist_gradient_boosting,yolo_counts_only,33.417352926948666,48.57852091443345,0.0171411012253251,0.1018342603731189,Simple vehicle counts alone; weak and unstable.
+Advanced YOLO only,image_dominant,random_forest,advanced_yolo_only,31.33867375533414,46.07050553121069,0.1160075525720117,0.3259177159039245,Spatial/area/proximity YOLO features without road/ResNet.
+Road only,image_dominant,extra_trees,road_only,31.433631414745047,45.18037818100284,0.1498367600370991,0.3566598956767186,Road segmentation and road-surface descriptors only.
+ResNet50 only,image_dominant,hist_gradient_boosting,resnet50_only_pca64,27.63361512913322,42.12018049830499,0.2611044582436562,0.4903461046868508,Generic scene embeddings only; captures appearance/haze/scene context.
+YOLO + road,image_dominant,extra_trees,yolo_plus_road,29.441039334972775,43.03910803571181,0.2285120921719854,0.4454445612443208,Interpretable traffic + road-surface source-proxy features.
+YOLO + road + ResNet50,image_dominant,hist_gradient_boosting,image_all_resnet_pca64,26.35902753653417,40.017530071155775,0.3330348239396243,0.5260858976062575,Strict image-dominant setup without temp/humidity/day-night/time shortcuts.
+Image + Temp/Humidity,image_dominant,random_forest,image_all_plus_temp_humidity,14.530676414484796,24.74098113986417,0.7450609075724222,0.8404731379100868,Image features with weak meteorological support only.
+Image + Temp/Humidity + Day/Night,image_dominant,random_forest,image_all_plus_temp_humidity_daynight,13.706857889207496,23.38690809462104,0.7722028863727968,0.8526666885908276,Best image-focused multimodal result; no hour/month/season/PM10/AQI.
+Full tabular RF baseline,selected_yolo_residual,random_forest,tabular_only,10.699892258536872,20.305383211321523,0.816098103022194,0.9127517325428618,Strongest fair tabular baseline with weather/time/season context.
+Selected YOLO residual fusion,selected_yolo_residual,residual_rf,selected_yolo_residual,10.815752999914425,20.263778629327387,0.8168509401465625,0.9111205326555502,Best fair result; selected YOLO features provide small residual correction.
+Selected YOLO early fusion,selected_yolo_residual,extra_trees,tabular_plus_selected_yolo,10.765278804847046,20.458728923647584,0.8133099702337712,0.9075537102945428,Directly adding selected YOLO features; weaker than residual fusion.

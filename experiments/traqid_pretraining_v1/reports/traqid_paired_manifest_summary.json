@@ -1,0 +1,33 @@
+{
+  "traqid_root": "experiments/traqid_pretraining_v1/data/raw/traqid",
+  "csv_rows": 26678,
+  "front_images": 26678,
+  "rear_images": 26678,
+  "manifest_rows": 26678,
+  "front_missing": 0,
+  "rear_missing": 0,
+  "created_at_parse_success": 26678,
+  "unique_image_ids": 26678,
+  "unique_timestamps": 8717,
+  "unique_dates": 20,
+  "unique_hours": 78,
+  "temperature_implausible_rows": 17,
+  "humidity_implausible_rows": 0,
+  "aqi_cat_counts": {
+    "Satisfactory": 13033,
+    "Moderate": 7453,
+    "Poor": 2283,
+    "Very Poor": 2233,
+    "Severe": 932,
+    "Good": 744
+  },
+  "day_or_night_counts": {
+    "Day": 13789,
+    "Night": 12889
+  },
+  "season_counts": {
+    "Monsoon": 10567,
+    "Winter": 10210,
+    "Summer": 5901
+  }
+}

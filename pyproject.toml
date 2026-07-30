@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "roadside-pm-visual-intelligence"
+version = "0.1.0"
+description = "Leakage-aware multimodal roadside PM prediction and source-proxy research."
+requires-python = ">=3.9"
+dependencies = [
+  "numpy",
+  "pandas",
+  "PyYAML",
+  "scikit-learn",
+]
+
+[project.optional-dependencies]
+vision = ["opencv-python", "Pillow", "torch", "torchvision", "transformers", "ultralytics"]
+geospatial = ["earthengine-api"]
+experiments = ["matplotlib", "scipy", "xgboost"]
+all = [
+  "opencv-python", "Pillow", "torch", "torchvision", "transformers", "ultralytics",
+  "earthengine-api", "matplotlib", "scipy", "xgboost", "streamlit",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["roadside_pm*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,0 +1,32 @@
+pipeline_id: image_embeddings_temporal_v1
+status: registered_for_next_migration
+backbone: resnet50
+pretraining: imagenet
+pooling: global_average_pool
+modalities: [front, rear]
+fusion_variants: [front_only, rear_only, mean, concat]
+sequence_lengths: [1, 3, 7]
+temporal_models: [gru, lstm]
+identity:
+  sample_key: sample_index
+  sequence_key: sequence_id
+storage:
+  embeddings: numpy_array_plus_csv_index
+  merge_into_canonical_table: false
+validation:
+  split_before_sequence_windows: true
+  raw_frame_disjoint: true
+  group_by: [collection_id, trip_id, date, spatial_block_id]
+  fit_pca_inside_fold: true
+  fit_scaler_inside_fold: true
+  evaluate: [grouped_date, chronological, spatial_block]
+historical_implementations:
+  mumma:
+    - experiments/mumma_281_pipeline_v1/scripts/06_extract_resnet50_embeddings.py
+    - experiments/mumma_281_pipeline_v1/scripts/07_resnet_t7_random2fold_lstm_fair_pm25.py
+  traqid:
+    - experiments/traqid_pretraining_v1/scripts/19_build_paper_style_T_sequence_manifest.py
+    - experiments/traqid_pretraining_v1/scripts/20_extract_paper_cnn_features.py
+    - experiments/traqid_pretraining_v1/scripts/21_train_paper_cnn_lstm_multitarget.py
+    - experiments/traqid_pretraining_v1/scripts/23_train_paper_cnn_lstm_tabular_fusion.py
+

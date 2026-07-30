@@ -1,0 +1,8 @@
+feature_set,num_features
+sensor_context_only,18
+vehicle_IDD_only,60
+road_condition_only,67
+OSM_only,37
+engineered_all_without_resnet,172
+resnet50_only,2048
+engineered_all_plus_resnet50,2220

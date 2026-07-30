@@ -1,0 +1,29 @@
+pipeline_id: traqid_presentation_reproduction_v1
+status: historical_reproduction_overlap_contaminated
+source_presentation: FINAL_TRAQID_Temporal_PM25_Residual_Fusion_Presentation.key
+entry_point: pipelines.image_embeddings.traqid_presentation_reproduction
+architecture:
+  sequence_length: 7
+  image_backbone: resnet50
+  views: [front, rear]
+  embedding_fusion: concat
+  embedding_dim: 4096
+  projection_dim: 512
+  temporal_cell: gru
+  hidden_dim: 256
+  layers: 2
+  dropout: 0.25
+residual:
+  folds: 3
+  model: extra_trees_conservative
+  aggregations: [last, mean, std, min, max]
+  clip_pm25: 12.5
+validation:
+  split: random_80_20
+  seed: 42
+  warning: T7 sliding windows overlap across the random split.
+expected_result:
+  R2: 0.965556
+  RMSE: 8.716917
+  MAE: 4.211589
+next_stage: fair_grouped_date_nested_stacking

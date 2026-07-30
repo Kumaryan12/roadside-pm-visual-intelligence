@@ -1,0 +1,67 @@
+{
+  "model": "balanced_date_grouped_T7_GRU_tabular_fusion",
+  "target": "PM2.5",
+  "folds": 5,
+  "aggregate_test_metrics": [
+    {
+      "metric": "MAE",
+      "mean": 37.99621886025087,
+      "std": 21.341520173392325,
+      "min": 17.01758974102062,
+      "max": 73.65427245106613,
+      "folds": 5
+    },
+    {
+      "metric": "RMSE",
+      "mean": 54.990764695338065,
+      "std": 26.474334748572147,
+      "min": 22.6405068569146,
+      "max": 94.04400537850273,
+      "folds": 5
+    },
+    {
+      "metric": "R2",
+      "mean": -0.8241500794318156,
+      "std": 1.6364008575837756,
+      "min": -3.743001791555791,
+      "max": 0.0583151002414829,
+      "folds": 5
+    },
+    {
+      "metric": "Pearson",
+      "mean": 0.13518069936679328,
+      "std": 0.1337684756907053,
+      "min": -0.03358804032890156,
+      "max": 0.2937697965961549,
+      "folds": 5
+    },
+    {
+      "metric": "Spearman",
+      "mean": 0.10241193085160014,
+      "std": 0.1538032650370421,
+      "min": -0.10818598575907767,
+      "max": 0.26258259194519584,
+      "folds": 5
+    }
+  ],
+  "pooled_test_metrics": {
+    "MAE": 38.94861700628364,
+    "RMSE": 61.2260919433459,
+    "R2": -0.7143660095582145,
+    "finite_fraction": 1.0,
+    "Pearson": -0.025463360679458504,
+    "Spearman": -0.05306002347952538
+  },
+  "test_coverage": {
+    "rows": 26558,
+    "unique_sequence_ids": 26558,
+    "duplicate_sequence_ids": 0,
+    "unique_dates": 20
+  },
+  "notes": [
+    "Complete acquisition dates were assigned to grouped folds.",
+    "Sequences were created independently inside train, validation, and test date groups.",
+    "Tabular preprocessing and embedding normalization were fitted using training rows only.",
+    "Test data were evaluated only after selecting the best validation checkpoint."
+  ]
+}

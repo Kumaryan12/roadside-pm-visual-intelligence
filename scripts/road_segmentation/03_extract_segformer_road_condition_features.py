@@ -13,18 +13,7 @@ DEFAULT_INPUT_MANIFEST = Path("outputs/features/processed_frame_manifest_preproc
 DEFAULT_OUTPUT_CSV = Path("outputs/features/segformer_road_condition_features_frame_level_v2.csv")
 
 
-from transformers import SegformerImageProcessor, SegformerForSemanticSegmentation
-
 MODEL_NAME = "models/road_segmentation/best_segformer_b0_idd_binary_road/best_segformer_b0_idd_binary_road"
-
-# Load original processor from Hugging Face
-processor = SegformerImageProcessor.from_pretrained("nvidia/segformer-b0-finetuned-cityscapes-768-768")
-
-# Load your fine-tuned weights into model
-model = SegformerForSemanticSegmentation.from_pretrained(
-    MODEL_NAME,
-    ignore_mismatched_sizes=True  # if your output classes changed
-)
 # Same artificial platform masks that were applied during preprocessing.
 # Coordinates are normalized: (x1_ratio, y1_ratio, x2_ratio, y2_ratio)
 PLATFORM_MASK_CONFIG = {
@@ -42,7 +31,12 @@ def resolve_path(path_value: str) -> Path:
 
 
 def load_model():
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
 
     processor = SegformerImageProcessor.from_pretrained(MODEL_NAME)
     model = SegformerForSemanticSegmentation.from_pretrained(MODEL_NAME)
@@ -285,6 +279,12 @@ def main():
     parser.add_argument("--output-csv", default=str(DEFAULT_OUTPUT_CSV))
     parser.add_argument("--lenses", nargs="+", type=int, default=[1, 6])
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--checkpoint-every", type=int, default=100)
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Ignore an existing output CSV and recompute all selected frames.",
+    )
 
     args = parser.parse_args()
 
@@ -310,14 +310,34 @@ def main():
 
     processor, model, id2label, device = load_model()
 
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
     rows = []
+    completed = set()
+
+    if output_csv.exists() and not args.overwrite:
+        previous = pd.read_csv(output_csv)
+        rows = previous.to_dict(orient="records")
+        if {"processed_frame_key", "lens_id"}.issubset(previous.columns):
+            completed = set(
+                zip(
+                    previous["processed_frame_key"].astype(str),
+                    previous["lens_id"].astype(int),
+                )
+            )
+        print("Resuming completed rows:", len(completed))
 
     for i, (_, row) in enumerate(df.iterrows(), start=1):
+        row_key = (str(row["processed_frame_key"]), int(row["lens_id"]))
+        if row_key in completed:
+            continue
         print(f"[{i}/{len(df)}] lens={row['lens_id']} frame={row['processed_frame_key']}")
         rows.append(process_row(row, processor, model, id2label, device))
+        completed.add(row_key)
+        if len(rows) % args.checkpoint_every == 0:
+            pd.DataFrame(rows).to_csv(output_csv, index=False)
+            print("Checkpoint saved:", output_csv)
 
     out = pd.DataFrame(rows)
-    output_csv.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(output_csv, index=False)
 
     print("\nSaved:", output_csv)

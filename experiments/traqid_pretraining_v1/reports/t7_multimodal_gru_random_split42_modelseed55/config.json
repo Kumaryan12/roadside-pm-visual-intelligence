@@ -1,0 +1,32 @@
+{
+  "sequence_table": "experiments/traqid_pretraining_v1/data/processed/traqid_engineered_T7_sequence_table.csv",
+  "manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+  "yolo_features": "experiments/traqid_pretraining_v1/pipeline_validation/outputs/traqid_yolo_advanced_features_front.csv",
+  "road_features": "experiments/traqid_pretraining_v1/pipeline_validation/outputs/traqid_road_features_front.csv",
+  "embedding_npy": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+  "out_dir": "experiments/traqid_pretraining_v1/reports/t7_multimodal_gru_random_split42_modelseed55",
+  "split_mode": "random",
+  "T": 7,
+  "seed": 55,
+  "split_seed": 42,
+  "train_frac": 0.8,
+  "val_frac_of_train": 0.15,
+  "epochs": 80,
+  "batch_size": 256,
+  "lr": 5e-05,
+  "patience": 12,
+  "projection_dim": 512,
+  "hidden_dim": 256,
+  "num_layers": 2,
+  "dropout": 0.25,
+  "embedding_dim": 4096,
+  "engineered_dim": 112,
+  "input_dim": 4208,
+  "n_sequence_rows": 26558,
+  "n_engineered_features": 112,
+  "targets": [
+    "PM2.5",
+    "PM10",
+    "aqi"
+  ]
+}

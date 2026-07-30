@@ -1,0 +1,52 @@
+{
+  "index_csv": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_embedding_index.csv",
+  "embeddings_dir": "experiments/traqid_pretraining_v1/embeddings",
+  "prefix": "traqid_mobilenetv2_torch",
+  "rows_used": 26678,
+  "unique_dates_evaluated": 20,
+  "dates": [
+    "2022-10-22",
+    "2022-10-24",
+    "2022-10-25",
+    "2022-10-26",
+    "2023-01-28",
+    "2023-01-30",
+    "2023-02-01",
+    "2023-02-06",
+    "2023-02-07",
+    "2023-02-08",
+    "2023-12-21",
+    "2023-12-22",
+    "2023-12-23",
+    "2023-12-29",
+    "2024-03-01",
+    "2024-03-02",
+    "2024-03-03",
+    "2024-03-06",
+    "2024-07-05",
+    "2024-07-09"
+  ],
+  "embedding_kinds": [
+    "front",
+    "rear",
+    "mean"
+  ],
+  "targets": [
+    "PM2.5"
+  ],
+  "target_modes": [
+    "log1p"
+  ],
+  "pca_components": [
+    64,
+    128,
+    256
+  ],
+  "alphas": [
+    100.0,
+    1000.0
+  ],
+  "include_mean_baseline": true,
+  "require_env_plausible": false,
+  "main_question": "Does frozen visual embedding signal remain stable when each collection date is held out completely?"
+}

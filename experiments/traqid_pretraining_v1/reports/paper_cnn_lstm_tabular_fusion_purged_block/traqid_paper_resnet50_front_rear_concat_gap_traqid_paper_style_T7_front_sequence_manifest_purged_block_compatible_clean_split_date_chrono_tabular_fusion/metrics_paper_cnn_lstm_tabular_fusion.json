@@ -1,0 +1,140 @@
+{
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion_purged_block/traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_purged_block_compatible_clean_split_date_chrono_tabular_fusion/best_paper_cnn_lstm_tabular_fusion.pt",
+    "epoch": 21
+  },
+  "target_min": [
+    12.916627883911133,
+    32.17660140991211,
+    36.54499816894531
+  ],
+  "target_max": [
+    325.4296875,
+    669.8512573242188,
+    599.9471435546875
+  ],
+  "tabular_summary": {
+    "numeric_cols": [
+      "Temperature",
+      "Humidity",
+      "hour_sin",
+      "hour_cos"
+    ],
+    "categorical_cols": [
+      "Season",
+      "Day_or_Night"
+    ],
+    "num_medians": {
+      "Temperature": 31.21,
+      "Humidity": 37.071,
+      "hour_sin": -0.9659258262890683,
+      "hour_cos": -0.25881904510252063
+    },
+    "onehot_categories": {
+      "Season": [
+        "Monsoon",
+        "Summer",
+        "Winter"
+      ],
+      "Day_or_Night": [
+        "Day",
+        "Night"
+      ]
+    }
+  },
+  "val": {
+    "PM2.5": {
+      "MAE": 36.2802734375,
+      "RMSE": 58.725506030972184,
+      "R2": -0.010815858840942383,
+      "Pearson": 0.2489255964756012,
+      "Spearman": 0.3270750906921513,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 43.093971252441406,
+      "RMSE": 76.08920032599896,
+      "R2": 0.5259178876876831,
+      "Pearson": 0.7339528799057007,
+      "Spearman": 0.6525116398386837,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 74.87171173095703,
+      "RMSE": 111.31085502013045,
+      "R2": 0.0871623158454895,
+      "Pearson": 0.40413764119148254,
+      "Spearman": 0.4039870777434751,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.20075478156407675,
+      "RMSE": 82.0418537923672
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 30.26339340209961,
+      "RMSE": 43.98237534308842,
+      "R2": -0.0226285457611084,
+      "Pearson": 0.3072502613067627,
+      "Spearman": 0.2924733246370774,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 40.298038482666016,
+      "RMSE": 65.84304179139775,
+      "R2": 0.5624233484268188,
+      "Pearson": 0.7575135231018066,
+      "Spearman": 0.6592010633956287,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 67.2967529296875,
+      "RMSE": 97.57581687622451,
+      "R2": 0.10362738370895386,
+      "Pearson": 0.4214102625846863,
+      "Spearman": 0.3725695833667945,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.2144740621248881,
+      "RMSE": 69.1337446702369
+    }
+  },
+  "config": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T7_front_sequence_manifest_purged_block_compatible_clean.csv",
+    "base_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+    "features": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+    "split_col": "split_date_chrono",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "epochs": 80,
+    "batch_size": 32,
+    "hidden_dim": 128,
+    "tab_hidden_dim": 64,
+    "fusion_hidden_dim": 128,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "device": "auto",
+    "num_workers": 0,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion_purged_block",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/paper_cnn_lstm_tabular_fusion_purged_block",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/paper_cnn_lstm_tabular_fusion_purged_block"
+  },
+  "run_suffix": "traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_purged_block_compatible_clean_split_date_chrono_tabular_fusion",
+  "split": {
+    "split_col": "split_date_chrono",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "train_size": 18461,
+    "val_size": 3744,
+    "test_size": 3873
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion_time_balanced_purged/traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_time_balanced_purged_split_time_balanced_purged_tabular_fusion/best_paper_cnn_lstm_tabular_fusion.pt",
+    "epoch": 62
+  },
+  "target_min": [
+    14.639813423156738,
+    32.17660140991211,
+    36.54499816894531
+  ],
+  "target_max": [
+    400.863037109375,
+    669.8512573242188,
+    599.9471435546875
+  ],
+  "tabular_summary": {
+    "numeric_cols": [
+      "Temperature",
+      "Humidity",
+      "hour_sin",
+      "hour_cos"
+    ],
+    "categorical_cols": [
+      "Season",
+      "Day_or_Night"
+    ],
+    "num_medians": {
+      "Temperature": 31.06,
+      "Humidity": 37.677499999999995,
+      "hour_sin": -0.9659258262890683,
+      "hour_cos": -0.25881904510252063
+    },
+    "onehot_categories": {
+      "Season": [
+        "Monsoon",
+        "Summer",
+        "Winter"
+      ],
+      "Day_or_Night": [
+        "Day",
+        "Night"
+      ]
+    }
+  },
+  "val": {
+    "PM2.5": {
+      "MAE": 24.282636642456055,
+      "RMSE": 41.84019221478688,
+      "R2": 0.1528109312057495,
+      "Pearson": 0.4254841208457947,
+      "Spearman": 0.4704618168305531,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 35.0794792175293,
+      "RMSE": 59.15694127633608,
+      "R2": 0.6318659782409668,
+      "Pearson": 0.8101226687431335,
+      "Spearman": 0.738075624734246,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 52.45079803466797,
+      "RMSE": 83.01042973815098,
+      "R2": 0.269381582736969,
+      "Pearson": 0.5468302965164185,
+      "Spearman": 0.5686555500009709,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.3513528307278951,
+      "RMSE": 61.33585440975798
+    }
+  },
+  "test": {
+    "PM2.5": {
+      "MAE": 24.228166580200195,
+      "RMSE": 39.56130280574061,
+      "R2": 0.21246713399887085,
+      "Pearson": 0.4878814220428467,
+      "Spearman": 0.5332340084072996,
+      "finite_fraction": 1.0
+    },
+    "PM10": {
+      "MAE": 36.88093948364258,
+      "RMSE": 69.49759016730364,
+      "R2": 0.5913739204406738,
+      "Pearson": 0.7809594869613647,
+      "Spearman": 0.7601967722197462,
+      "finite_fraction": 1.0
+    },
+    "AQI": {
+      "MAE": 55.41261291503906,
+      "RMSE": 88.05555220108214,
+      "R2": 0.29873979091644287,
+      "Pearson": 0.5692532062530518,
+      "Spearman": 0.5913974758089169,
+      "finite_fraction": 1.0
+    },
+    "average": {
+      "R2": 0.36752694845199585,
+      "RMSE": 65.70481505804213
+    }
+  },
+  "config": {
+    "sequence_manifest": "experiments/traqid_pretraining_v1/data/processed/paper_style_sequences/traqid_paper_style_T7_front_sequence_manifest_time_balanced_purged.csv",
+    "base_manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+    "features": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+    "split_col": "split_time_balanced_purged",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "epochs": 80,
+    "batch_size": 32,
+    "hidden_dim": 128,
+    "tab_hidden_dim": 64,
+    "fusion_hidden_dim": 128,
+    "num_layers": 1,
+    "dropout": 0.3,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "device": "auto",
+    "num_workers": 0,
+    "seed": 42,
+    "out_dir": "experiments/traqid_pretraining_v1/models/paper_cnn_lstm_tabular_fusion_time_balanced_purged",
+    "report_dir": "experiments/traqid_pretraining_v1/reports/paper_cnn_lstm_tabular_fusion_time_balanced_purged",
+    "fig_dir": "experiments/traqid_pretraining_v1/figures/paper_cnn_lstm_tabular_fusion_time_balanced_purged"
+  },
+  "run_suffix": "traqid_paper_resnet50_front_rear_concat_gap_traqid_paper_style_T7_front_sequence_manifest_time_balanced_purged_split_time_balanced_purged_tabular_fusion",
+  "split": {
+    "split_col": "split_time_balanced_purged",
+    "train_name": "train",
+    "val_name": "val",
+    "test_name": "test",
+    "train_size": 15076,
+    "val_size": 3289,
+    "test_size": 6691
+  }
+}

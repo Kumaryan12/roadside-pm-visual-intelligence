@@ -1,0 +1,14 @@
+{
+  "manifest": "experiments/hvaq_vgg16_lstm_v1/data/processed/hvaq_image_label_manifest.csv",
+  "rows": 720,
+  "unique_images": 106,
+  "embedding_shape": [
+    720,
+    512
+  ],
+  "out_embeddings": "experiments/hvaq_vgg16_lstm_v1/embeddings/hvaq_vgg16_avgpool512_row_embeddings.npy",
+  "out_index": "experiments/hvaq_vgg16_lstm_v1/embeddings/hvaq_vgg16_avgpool512_embedding_index.csv",
+  "status_counts": {
+    "success": 106
+  }
+}

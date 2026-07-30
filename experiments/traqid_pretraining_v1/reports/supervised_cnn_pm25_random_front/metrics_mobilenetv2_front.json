@@ -1,0 +1,37 @@
+{
+  "baseline": {
+    "val": {
+      "MAE": 28.821362583218917,
+      "RMSE": 47.92093264248891,
+      "R2": -0.050263448381247855,
+      "Pearson": NaN,
+      "Spearman": NaN
+    },
+    "test": {
+      "MAE": 29.463410232253622,
+      "RMSE": 48.71255661208352,
+      "R2": -0.05199583614354375,
+      "Pearson": NaN,
+      "Spearman": NaN
+    }
+  },
+  "best_checkpoint": {
+    "path": "experiments/traqid_pretraining_v1/models/supervised_cnn_pm25/best_mobilenetv2_front_PM2_5.pt",
+    "phase": "finetune",
+    "epoch": 3
+  },
+  "val": {
+    "MAE": 26.3786131650552,
+    "RMSE": 43.30131869735103,
+    "R2": 0.1424687168924087,
+    "Pearson": 0.42402289096606777,
+    "Spearman": 0.43082114560793733
+  },
+  "test": {
+    "MAE": 26.907168715313517,
+    "RMSE": 43.99270009413047,
+    "R2": 0.14198790864731636,
+    "Pearson": 0.42297821265511004,
+    "Spearman": 0.4180551762124113
+  }
+}

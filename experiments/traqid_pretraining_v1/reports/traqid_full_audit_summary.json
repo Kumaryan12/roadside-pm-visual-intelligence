@@ -1,0 +1,50 @@
+{
+  "raw_dir": "experiments/traqid_pretraining_v1/data/raw",
+  "traqid_root": "experiments/traqid_pretraining_v1/data/raw/traqid",
+  "csv_path": "experiments/traqid_pretraining_v1/data/raw/traqid/TRAQID.csv",
+  "image_roots": [
+    "experiments/traqid_pretraining_v1/data/raw/traqid/front",
+    "experiments/traqid_pretraining_v1/data/raw/traqid/rear"
+  ],
+  "csv_shape": [
+    26678,
+    10
+  ],
+  "columns": [
+    "created_at",
+    "Image",
+    "PM2.5",
+    "PM10",
+    "Temperature",
+    "Humidity",
+    "aqi",
+    "Season",
+    "Day_or_Night",
+    "aqi_cat"
+  ],
+  "image_file_count": 53356,
+  "image_view_counts": {
+    "front": 26678,
+    "rear": 26678
+  },
+  "image_extension_counts": {
+    ".png": 53356
+  },
+  "missing_values": {
+    "created_at": 0,
+    "Image": 0,
+    "PM2.5": 0,
+    "PM10": 0,
+    "Temperature": 0,
+    "Humidity": 0,
+    "aqi": 0,
+    "Season": 0,
+    "Day_or_Night": 0,
+    "aqi_cat": 0
+  },
+  "match_summary": {
+    "csv_unique_image_ids": 26678,
+    "image_files_with_numeric_token_match": 53356,
+    "image_files_without_numeric_token_match": 0
+  }
+}

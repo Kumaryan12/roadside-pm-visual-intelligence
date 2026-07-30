@@ -1,0 +1,24 @@
+| feature_group     | residual_model   |   n_raw_features |   n_aggregated_features |       R2 |    RMSE |     MAE |
+|:------------------|:-----------------|-----------------:|------------------------:|---------:|--------:|--------:|
+| full              | extra_trees      |              112 |                     535 | 0.948647 | 10.5414 | 4.83889 |
+| yolo_plus_tabular | extra_trees      |               96 |                     465 | 0.948437 | 10.5629 | 4.84397 |
+| yolo_plus_road    | extra_trees      |               97 |                     475 | 0.947687 | 10.6395 | 4.89994 |
+| road_plus_tabular | extra_trees      |               31 |                     130 | 0.947577 | 10.6507 | 4.92611 |
+| yolo_only         | extra_trees      |               81 |                     405 | 0.947259 | 10.683  | 4.92347 |
+| road_plus_tabular | random_forest    |               31 |                     130 | 0.946677 | 10.7417 | 4.91969 |
+| yolo_plus_road    | random_forest    |               97 |                     475 | 0.946462 | 10.7634 | 4.94747 |
+| tabular_only      | random_forest    |               15 |                      60 | 0.94646  | 10.7636 | 5.05531 |
+| full              | random_forest    |              112 |                     535 | 0.946442 | 10.7653 | 4.94428 |
+| yolo_plus_tabular | random_forest    |               96 |                     465 | 0.946278 | 10.7818 | 4.95824 |
+| road_only         | random_forest    |               16 |                      70 | 0.946199 | 10.7898 | 4.9549  |
+| road_only         | extra_trees      |               16 |                      70 | 0.946177 | 10.792  | 4.92815 |
+| yolo_only         | random_forest    |               81 |                     405 | 0.946024 | 10.8073 | 4.97536 |
+| tabular_only      | extra_trees      |               15 |                      60 | 0.945393 | 10.8703 | 5.07543 |
+| tabular_only      | ridge            |               15 |                      60 | 0.942012 | 11.2017 | 5.14992 |
+| road_only         | ridge            |               16 |                      70 | 0.941706 | 11.2313 | 5.21243 |
+| road_plus_tabular | ridge            |               31 |                     130 | 0.941648 | 11.2369 | 5.31303 |
+| image_base_only   | none             |                0 |                       0 | 0.941439 | 11.257  | 4.98858 |
+| yolo_plus_tabular | ridge            |               96 |                     465 | 0.940751 | 11.3228 | 6.21672 |
+| yolo_only         | ridge            |               81 |                     405 | 0.939985 | 11.3958 | 6.20472 |
+| full              | ridge            |              112 |                     535 | 0.939748 | 11.4183 | 6.35959 |
+| yolo_plus_road    | ridge            |               97 |                     475 | 0.939042 | 11.485  | 6.35955 |

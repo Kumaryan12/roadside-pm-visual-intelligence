@@ -1,0 +1,12 @@
+metric,value
+n_rows,281.0
+unique_timestamps,48.0
+duplicate_timestamps,233.0
+pm25_mean,20.00306861727046
+pm25_std,16.426068014218373
+pm25_min,6.149734632
+pm25_max,147.5344017
+adjacent_abs_diff_mean,5.708454371557143
+adjacent_abs_diff_median,1.878499593
+adjacent_abs_diff_75p,6.75115561
+adjacent_abs_diff_max,107.59278480999998

@@ -1,0 +1,50 @@
+pipeline_id: roadside_feature_table_v1
+schema_version: 1
+
+inputs:
+  sensor_csv: data/sensor/MC1S_window_115430_124150.csv
+  video_root: /Volumes/New Volume/23_02_2026_navneet
+
+models:
+  yolo_idd: models/detectors/yolo11m_idd15_v1_best.pt
+  road_segformer: models/road_segmentation/best_segformer_b0_idd_binary_road/best_segformer_b0_idd_binary_road
+  metric_depth: depth-anything/Depth-Anything-V2-Metric-Outdoor-Base-hf
+
+camera:
+  road_area_lens_id: 1
+  fx_px: 1345.4897862232779
+  fy_px: 1345.4897862232779
+  calibration_provenance: outputs/road_area_lens1_batch/lens1_depth_estimated_road_area.csv
+
+processing:
+  # Lens 2 replaced hardware-obstructed Lens 4 after the two-day orientation
+  # and crop audit. Lenses 1 and 6 remain the road/depth feature cameras.
+  lenses: [1, 2, 6]
+  road_feature_lenses: [1, 6]
+  yolo_confidence: 0.25
+  yolo_image_size: 960
+  road_area_width_px: 1024
+  min_depth_m: 0.5
+  max_depth_m: 30.0
+  save_road_masks: true
+  save_depth_arrays: true
+
+geospatial:
+  latitude_column: value.lat
+  longitude_column: value.long
+  timestamp_column: timestamp
+  sample_id_column: sample_index
+  osm_mode: overpass_extract
+  osm_radius_m: 250
+  osm_endpoint: https://overpass-api.de/api/interpreter
+  alphaearth_mode: earth_engine_extract
+  alphaearth_config: configs/features/alphaearth.yaml
+  earth_engine_project: null
+  alphaearth_max_available_year: 2025
+  alphaearth_buffers_m: [50, 100, 250]
+  notes:
+    - OSM extraction requires network access to the configured Overpass endpoint.
+    - AlphaEarth extraction requires earthengine-api, authentication, and an Earth Engine project when required.
+
+outputs:
+  root: artifacts/runs

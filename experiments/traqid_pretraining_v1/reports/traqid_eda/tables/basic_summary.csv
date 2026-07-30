@@ -1,0 +1,2 @@
+manifest_path,rows,columns,timestamp_col,valid_timestamps,unique_timestamps,unique_dates,start_time,end_time
+experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv,26678,35,created_at_parsed,26678,8717,20,2022-10-22 18:00:00,2024-07-09 17:59:50

@@ -1,0 +1,77 @@
+{
+  "input_manifest": "experiments/hvaq_vgg16_lstm_v1/data/processed/hvaq_image_label_manifest.csv",
+  "output_sequence_manifest": "experiments/hvaq_vgg16_lstm_v1/data/processed/hvaq_T7_sequence_manifest_purge0.csv",
+  "sequence_len": 7,
+  "rows": 576,
+  "unique_dates": 3,
+  "unique_locations": 10,
+  "date_counts": {
+    "2019-07-24": 94,
+    "2019-10-19": 259,
+    "2019-11-10": 223
+  },
+  "location_counts": {
+    "1": 59,
+    "2": 53,
+    "3": 56,
+    "4": 50,
+    "5": 77,
+    "6": 59,
+    "7": 63,
+    "8": 88,
+    "9": 16,
+    "10": 55
+  },
+  "split_counts": {
+    "random": {
+      "train": 403,
+      "test": 87,
+      "val": 86
+    },
+    "chrono_date": {
+      "val": 259,
+      "test": 223,
+      "train": 94
+    },
+    "purged_block": {
+      "train": 390,
+      "test": 97,
+      "val": 85,
+      "unused": 4
+    }
+  },
+  "chrono_date_split_dates": {
+    "train": [
+      "2019-07-24"
+    ],
+    "val": [
+      "2019-10-19"
+    ],
+    "test": [
+      "2019-11-10"
+    ]
+  },
+  "target_summary": {
+    "target_PM2.5": {
+      "count": 576.0,
+      "mean": 47.04600694444444,
+      "std": 17.77164379448937,
+      "min": 9.9,
+      "25%": 42.575,
+      "50%": 50.5,
+      "75%": 57.05,
+      "max": 103.1
+    },
+    "target_PM10": {
+      "count": 576.0,
+      "mean": 71.67534722222223,
+      "std": 30.182972162709213,
+      "min": 15.2,
+      "25%": 58.875,
+      "50%": 70.25,
+      "75%": 88.125,
+      "max": 203.3
+    }
+  },
+  "warning": "Random split is leakage-prone because sequences overlap and images repeat across locations. Use purged/date split for honest generalization."
+}

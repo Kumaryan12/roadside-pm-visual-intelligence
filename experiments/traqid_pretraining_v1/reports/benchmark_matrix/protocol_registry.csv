@@ -1,0 +1,7 @@
+protocol,evidence_status,interpretation
+random_70_15_15,contaminated,Random sequence split; sliding windows share frames across partitions.
+random_twofold,contaminated,Random two-fold sequence CV; sliding windows share frames across folds.
+old_purged_block,limited,"No shared frames, but the test block is later/night-skewed within dates."
+time_balanced_purged,limited,"No shared frames, but train and test contain the same collection dates."
+chronological_date,robust_stress_test,"No shared frames; tests later, unseen collection dates."
+date_grouped_outer_cv,primary,Outer test dates are absent from model fitting and early stopping.

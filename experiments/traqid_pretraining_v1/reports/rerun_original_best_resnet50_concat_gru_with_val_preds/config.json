@@ -1,0 +1,26 @@
+{
+  "sequence_table": "experiments/traqid_pretraining_v1/data/processed/traqid_engineered_T7_sequence_table.csv",
+  "embedding_npy": "experiments/traqid_pretraining_v1/embeddings/paper_style_cnn/traqid_paper_resnet50_front_rear_concat_gap_features.npy",
+  "out_dir": "experiments/traqid_pretraining_v1/reports/rerun_original_best_resnet50_concat_gru_with_val_preds",
+  "T": 7,
+  "split_mode": "random",
+  "train_frac": 0.8,
+  "val_frac_of_train": 0.15,
+  "seed": 42,
+  "batch_size": 64,
+  "epochs": 60,
+  "patience": 10,
+  "lr": 0.0001,
+  "weight_decay": 0.0001,
+  "projection_dim": 512,
+  "hidden_dim": 256,
+  "num_layers": 2,
+  "dropout": 0.25,
+  "input_dim": 4096,
+  "n_sequence_rows": 26558,
+  "targets": [
+    "PM2.5",
+    "PM10",
+    "aqi"
+  ]
+}

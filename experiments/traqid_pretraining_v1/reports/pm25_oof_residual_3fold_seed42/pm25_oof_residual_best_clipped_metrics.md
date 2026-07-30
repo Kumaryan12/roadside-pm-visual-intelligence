@@ -1,0 +1,3 @@
+| model                                               | base_model                      | residual_model                         |   clip_value |       R2 |    RMSE |     MAE |   mean_abs_correction |   max_abs_correction |   test_rows |
+|:----------------------------------------------------|:--------------------------------|:---------------------------------------|-------------:|---------:|--------:|--------:|----------------------:|---------------------:|------------:|
+| extra_trees_conservative_plus_basepred_clipped_12.5 | 3fold_oof_resnet50_gru_ensemble | extra_trees_conservative_plus_basepred |         12.5 | 0.965556 | 8.71692 | 4.21159 |               2.29471 |                 12.5 |        5312 |

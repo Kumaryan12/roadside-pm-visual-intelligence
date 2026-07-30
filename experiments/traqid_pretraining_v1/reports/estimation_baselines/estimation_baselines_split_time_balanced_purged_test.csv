@@ -1,0 +1,9 @@
+model,split_col,train_name,eval_name,train_sequences,eval_sequences,target,R2,RMSE,MAE
+train_mean,split_time_balanced_purged,train,test,15076,6691,PM2.5,-5.295452510045706e-06,44.57972487544218,30.460896921685308
+train_mean,split_time_balanced_purged,train,test,15076,6691,PM10,-0.00028621081960844563,108.73487283809612,79.95921224159653
+train_mean,split_time_balanced_purged,train,test,15076,6691,aqi,-2.30238238274616e-06,105.15202864853984,79.77440992112074
+train_mean,split_time_balanced_purged,train,test,15076,6691,Average,-9.793621816707916e-05,86.15554212069272,63.39817302813419
+previous_step_persistence,split_time_balanced_purged,train,test,15076,6691,PM2.5,0.9352642241978493,11.342490194986748,4.85045171946632
+previous_step_persistence,split_time_balanced_purged,train,test,15076,6691,PM10,0.9596161375432762,21.84794716877808,8.897512236150199
+previous_step_persistence,split_time_balanced_purged,train,test,15076,6691,aqi,0.9329455281873233,27.228958420672374,11.892056479652002
+previous_step_persistence,split_time_balanced_purged,train,test,15076,6691,Average,0.9426086299761497,20.1397985948124,8.546673478422841

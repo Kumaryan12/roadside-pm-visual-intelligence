@@ -1,0 +1,5 @@
+Protocol,Test overlap >=6/7,PM2.5 R2,PM10 R2,AQI R2,Average R2,Average RMSE,Interpretation
+Random 70/15/15,0.9091,0.9444,0.966,0.9508,0.9537,18.7795,Paper-style random sequence validation; severe sliding-window overlap leakage.
+Two-fold random CV,0.7481,0.9055,0.943,0.9161,0.9215,24.3072,Paper-style two-fold CV; still highly overlap-contaminated.
+Time-balanced purged,0.0,0.2125,0.5914,0.2987,0.3675,65.7048,No direct frame overlap; same dates and broadly balanced time/target distributions.
+Chronological date-wise,0.0,-0.83,-1.4386,-1.0144,-1.0944,100.8268,No direct frame overlap; future/unseen-date stress test.

@@ -1,0 +1,8 @@
+model_index,prediction_file,rows,unique_sequence_id,min_target_row_id,max_target_row_id
+0,experiments/traqid_pretraining_v1/reports/t7_multimodal_gru_random_split42_modelseed11/predictions.csv,5312,5312,20,26676
+1,experiments/traqid_pretraining_v1/reports/diverse_resnet50_mean_gru/predictions.csv,5312,5312,20,26676
+2,experiments/traqid_pretraining_v1/reports/diverse_vgg16_concat_gru/predictions.csv,5312,5312,20,26676
+3,experiments/traqid_pretraining_v1/reports/diverse_vgg16_mean_gru/predictions.csv,5312,5312,20,26676
+4,experiments/traqid_pretraining_v1/reports/diverse_resnet50_concat_lstm/predictions.csv,5312,5312,20,26676
+5,experiments/traqid_pretraining_v1/reports/diverse_resnet50_concat_bigru/predictions.csv,5312,5312,20,26676
+6,experiments/traqid_pretraining_v1/reports/diverse_vgg16_concat_bigru/predictions.csv,5312,5312,20,26676

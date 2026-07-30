@@ -1,0 +1,42 @@
+schema_version: 1
+status: illustrative_unvalidated
+terminology: assumption-conditioned source scenarios
+
+measurement_assumptions:
+  pm_mass_units: ug_m3
+  cumulative_mass_channels: [sPM1, sPM2, sPM4, sPM10]
+  incremental_mass_bins: [pm_0_1, pm_1_2p5, pm_2p5_4, pm_4_10]
+  negative_increment_policy: clip_to_zero_and_report
+  spm2_upper_bound_assumed_um: 2.5
+  opc_number_constraint_enabled: false
+  opc_number_constraint_reason: Exact cumulative/differential semantics and units are not confirmed.
+
+sources:
+  vehicle_exhaust_scenario:
+    mass_bin_mean: [0.88, 0.10, 0.015, 0.005]
+    dirichlet_concentration: 60
+    assumed_density_kg_m3: [900, 1600]
+    evidence_status: illustrative_prior_not_measured
+  road_dust_scenario:
+    mass_bin_mean: [0.10, 0.20, 0.35, 0.35]
+    dirichlet_concentration: 40
+    assumed_density_kg_m3: [2200, 3000]
+    evidence_status: illustrative_prior_not_measured
+  secondary_background_scenario:
+    mass_bin_mean: [0.68, 0.25, 0.05, 0.02]
+    dirichlet_concentration: 50
+    assumed_density_kg_m3: [1200, 1900]
+    evidence_status: illustrative_prior_not_measured
+  unresolved_scenario:
+    mass_bin_mean: [0.35, 0.25, 0.20, 0.20]
+    dirichlet_concentration: 15
+    assumed_density_kg_m3: [800, 3200]
+    evidence_status: deliberately_broad_unresolved_prior
+
+reporting:
+  permitted_claim: Results are conditional on the stated illustrative source profiles.
+  prohibited_claim: Fractions are measured or chemically validated source contributions.
+  replace_when_available:
+    - FTIR or filter chemistry
+    - instrument-confirmed differential OPC bins
+    - measured local source profiles

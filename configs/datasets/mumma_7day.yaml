@@ -1,0 +1,26 @@
+dataset_id: mumma_7day_10s
+status: incomplete_two_day_delivery
+collection_manifest: data/manifests/mumma_7day_collections.csv
+sampling_interval_seconds: 10
+expected_days: 7
+expected_hours_per_day: 5
+expected_max_samples: 12600
+columns:
+  sample_id: sample_id
+  timestamp: sample_timestamp
+  date: date
+  trip_id: trip_id
+  latitude: lat
+  longitude: long
+  pm25: sPM2
+  opc_mass_bins: [sPM1, sPM2, sPM4, sPM10]
+  opc_number_bins: [sNPMp5, sNPM1, sNPM2, sNPM4, sNPM10]
+  # Exact aerodynamic bin boundaries and calibration metadata still need to be
+  # supplied by the instrument/data owner before source-apportionment claims.
+validation:
+  primary: leave_one_day_out
+  chronological_test_days: 2
+  spatial_block_size_m: 500
+  seed: 42
+  sequences_built_after_split: true
+  sequence_lengths: [1, 3, 7, 13, 31]

@@ -1,0 +1,5 @@
+model,target,split,features,n_train,n_test,MAE,RMSE,R2,Spearman
+random_forest,PM2.5,random_stratified_by_aqi_cat,Temperature+Humidity+hour+Season+Day_or_Night,17062,5333,11.488524413517409,20.45109716045785,0.8073646284768305,0.892177947559786
+hist_gradient_boosting,PM2.5,random_stratified_by_aqi_cat,Temperature+Humidity+hour+Season+Day_or_Night,17062,5333,13.417229806649594,22.36033819910607,0.7697182364354773,0.8459411024674512
+ridge,PM2.5,random_stratified_by_aqi_cat,Temperature+Humidity+hour+Season+Day_or_Night,17062,5333,27.779012113737807,43.05699164844578,0.1461331040930044,0.33541241292384744
+mean_baseline,PM2.5,random_stratified_by_aqi_cat,Temperature+Humidity+hour+Season+Day_or_Night,17062,5333,31.99106178106286,46.596297926389475,-1.2981188887373207e-05,

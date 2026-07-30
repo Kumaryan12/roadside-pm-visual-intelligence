@@ -1,0 +1,33 @@
+{
+  "manifest": "experiments/traqid_pretraining_v1/data/processed/traqid_paired_manifest_with_splits.csv",
+  "rows": 26678,
+  "model": "mobilenetv2",
+  "backend": "pytorch",
+  "device": "mps",
+  "batch_size": 64,
+  "num_workers": 0,
+  "feature_dim_per_view": 1280,
+  "views": [
+    "front",
+    "rear"
+  ],
+  "output_files": {
+    "front_embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_front_embeddings.npy",
+    "rear_embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_rear_embeddings.npy",
+    "front_rear_mean_embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_front_rear_mean_embeddings.npy",
+    "front_rear_concat_embeddings": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_front_rear_concat_embeddings.npy"
+  },
+  "index_csv": "experiments/traqid_pretraining_v1/embeddings/traqid_mobilenetv2_torch_embedding_index.csv",
+  "split_counts": {
+    "train": 16909,
+    "test": 5480,
+    "val": 4289
+  },
+  "warning": "Do not evaluate by random image split. Use date/split_date_chrono groups.",
+  "front_status_counts": {
+    "success": 26678
+  },
+  "rear_status_counts": {
+    "success": 26678
+  }
+}
