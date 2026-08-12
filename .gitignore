@@ -148,3 +148,5 @@ project_file_inventory.txt
 # ============================================================
 !docs/internship_report/
 !docs/internship_report/**
+docs/internship_report/.DS_Store
+docs/internship_report/figures/.DS_Store
