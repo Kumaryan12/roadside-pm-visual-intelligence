@@ -22,6 +22,11 @@ def main() -> None:
     )
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "mps", "cuda"])
+    parser.add_argument(
+        "--checkpoint",
+        type=Path,
+        help="Optional PM25Vision ResNet50 encoder checkpoint.",
+    )
     parser.add_argument("--filter-col")
     parser.add_argument("--filter-value")
     args = parser.parse_args()
@@ -39,6 +44,7 @@ def main() -> None:
         batch_size=args.batch_size,
         device=args.device,
         backbone=args.backbone,
+        checkpoint=args.checkpoint,
     )
 
 

@@ -17,6 +17,11 @@ def main():
     parser.add_argument("--output-index", required=True)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "mps", "cuda"])
+    parser.add_argument(
+        "--checkpoint",
+        type=Path,
+        help="Optional PM25Vision ResNet50 encoder checkpoint.",
+    )
     parser.add_argument("--filter-col", default=None)
     parser.add_argument("--filter-value", default=None)
     args = parser.parse_args()
@@ -24,7 +29,7 @@ def main():
     if args.filter_col:
         if args.filter_col not in manifest: raise ValueError(f"Missing filter column {args.filter_col!r}")
         manifest = manifest[manifest[args.filter_col].astype(str) == str(args.filter_value)].copy()
-    extract_resnet50_embeddings(manifest.reset_index(drop=True), image_column=args.image_col, id_column=args.id_col, output_array=Path(args.output_array), output_index=Path(args.output_index), batch_size=args.batch_size, device=args.device)
+    extract_resnet50_embeddings(manifest.reset_index(drop=True), image_column=args.image_col, id_column=args.id_col, output_array=Path(args.output_array), output_index=Path(args.output_index), batch_size=args.batch_size, device=args.device, checkpoint=args.checkpoint)
 
 
 if __name__ == "__main__": main()

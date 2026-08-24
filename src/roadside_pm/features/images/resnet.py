@@ -28,6 +28,7 @@ def extract_torchvision_embeddings(
     batch_size: int = 32,
     device: str = "auto",
     backbone: str = "resnet50",
+    checkpoint: Path | None = None,
 ) -> tuple[np.ndarray, pd.DataFrame]:
     import torch
     from PIL import Image
@@ -65,6 +66,15 @@ def extract_torchvision_embeddings(
         raise ValueError(
             "backbone must be resnet50, mobilenet_v2, efficientnet_b0, or convnext_tiny"
         )
+    if checkpoint is not None:
+        if backbone != "resnet50":
+            raise ValueError("Transfer checkpoints are currently supported only for resnet50.")
+        payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
+        if not isinstance(payload, dict) or "encoder_state_dict" not in payload:
+            raise ValueError(
+                f"Checkpoint {checkpoint} does not contain encoder_state_dict."
+            )
+        model.load_state_dict(payload["encoder_state_dict"], strict=True)
     model.eval().to(select_device(device))
     transform = weights.transforms()
 
@@ -105,6 +115,7 @@ def extract_resnet50_embeddings(
     output_index: Path,
     batch_size: int = 32,
     device: str = "auto",
+    checkpoint: Path | None = None,
 ) -> tuple[np.ndarray, pd.DataFrame]:
     """Backward-compatible ResNet50 entry point."""
     return extract_torchvision_embeddings(
@@ -116,4 +127,5 @@ def extract_resnet50_embeddings(
         batch_size=batch_size,
         device=device,
         backbone="resnet50",
+        checkpoint=checkpoint,
     )
