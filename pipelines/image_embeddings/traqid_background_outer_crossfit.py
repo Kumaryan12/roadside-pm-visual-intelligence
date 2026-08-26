@@ -49,6 +49,10 @@ VARIANTS = {
         "background_column": "background_merra2_pm25_ug_m3",
         "correction_model": "random_forest",
     },
+    "local_reference": {
+        "background_column": "reference_pm25_ug_m3",
+        "correction_model": "random_forest",
+    },
 }
 
 
@@ -77,6 +81,19 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument("--background-csv", required=True)
+    parser.add_argument(
+        "--local-reference-csv",
+        help=(
+            "Aligned monitor table containing sample_id and "
+            "reference_pm25_ug_m3; required for local_reference."
+        ),
+    )
+    parser.add_argument(
+        "--variants",
+        nargs="+",
+        choices=sorted(VARIANTS),
+        default=["direct", "cams", "merra2"],
+    )
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--cell", choices=["gru", "lstm"], default="gru")
     parser.add_argument("--outer-folds", type=int, default=5)
@@ -193,12 +210,13 @@ def main() -> int:
 
     background = pd.read_csv(args.background_csv)
     background["sample_id"] = background["sample_id"].astype(str)
-    required_background = {
-        "sample_id",
-        "background_status",
-        "background_cams_pm25_ug_m3",
-        "background_merra2_pm25_ug_m3",
-    }
+    required_background = {"sample_id", "background_status"}
+    required_background.update(
+        str(VARIANTS[name]["background_column"])
+        for name in args.variants
+        if VARIANTS[name]["background_column"] is not None
+        and name != "local_reference"
+    )
     missing_background = sorted(required_background - set(background.columns))
     if missing_background:
         raise ValueError(f"Background table is missing: {missing_background}")
@@ -206,6 +224,32 @@ def main() -> int:
         raise ValueError("Background sample_id must be unique")
     if not background["background_status"].eq("success").all():
         raise ValueError("Background table contains unsuccessful rows")
+    if "local_reference" in args.variants:
+        if not args.local_reference_csv:
+            raise ValueError(
+                "--local-reference-csv is required for local_reference"
+            )
+        reference = pd.read_csv(args.local_reference_csv)
+        reference["sample_id"] = reference["sample_id"].astype(str)
+        required_reference = {"sample_id", "reference_pm25_ug_m3"}
+        missing_reference = sorted(required_reference - set(reference.columns))
+        if missing_reference:
+            raise ValueError(
+                f"Local-reference table is missing: {missing_reference}"
+            )
+        if reference["sample_id"].duplicated().any():
+            raise ValueError("Local-reference sample_id must be unique")
+        background = background.merge(
+            reference[["sample_id", "reference_pm25_ug_m3"]],
+            on="sample_id",
+            how="left",
+            validate="one_to_one",
+        )
+        if background["reference_pm25_ug_m3"].isna().any():
+            raise ValueError(
+                "Local-reference coverage is incomplete. Do not impute missing "
+                "monitor PM2.5 in this matched experiment."
+            )
     background = background.set_index("sample_id")
 
     engineered = pd.read_csv(args.engineered_table)
@@ -233,7 +277,8 @@ def main() -> int:
     fold_metrics: list[dict[str, object]] = []
     prediction_tables: list[pd.DataFrame] = []
 
-    for variant, specification in VARIANTS.items():
+    for variant in args.variants:
+        specification = VARIANTS[variant]
         background_column = specification["background_column"]
         correction_name = str(specification["correction_model"])
         for fold_number, base_fold in enumerate(folds, 1):
@@ -387,8 +432,7 @@ def main() -> int:
 
     if args.dry_run:
         print(
-            "Dry run complete. Direct folds will be reused; "
-            "CAMS and MERRA-2 commands are shown above."
+            "Dry run complete. Commands for the requested variants are shown above."
         )
         return 0
 
@@ -442,7 +486,11 @@ def main() -> int:
             "Correction identities were pre-specified from earlier random "
             "diagnostics on the same dataset; confirm on future dates."
         ),
-        "variants": VARIANTS,
+        "variants": {name: VARIANTS[name] for name in args.variants},
+        "local_reference_csv": args.local_reference_csv,
+        "local_reference_is_inference_time_pm_input": (
+            "local_reference" in args.variants
+        ),
         "background_target_fitted": False,
         "residual_training": (
             "outer-validation residuals only; applied once to outer-test dates"

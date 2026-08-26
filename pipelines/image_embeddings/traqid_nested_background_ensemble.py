@@ -41,7 +41,7 @@ from pipelines.pm25_prediction.mumma_7day.run_nested_background_ensemble import 
 )
 
 
-ATMOSPHERIC_VARIANTS = ("cams", "merra2")
+ATMOSPHERIC_VARIANTS = ("cams", "merra2", "local_reference")
 
 
 def parse_args() -> argparse.Namespace:
@@ -67,6 +67,13 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument("--background-csv", required=True)
+    parser.add_argument(
+        "--local-reference-csv",
+        help=(
+            "Aligned nearby-monitor table; required when local_reference is "
+            "included in --variants."
+        ),
+    )
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--cell", choices=["gru", "lstm"], default="gru")
     parser.add_argument(
@@ -195,6 +202,29 @@ def main() -> int:
     background["sample_id"] = background["sample_id"].astype(str)
     if background["sample_id"].duplicated().any():
         raise ValueError("Background sample_id must be unique")
+    if "local_reference" in args.variants:
+        if not args.local_reference_csv:
+            raise ValueError(
+                "--local-reference-csv is required for local_reference"
+            )
+        reference = pd.read_csv(args.local_reference_csv)
+        reference["sample_id"] = reference["sample_id"].astype(str)
+        if reference["sample_id"].duplicated().any():
+            raise ValueError("Local-reference sample_id must be unique")
+        required = {"sample_id", "reference_pm25_ug_m3"}
+        if missing := sorted(required - set(reference.columns)):
+            raise ValueError(f"Local-reference table is missing: {missing}")
+        background = background.merge(
+            reference[["sample_id", "reference_pm25_ug_m3"]],
+            on="sample_id",
+            how="left",
+            validate="one_to_one",
+        )
+        if background["reference_pm25_ug_m3"].isna().any():
+            raise ValueError(
+                "Local-reference coverage is incomplete. The matched nested "
+                "experiment requires monitor PM2.5 for every sample."
+            )
     background = background.set_index("sample_id")
 
     outer_predictions = pd.read_csv(background_run / "predictions.csv")
@@ -571,11 +601,15 @@ def main() -> int:
             "independent tabular local-increment branch"
         ),
         "variants": list(args.variants),
+        "local_reference_csv": args.local_reference_csv,
+        "local_reference_is_inference_time_pm_input": (
+            "local_reference" in args.variants
+        ),
         "tabular_model": args.tabular_model,
         "tabular_feature_count": len(features),
         "temporal_corrections": {
             variant: VARIANTS[variant]["correction_model"]
-            for variant in ATMOSPHERIC_VARIANTS
+            for variant in args.variants
         },
         "ensemble_weight_selection": (
             "MSE-optimal convex weight selected on cross-fitted outer-"

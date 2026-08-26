@@ -1,0 +1,49 @@
+benchmark_id: china_public_fair_benchmark_v1
+status: frozen_before_outer_test_model_development
+
+data:
+  manifest: artifacts/runs/china_surveillance_aqi_paper_reproduction_v1/processed/china_surveillance_manifest.csv
+  resnet50_embeddings: artifacts/runs/china_surveillance_aqi_paper_reproduction_v1/embeddings/traqid_paper_resnet50_front_gap_features.npy
+  datasets:
+    taiwan:
+      targets: [pm25, pm10, aqi]
+      outer_protocol: leave_one_site_out
+      folds: 6
+      validation: next_site_in_sorted_order
+    nanjing:
+      targets: [pm25, pm10, aqi]
+      outer_protocol: chronological_complete_date_60_20_20
+      warning: released PM/AQI workbook columns were inferred and require verification
+    shanghai:
+      targets: [aqi]
+      outer_protocol: chronological_complete_date_60_20_20
+      warning: AQI is not PM2.5 concentration
+
+sequences:
+  length: 7
+  maximum_gap_hours: 3.0
+  construction: raw_rows_partitioned_before_window_construction
+  cross_partition_raw_overlap_allowed: false
+
+primary_endpoint:
+  dataset: taiwan
+  target: pm25
+  protocol: leave_one_site_out
+  metrics:
+    - pooled_r2
+    - mean_site_r2
+    - median_site_r2
+    - positive_site_r2_count
+    - mae
+    - rmse
+    - bias
+    - spearman
+    - worst_site_rmse
+  uncertainty: paired_site_cluster_bootstrap
+
+development_rules:
+  - Never tune architecture or hyperparameters on an outer test site.
+  - Select checkpoints using the designated validation site only.
+  - Preserve every negative ablation in the final benchmark report.
+  - Do not compare AQI metrics directly with PM2.5 concentration metrics.
+  - Treat Nanjing PM labels as provisional until the source workbook schema is verified.
