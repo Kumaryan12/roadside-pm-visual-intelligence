@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software or its derived workflows, please cite the archived release."
+title: "Roadside PM Visual Intelligence: leakage-aware background-conditioned PM2.5 estimation"
+type: software
+license: MIT
+authors:
+  - family-names: "Kumar"
+    given-names: "Aryan Satyendra"
+    email: "kumararyan66472@gmail.com"
+repository-code: "https://github.com/Kumaryan12/roadside-pm-visual-intelligence"
+url: "https://github.com/Kumaryan12/roadside-pm-visual-intelligence"
+abstract: >-
+  Reproducible pipelines and manuscript artifacts for auditing temporal-context
+  leakage and evaluating background-conditioned visual and contextual PM2.5
+  estimation under complete-date, chronological, and held-out-site protocols.
+keywords:
+  - PM2.5
+  - temporal-context leakage
+  - environmental machine learning
+  - grouped validation
+  - background conditioning
+  - computer vision
+version: 1.0.0
+date-released: 2026-08-27

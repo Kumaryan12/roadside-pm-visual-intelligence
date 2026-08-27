@@ -707,21 +707,18 @@ components as exhaust, dust, or secondary aerosol without that evidence.
 
 ## License and citation
 
-No open-source license file is currently included. The public repository can
-be inspected and cited, but reuse or redistribution should not be assumed to
-be licensed until the repository owner adds an explicit license. External
-datasets, APIs, and pretrained checkpoints retain their own terms.
+Code, scripts, and configurations are released under the
+[MIT License](LICENSE). Original manuscript text, documentation, tables, and
+figures under `docs/` are released under
+[CC BY 4.0](docs/LICENSE.md), unless a file states otherwise. External
+datasets, imagery, APIs, atmospheric products, maps, and pretrained weights
+retain their original terms and are not relicensed here; see
+[THIRD_PARTY_DATA.md](THIRD_PARTY_DATA.md).
 
-Suggested project citation:
-
-```bibtex
-@software{satyendrakumar2026roadsidepm,
-  author = {Aryan Satyendra Kumar},
-  title = {Roadside PM Visual Intelligence},
-  year = {2026},
-  url = {https://github.com/Kumaryan12/roadside-pm-visual-intelligence}
-}
-```
+Machine-readable citation metadata is provided in
+[`CITATION.cff`](CITATION.cff). Cite the archived Zenodo release DOI once
+available; GitHub's **Cite this repository** control will expose the same
+metadata.
 
 When reporting a numerical result, cite the corresponding run manifest and
 state the dataset, split protocol, target, feature group, and whether the

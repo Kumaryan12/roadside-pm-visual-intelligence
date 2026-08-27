@@ -45,6 +45,7 @@ env/
 .matplotlib-cache/
 tmp/
 temp/
+build/
 
 # ============================================================
 # Generated project artifacts
