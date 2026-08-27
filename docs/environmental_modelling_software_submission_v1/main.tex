@@ -626,7 +626,7 @@ climatology failed on the future period (\Rtwo=-0.116), and delaying the
 other-site median by one hour reduced \Rtwo{} to 0.647. Contemporaneous
 other-site mean and median baselines reached 0.696 and 0.690. Relative to the
 median, the conditioned-image estimator improved MAE by 0.124 \ugm,
-RMSE by 0.172 \ugm{} and \Rtwo{} by 0.016 in 5,000 paired complete-date
+RMSE by 0.172 \ugm{} and \Rtwo{} by 0.016 in 20,000 paired complete-date
 resamples; all three 95\% intervals excluded zero. Removing any one support
 station changed median-background RMSE from 6.61 to 6.68--6.81 \ugm, showing
 moderate rather than catastrophic single-station sensitivity.
@@ -1123,7 +1123,7 @@ Taiwan learned network 0.740 & Chronological network ablation & Post-hoc & Hypot
 
 The baseline sensitivity analysis uses
 \path{pipelines/china_surveillance_aqi/analyze_reviewer_baselines.py}
-with the frozen chronological predictions, 5,000 complete-date bootstrap
+with the frozen chronological predictions, 20,000 complete-date bootstrap
 resamples and seed 42. It does not refit the frozen image model. The sequence
 manifest, prediction tables, split audit and generated summaries are retained
 with the repository workflow; raw third-party imagery is not redistributed.

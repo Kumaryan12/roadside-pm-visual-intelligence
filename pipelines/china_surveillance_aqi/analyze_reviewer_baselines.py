@@ -1,4 +1,4 @@
-"""Generate reviewer-requested Taiwan baselines and grouped uncertainty audits.
+"""Generate Taiwan baselines and grouped uncertainty audits.
 
 This analysis does not refit or alter the frozen conditioned-image model.  It
 evaluates transparent monitoring-network baselines on the identical 54-date
@@ -255,18 +255,19 @@ def main() -> int:
         "conditioned_image_frozen",
     ]
     labels = [
-        "Training\nmean",
+        "Train\nmean",
         "Site-hour\nclimatology",
-        "Other-site\nmedian, t-1 h",
-        "Other-site\nmean, current",
-        "Other-site\nmedian, current",
-        "Conditioned\nimage (frozen)",
+        "Network median\n(previous hour)",
+        "Network mean\n(current hour)",
+        "Network median\n(current hour)",
+        "Complete\nmodel",
     ]
     values = [float(baseline_table.set_index("model").loc[name, "rmse"]) for name in plot_order]
     colors = ["#8C939D"] * 5 + ["#3B6EA8"]
-    fig, axes = plt.subplots(1, 2, figsize=(12.4, 4.5))
+    fig, axes = plt.subplots(1, 2, figsize=(13.6, 4.5))
     axes[0].bar(np.arange(len(values)), values, color=colors)
-    axes[0].set_xticks(np.arange(len(values)), labels, rotation=18, ha="right")
+    axes[0].set_xticks(np.arange(len(values)), labels, rotation=0, ha="center")
+    axes[0].tick_params(axis="x", labelsize=8)
     axes[0].set_ylabel("RMSE ($\\mu$g m$^{-3}$)")
     axes[0].set_title("Identical 54-date chronological test partition")
     axes[0].grid(axis="y", alpha=0.25)
@@ -296,7 +297,7 @@ def main() -> int:
         "target_site_current_pm25_used_as_predictor": False,
         "other_site_contemporaneous_pm25_required_at_inference": True,
         "frozen_model_refit": False,
-        "new_baselines_status": "retrospective reviewer-requested analysis on previously inspected test",
+        "new_baselines_status": "retrospective baseline sensitivity analysis on previously inspected test",
         "posthoc_models": [
             "learned_spatial_background_posthoc",
             "lagged_spatiotemporal_background_posthoc",
