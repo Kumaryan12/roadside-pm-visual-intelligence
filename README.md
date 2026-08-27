@@ -716,9 +716,9 @@ retain their original terms and are not relicensed here; see
 [THIRD_PARTY_DATA.md](THIRD_PARTY_DATA.md).
 
 Machine-readable citation metadata is provided in
-[`CITATION.cff`](CITATION.cff). Cite the archived Zenodo release DOI once
-available; GitHub's **Cite this repository** control will expose the same
-metadata.
+[`CITATION.cff`](CITATION.cff). Cite the archived release using
+[DOI 10.5281/zenodo.22121572](https://doi.org/10.5281/zenodo.22121572).
+GitHub's **Cite this repository** control exposes the same metadata.
 
 When reporting a numerical result, cite the corresponding run manifest and
 state the dataset, split protocol, target, feature group, and whether the

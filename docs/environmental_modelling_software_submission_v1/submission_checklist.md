@@ -19,13 +19,14 @@
 - Acknowledgements included before the references.
 - Grouped, assisted, diagnostic and exploratory results remain explicitly distinguished.
 - Cover letter is tailored to *Environmental Modelling & Software*.
+- Exact code and derived-result release archived at DOI
+  `10.5281/zenodo.22121572`, cited in the manuscript and bibliography.
 
 ## Author actions required before upload
 
 - Confirm the no-specific-funding statement is accurate.
 - Confirm the spelling and consent of acknowledged contributors: Sreejith Chakrapani and Navaneethakrishnan V.
 - Add an ORCID in Editorial Manager if available.
-- Deposit the exact code and derived-result snapshot in Zenodo or another DOI-issuing repository, then replace the planned-DOI sentence with the DOI and add a dataset/software citation to `references.bib`.
 - Verify that every public dataset and image source is used under its current licence and access terms; do not upload restricted source images.
 - Complete Elsevier's Declaration of Competing Interest tool and upload its generated Word file, even though the manuscript states that no competing interests exist.
 - Review and approve the generative-AI disclosure wording; disclose the same tools in the submission workflow when prompted.
@@ -49,7 +50,7 @@
 - No jurisdictional map is included in the current manuscript.
 - No chemical source-apportionment claim is made.
 - The source datasets are public, but public availability does not automatically permit redistribution of their imagery.
-- A GitHub URL is useful for review; an immutable DOI is still required for a citable release.
+- The GitHub repository and immutable Zenodo DOI are both stated in the manuscript.
 
 ## Length note
 

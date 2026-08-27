@@ -33,6 +33,6 @@ Tectonic resolves the BibTeX bibliography automatically.
 
 ## Before submission
 
-The exact code and derived-result snapshot must receive an immutable repository
-DOI before the final upload. Complete the remaining actions in
-`submission_checklist.md`.
+The exact code and derived-result snapshot is archived at
+<https://doi.org/10.5281/zenodo.22121572>. Complete the remaining author actions
+in `submission_checklist.md`.

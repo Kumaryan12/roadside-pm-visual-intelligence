@@ -9,6 +9,10 @@ authors:
     email: "kumararyan66472@gmail.com"
 repository-code: "https://github.com/Kumaryan12/roadside-pm-visual-intelligence"
 url: "https://github.com/Kumaryan12/roadside-pm-visual-intelligence"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.22121572"
+    description: "Archived v1.0.1-paper release"
 abstract: >-
   Reproducible pipelines and manuscript artifacts for auditing temporal-context
   leakage and evaluating background-conditioned visual and contextual PM2.5
