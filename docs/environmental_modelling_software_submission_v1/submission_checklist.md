@@ -20,7 +20,7 @@
 - Grouped, assisted, diagnostic and exploratory results remain explicitly distinguished.
 - Cover letter is tailored to *Environmental Modelling & Software*.
 - Exact code and derived-result release archived at DOI
-  `10.5281/zenodo.22121572`, cited in the manuscript and bibliography.
+  `10.5281/zenodo.22121571`, cited in the manuscript and bibliography.
 
 ## Author actions required before upload
 

@@ -11,8 +11,8 @@ repository-code: "https://github.com/Kumaryan12/roadside-pm-visual-intelligence"
 url: "https://github.com/Kumaryan12/roadside-pm-visual-intelligence"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.22121572"
-    description: "Archived v1.0.1-paper release"
+    value: "10.5281/zenodo.22121571"
+    description: "Version-independent Zenodo archive DOI"
 abstract: >-
   Reproducible pipelines and manuscript artifacts for auditing temporal-context
   leakage and evaluating background-conditioned visual and contextual PM2.5
@@ -24,5 +24,5 @@ keywords:
   - grouped validation
   - background conditioning
   - computer vision
-version: 1.0.1
+version: 1.0.2
 date-released: 2026-08-27

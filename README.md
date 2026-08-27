@@ -4,8 +4,8 @@
 
 ### Leakage-aware, background-conditioned PM2.5 estimation from image sequences and environmental context
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22121572.svg)](https://doi.org/10.5281/zenodo.22121572)
-[![GitHub release](https://img.shields.io/badge/release-v1.0.1--paper-24292f?logo=github)](https://github.com/Kumaryan12/roadside-pm-visual-intelligence/releases/tag/v1.0.1-paper)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22121571.svg)](https://doi.org/10.5281/zenodo.22121571)
+[![GitHub release](https://img.shields.io/badge/release-v1.0.2--paper-24292f?logo=github)](https://github.com/Kumaryan12/roadside-pm-visual-intelligence/releases/tag/v1.0.2-paper)
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/code-MIT-2f4f4f)](LICENSE)
 [![Docs: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-555)](docs/LICENSE.md)
@@ -14,8 +14,8 @@
 
 [Manuscript](docs/environmental_modelling_software_submission_v1/main.pdf) ·
 [LaTeX source](docs/environmental_modelling_software_submission_v1/main.tex) ·
-[Release](https://github.com/Kumaryan12/roadside-pm-visual-intelligence/releases/tag/v1.0.1-paper) ·
-[Zenodo record](https://doi.org/10.5281/zenodo.22121572)
+[Release](https://github.com/Kumaryan12/roadside-pm-visual-intelligence/releases/tag/v1.0.2-paper) ·
+[Zenodo record](https://doi.org/10.5281/zenodo.22121571)
 
 </div>
 
@@ -319,11 +319,11 @@ For the exact released snapshot:
 
 ```bash
 git fetch --tags
-git checkout v1.0.1-paper
+git checkout v1.0.2-paper
 ```
 
 The versioned source is archived at
-[DOI 10.5281/zenodo.22121572](https://doi.org/10.5281/zenodo.22121572).
+[DOI 10.5281/zenodo.22121571](https://doi.org/10.5281/zenodo.22121571).
 
 ### 2. Obtain the source datasets
 
@@ -433,8 +433,8 @@ See [THIRD_PARTY_DATA.md](THIRD_PARTY_DATA.md) for third-party resource terms.
 - Manuscript PDF: [main.pdf](docs/environmental_modelling_software_submission_v1/main.pdf)
 - Manuscript source: [main.tex](docs/environmental_modelling_software_submission_v1/main.tex)
 - Submission checklist: [submission_checklist.md](docs/environmental_modelling_software_submission_v1/submission_checklist.md)
-- GitHub release: [v1.0.1-paper](https://github.com/Kumaryan12/roadside-pm-visual-intelligence/releases/tag/v1.0.1-paper)
-- Archived DOI: [10.5281/zenodo.22121572](https://doi.org/10.5281/zenodo.22121572)
+- GitHub release: [v1.0.2-paper](https://github.com/Kumaryan12/roadside-pm-visual-intelligence/releases/tag/v1.0.2-paper)
+- Version-independent archive DOI: [10.5281/zenodo.22121571](https://doi.org/10.5281/zenodo.22121571)
 
 The DOI identifies the immutable paper-release snapshot. The `main` branch may
 contain later documentation or maintenance changes.
@@ -450,10 +450,10 @@ Machine-readable metadata is provided in [`CITATION.cff`](CITATION.cff).
   author  = {Kumar, Aryan Satyendra},
   title   = {Roadside PM Visual Intelligence: leakage-aware
              background-conditioned PM2.5 estimation},
-  version = {v1.0.1-paper},
+  version = {v1.0.2-paper},
   year    = {2026},
-  doi     = {10.5281/zenodo.22121572},
-  url     = {https://doi.org/10.5281/zenodo.22121572}
+  doi     = {10.5281/zenodo.22121571},
+  url     = {https://doi.org/10.5281/zenodo.22121571}
 }
 ```
 
