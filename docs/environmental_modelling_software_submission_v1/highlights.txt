@@ -2,6 +2,6 @@ Highlights
 
 - Random overlapping T=7 windows exposed 99.90% target-context leakage.
 - Complete-date testing reduced TRAQID R2 from 0.950 to 0.188.
-- Background conditioning separates broad pollution state from local refinement.
-- Taiwan achieved R2=0.706 on 54 later dates with zero frame overlap.
-- Nested leave-one-site-out testing retained R2=0.702 across six sites.
+- Reusable software audits raw context, background availability and grouped fits.
+- Network-assisted Taiwan testing reached R2=0.706 with zero frame overlap.
+- Nested six-site holdout retained pooled R2=0.702 and positive site-wise skill.

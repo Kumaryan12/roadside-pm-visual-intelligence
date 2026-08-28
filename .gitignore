@@ -131,6 +131,7 @@ models/detectors/
 # ============================================================
 *.aux
 *.bbl
+!docs/environmental_modelling_software_submission_v1/main.bbl
 *.blg
 *.fls
 *.fdb_latexmk

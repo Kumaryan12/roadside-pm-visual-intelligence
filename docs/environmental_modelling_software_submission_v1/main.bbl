@@ -1,0 +1,233 @@
+\begin{thebibliography}{24}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{#2}
+\providecommand{\path}[1]{#1}
+\providecommand{\DOIprefix}{doi:}
+\providecommand{\ArXivprefix}{arXiv:}
+\providecommand{\URLprefix}{URL: }
+\providecommand{\Pubmedprefix}{pmid:}
+\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\path{#1}}}
+\providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
+\providecommand{\bibinfo}[2]{#2}
+\ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Article
+\bibitem[{Berrocal et~al.(2010)Berrocal, Gelfand and
+  Holland}]{berrocal2010downscaler}
+\bibinfo{author}{Berrocal, V.J.}, \bibinfo{author}{Gelfand, A.E.},
+  \bibinfo{author}{Holland, D.M.}, \bibinfo{year}{2010}.
+\newblock \bibinfo{title}{A spatio-temporal downscaler for output from
+  numerical models}.
+\newblock \bibinfo{journal}{Journal of Agricultural, Biological, and
+  Environmental Statistics} \bibinfo{volume}{15}, \bibinfo{pages}{176--197}.
+%Type = Article
+\bibitem[{Breiman(2001)}]{breiman2001rf}
+\bibinfo{author}{Breiman, L.}, \bibinfo{year}{2001}.
+\newblock \bibinfo{title}{Random forests}.
+\newblock \bibinfo{journal}{Machine Learning} \bibinfo{volume}{45},
+  \bibinfo{pages}{5--32}.
+\newblock \DOIprefix\doi{10.1023/A:1010933404324}.
+%Type = Inproceedings
+\bibitem[{Cho et~al.(2014)Cho, van Merri{\"e}nboer, Gulcehre
+  et~al.}]{cho2014gru}
+\bibinfo{author}{Cho, K.}, \bibinfo{author}{van Merri{\"e}nboer, B.},
+  \bibinfo{author}{Gulcehre, C.}, et~al., \bibinfo{year}{2014}.
+\newblock \bibinfo{title}{Learning phrase representations using {RNN}
+  encoder--decoder for statistical machine translation}, in:
+  \bibinfo{booktitle}{Proceedings of EMNLP}, pp. \bibinfo{pages}{1724--1734}.
+\newblock \DOIprefix\doi{10.3115/v1/D14-1179}.
+%Type = Article
+\bibitem[{Di et~al.(2019)Di, Amini, Shi, Kloog, Silvern, Kelly, Sabath,
+  Choirat, Koutrakis, Lyapustin, Wang, Mickley and Schwartz}]{di2019ensemble}
+\bibinfo{author}{Di, Q.}, \bibinfo{author}{Amini, H.}, \bibinfo{author}{Shi,
+  L.}, \bibinfo{author}{Kloog, I.}, \bibinfo{author}{Silvern, R.},
+  \bibinfo{author}{Kelly, J.}, \bibinfo{author}{Sabath, M.B.},
+  \bibinfo{author}{Choirat, C.}, \bibinfo{author}{Koutrakis, P.},
+  \bibinfo{author}{Lyapustin, A.}, \bibinfo{author}{Wang, Y.},
+  \bibinfo{author}{Mickley, L.J.}, \bibinfo{author}{Schwartz, J.},
+  \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{An ensemble-based model of {PM2.5} concentration
+  across the contiguous united states with high spatiotemporal resolution}.
+\newblock \bibinfo{journal}{Environment International} \bibinfo{volume}{130},
+  \bibinfo{pages}{104909}.
+\newblock \DOIprefix\doi{10.1016/j.envint.2019.104909}.
+%Type = Article
+\bibitem[{Gelaro et~al.(2017)Gelaro, McCarty, Su{\'a}rez
+  et~al.}]{gelaro2017merra2}
+\bibinfo{author}{Gelaro, R.}, \bibinfo{author}{McCarty, W.},
+  \bibinfo{author}{Su{\'a}rez, M.J.}, et~al., \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{The modern-era retrospective analysis for research
+  and applications, version 2 ({MERRA-2})}.
+\newblock \bibinfo{journal}{Journal of Climate} \bibinfo{volume}{30},
+  \bibinfo{pages}{5419--5454}.
+\newblock \DOIprefix\doi{10.1175/JCLI-D-16-0758.1}.
+%Type = Article
+\bibitem[{Geurts et~al.(2006)Geurts, Ernst and Wehenkel}]{geurts2006extratrees}
+\bibinfo{author}{Geurts, P.}, \bibinfo{author}{Ernst, D.},
+  \bibinfo{author}{Wehenkel, L.}, \bibinfo{year}{2006}.
+\newblock \bibinfo{title}{Extremely randomized trees}.
+\newblock \bibinfo{journal}{Machine Learning} \bibinfo{volume}{63},
+  \bibinfo{pages}{3--42}.
+\newblock \DOIprefix\doi{10.1007/s10994-006-6226-1}.
+%Type = Misc
+\bibitem[{{Google Earth Engine Data Catalog}(2026a)}]{geeCamsNrt}
+\bibinfo{author}{{Google Earth Engine Data Catalog}}, \bibinfo{year}{2026}a.
+\newblock \bibinfo{title}{{CAMS} global near-real-time atmospheric composition
+  forecasts}.
+\newblock
+  \bibinfo{howpublished}{\url{https://developers.google.com/earth-engine/datasets/catalog/ECMWF_CAMS_NRT}}.
+\newblock \bibinfo{note}{Accessed 2026-08-19}.
+%Type = Misc
+\bibitem[{{Google Earth Engine Data Catalog}(2026b)}]{geeEra5Land}
+\bibinfo{author}{{Google Earth Engine Data Catalog}}, \bibinfo{year}{2026}b.
+\newblock \bibinfo{title}{{ERA5-Land} hourly reanalysis}.
+\newblock
+  \bibinfo{howpublished}{\url{https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_HOURLY}}.
+\newblock \bibinfo{note}{Accessed 2026-08-19}.
+%Type = Misc
+\bibitem[{{Google Earth Engine Data Catalog}(2026c)}]{geeMerraAer}
+\bibinfo{author}{{Google Earth Engine Data Catalog}}, \bibinfo{year}{2026}c.
+\newblock \bibinfo{title}{{MERRA-2 M2T1NXAER}: Aerosol diagnostics v5.12.4}.
+\newblock
+  \bibinfo{howpublished}{\url{https://developers.google.com/earth-engine/datasets/catalog/NASA_GSFC_MERRA_aer_2}}.
+\newblock \bibinfo{note}{Accessed 2026-08-19}.
+%Type = Inproceedings
+\bibitem[{He et~al.(2016)He, Zhang, Ren and Sun}]{he2016resnet}
+\bibinfo{author}{He, K.}, \bibinfo{author}{Zhang, X.}, \bibinfo{author}{Ren,
+  S.}, \bibinfo{author}{Sun, J.}, \bibinfo{year}{2016}.
+\newblock \bibinfo{title}{Deep residual learning for image recognition}, in:
+  \bibinfo{booktitle}{Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pp. \bibinfo{pages}{770--778}.
+%Type = Article
+\bibitem[{Hoek et~al.(2008)Hoek, Beelen, de~Hoogh, Vienneau, Gulliver, Fischer
+  and Briggs}]{hoek2008lur}
+\bibinfo{author}{Hoek, G.}, \bibinfo{author}{Beelen, R.},
+  \bibinfo{author}{de~Hoogh, K.}, \bibinfo{author}{Vienneau, D.},
+  \bibinfo{author}{Gulliver, J.}, \bibinfo{author}{Fischer, P.},
+  \bibinfo{author}{Briggs, D.}, \bibinfo{year}{2008}.
+\newblock \bibinfo{title}{A review of land-use regression models to assess
+  spatial variation of outdoor air pollution}.
+\newblock \bibinfo{journal}{Atmospheric Environment} \bibinfo{volume}{42},
+  \bibinfo{pages}{7561--7578}.
+\newblock \DOIprefix\doi{10.1016/j.atmosenv.2008.05.057}.
+%Type = Article
+\bibitem[{Inness et~al.(2019)Inness, Ades, Agust{\'i}-Panareda
+  et~al.}]{inness2019cams}
+\bibinfo{author}{Inness, A.}, \bibinfo{author}{Ades, M.},
+  \bibinfo{author}{Agust{\'i}-Panareda, A.}, et~al., \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{The {CAMS} reanalysis of atmospheric composition}.
+\newblock \bibinfo{journal}{Atmospheric Chemistry and Physics}
+  \bibinfo{volume}{19}, \bibinfo{pages}{3515--3556}.
+\newblock \DOIprefix\doi{10.5194/acp-19-3515-2019}.
+%Type = Article
+\bibitem[{Kapoor and Narayanan(2023)}]{kapoor2023leakage}
+\bibinfo{author}{Kapoor, S.}, \bibinfo{author}{Narayanan, A.},
+  \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Leakage and the reproducibility crisis in
+  machine-learning-based science}.
+\newblock \bibinfo{journal}{Patterns} \bibinfo{volume}{4},
+  \bibinfo{pages}{100804}.
+\newblock \DOIprefix\doi{10.1016/j.patter.2023.100804}.
+%Type = Inproceedings
+\bibitem[{Kathalkar et~al.(2024)Kathalkar, Nilesh, Chaudhari and
+  Namboodiri}]{kathalkar2024traqid}
+\bibinfo{author}{Kathalkar, O.R.}, \bibinfo{author}{Nilesh, N.},
+  \bibinfo{author}{Chaudhari, S.}, \bibinfo{author}{Namboodiri, A.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{{TRAQID} -- traffic-related air quality image
+  dataset}, in: \bibinfo{booktitle}{Proceedings of the Indian Conference on
+  Computer Vision Graphics and Image Processing},
+  \bibinfo{publisher}{Association for Computing Machinery}. pp.
+  \bibinfo{pages}{1--10}.
+\newblock \DOIprefix\doi{10.1145/3702250.3702260}.
+%Type = Misc
+\bibitem[{Kumar(2026)}]{kumar2026roadside}
+\bibinfo{author}{Kumar, A.S.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Roadside {PM} visual intelligence: leakage-aware
+  background-conditioned {PM2.5} estimation}.
+\newblock \URLprefix \url{https://doi.org/10.5281/zenodo.22121571},
+  \DOIprefix\doi{10.5281/zenodo.22121571}.
+%Type = Article
+\bibitem[{Liu et~al.(2024)}]{liu2024trafficcamera}
+\bibinfo{author}{Liu, Y.}, et~al., \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Applying traffic camera and deep learning-based image
+  analysis to predict {PM2.5} concentrations}.
+\newblock \bibinfo{journal}{Science of the Total Environment}
+  \bibinfo{volume}{912}, \bibinfo{pages}{169233}.
+\newblock \DOIprefix\doi{10.1016/j.scitotenv.2023.169233}.
+%Type = Article
+\bibitem[{Luo et~al.(2020)Luo, Huang and Liu}]{luo2020cnn}
+\bibinfo{author}{Luo, Z.}, \bibinfo{author}{Huang, F.}, \bibinfo{author}{Liu,
+  H.}, \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{{PM2.5} concentration estimation using convolutional
+  neural network and gradient boosting machine}.
+\newblock \bibinfo{journal}{Journal of Environmental Sciences}
+  \bibinfo{volume}{98}, \bibinfo{pages}{85--93}.
+\newblock \DOIprefix\doi{10.1016/j.jes.2020.04.042}.
+%Type = Misc
+\bibitem[{{OpenAQ}(2026)}]{openaq2026}
+\bibinfo{author}{{OpenAQ}}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Openaq api and global air-quality data platform}.
+\newblock \bibinfo{howpublished}{\url{https://openaq.org/}}.
+\newblock \bibinfo{note}{Accessed 2026-08-24}.
+%Type = Article
+\bibitem[{Pedregosa et~al.(2011)Pedregosa, Varoquaux, Gramfort
+  et~al.}]{pedregosa2011sklearn}
+\bibinfo{author}{Pedregosa, F.}, \bibinfo{author}{Varoquaux, G.},
+  \bibinfo{author}{Gramfort, A.}, et~al., \bibinfo{year}{2011}.
+\newblock \bibinfo{title}{Scikit-learn: Machine learning in python}.
+\newblock \bibinfo{journal}{Journal of Machine Learning Research}
+  \bibinfo{volume}{12}, \bibinfo{pages}{2825--2830}.
+%Type = Article
+\bibitem[{Roberts et~al.(2017)Roberts, Bahn, Ciuti et~al.}]{roberts2017cv}
+\bibinfo{author}{Roberts, D.R.}, \bibinfo{author}{Bahn, V.},
+  \bibinfo{author}{Ciuti, S.}, et~al., \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{Cross-validation strategies for data with temporal,
+  spatial, hierarchical, or phylogenetic structure}.
+\newblock \bibinfo{journal}{Ecography} \bibinfo{volume}{40},
+  \bibinfo{pages}{913--929}.
+\newblock \DOIprefix\doi{10.1111/ecog.02881}.
+%Type = Article
+\bibitem[{Wang et~al.(2026)Wang, Liu and Mao}]{wang2026unified}
+\bibinfo{author}{Wang, X.}, \bibinfo{author}{Liu, X.}, \bibinfo{author}{Mao,
+  W.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Air quality estimation from sequential surveillance
+  images using a unified {CNN--RNN} framework}.
+\newblock \bibinfo{journal}{iScience} \bibinfo{volume}{29},
+  \bibinfo{pages}{114919}.
+\newblock \DOIprefix\doi{10.1016/j.isci.2026.114919}. \bibinfo{note}{dataset:
+  \url{https://doi.org/10.17632/3hnztk9fk8.1}}.
+%Type = Article
+\bibitem[{Wang et~al.(2024)Wang, Wang, Liu, Mao, Chen and
+  Dai}]{wang2024surveillance}
+\bibinfo{author}{Wang, X.}, \bibinfo{author}{Wang, M.}, \bibinfo{author}{Liu,
+  X.}, \bibinfo{author}{Mao, Y.}, \bibinfo{author}{Chen, Y.},
+  \bibinfo{author}{Dai, S.}, \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Surveillance-image-based outdoor air quality
+  monitoring}.
+\newblock \bibinfo{journal}{Environmental Science and Ecotechnology}
+  \bibinfo{volume}{18}, \bibinfo{pages}{100319}.
+\newblock \DOIprefix\doi{10.1016/j.ese.2023.100319}.
+%Type = Article
+\bibitem[{Wei et~al.(2020)Wei, Li, Lyapustin, Wang, Dubovik, Schwartz, Sun and
+  Li}]{wei2020stet}
+\bibinfo{author}{Wei, J.}, \bibinfo{author}{Li, Z.},
+  \bibinfo{author}{Lyapustin, A.}, \bibinfo{author}{Wang, Y.},
+  \bibinfo{author}{Dubovik, O.}, \bibinfo{author}{Schwartz, J.},
+  \bibinfo{author}{Sun, L.}, \bibinfo{author}{Li, D.}, \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Improved 1 km resolution {PM2.5} estimates across
+  china using enhanced space--time extremely randomized trees}.
+\newblock \bibinfo{journal}{Atmospheric Chemistry and Physics}
+  \bibinfo{volume}{20}, \bibinfo{pages}{3273--3289}.
+\newblock \DOIprefix\doi{10.5194/acp-20-3273-2020}.
+%Type = Inproceedings
+\bibitem[{Yang(2026)}]{han2026pm25vision}
+\bibinfo{author}{Yang, H.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{{PM25Vision}: A large-scale benchmark dataset for
+  visual estimation of air quality}, in: \bibinfo{booktitle}{Proceedings of the
+  21st International Conference on Computer Vision Theory and Applications --
+  Volume 3: VISAPP}, \bibinfo{organization}{INSTICC}.
+  \bibinfo{publisher}{SciTePress}. pp. \bibinfo{pages}{348--352}.
+\newblock \DOIprefix\doi{10.5220/0014268000004084}.
+
+\end{thebibliography}

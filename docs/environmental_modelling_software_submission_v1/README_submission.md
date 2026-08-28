@@ -21,13 +21,14 @@ Tectonic resolves the BibTeX bibliography automatically.
 - `main.tex`: editable Elsevier manuscript source.
 - `references.bib`: editable bibliography database.
 - `main.pdf`: locally compiled review manuscript.
-- `figures_submission_grayscale/`: grayscale article figures used by `main.tex`.
+- `figures_submission_final/`: final numbered Figures 1--12 used by `main.tex`.
 - `figures_submission/`: preserved original colour figures for future revision.
 - `figure_captions.txt`: figure legends for portals that request a legend file.
 - `highlights.txt`: mandatory 3--5 article highlights.
 - `graphical_abstract.tex`: editable graphical-abstract source.
 - `graphical_abstract.pdf`: mandatory vector graphical abstract.
 - `graphical_abstract.png`: exact-size 1328 x 531 px backup.
+- `declaration_of_competing_interest.docx`: separate editable declaration.
 - `cover_letter.md`: editable cover letter.
 - `submission_checklist.md`: completed requirements and remaining author actions.
 

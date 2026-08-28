@@ -26,12 +26,12 @@
   linkcolor=navy,
   citecolor=green,
   urlcolor=blue,
-  pdftitle={Auditing Temporal-Context Leakage in Image-Based PM2.5 Estimation: A Background-Conditioned Framework for Grouped Prediction},
+  pdftitle={A Leakage-Aware Software Framework for Background-Conditioned PM2.5 Prediction under Grouped Temporal and Spatial Shifts},
   pdfauthor={Aryan Satyendra Kumar},
   pdfsubject={Temporal leakage diagnosis and leakage-aware multimodal PM2.5 estimation on TRAQID and a Taiwan fixed-camera network},
   pdfkeywords={PM2.5, multimodal estimation, temporal-context leakage, complete-date validation, leave-one-site-out, background conditioning, TRAQID, Taiwan}
 }
-\graphicspath{{figures_submission_grayscale/}}
+\graphicspath{{figures_submission_final/}}
 \setlist{nosep,leftmargin=*}
 \setlength{\emergencystretch}{3em}
 \renewcommand{\arraystretch}{1.12}
@@ -52,8 +52,8 @@
 
 \begin{frontmatter}
 
-\title{Auditing Temporal-Context Leakage in Image-Based \pmfine{} Estimation:\\
-A Background-Conditioned Framework for Grouped Prediction}
+\title{A Leakage-Aware Software Framework for Background-Conditioned
+\pmfine{} Prediction under Grouped Temporal and Spatial Shifts}
 
 \author[nitgoa]{Aryan Satyendra Kumar\corref{cor1}}
 \cortext[cor1]{Corresponding author}
@@ -62,20 +62,21 @@ A Background-Conditioned Framework for Grouped Prediction}
 Cuncolim Municipal Area, Salcete Taluka, South Goa District, Goa 403703, India}
 
 \begin{abstract}
-Random partitioning of overlapping image sequences can overstate generalization
-in environmental machine learning. We audit this failure mode and propose a
-background-conditioned framework combining an inference-time atmospheric or
-monitoring-network signal with learned visual and contextual refinement. On the
-mobile-roadside TRAQID dataset, a temporal--tabular model fell from
-\Rtwo=0.950 under random windows, where 99.90\% of test targets appeared in
-training context, to \Rtwo=0.188 under zero-overlap complete-date evaluation.
-The framework was fitted independently to TRAQID and a six-site Taiwan network.
-TRAQID calibration-assisted prediction reduced future-period RMSE on 12 of 16
-dates. On Taiwan, the complete model achieved \Rtwo=0.706 across 54 later dates
-and \Rtwo=0.702 under nested leave-one-site-out evaluation, with zero raw-frame
-overlap. These results connect frame-level leakage diagnosis to grouped,
-inference-realistic environmental prediction while making background-data
-requirements explicit.
+Random partitioning of overlapping image sequences can overstate generalisation
+in environmental machine learning. We present reusable software for raw-context
+auditing, leakage-safe grouped sequences, inference-time background contracts,
+grouped cross-fitting and cluster-aware uncertainty. On TRAQID, performance fell
+from \Rtwo=0.950 under random windows, with 99.90\% target/context overlap, to
+pooled \Rtwo=0.188 under zero-overlap complete-date evaluation; mean and median
+date-wise \Rtwo{} were -5.625 and -1.042. First-10\% calibration obtained pooled
+future-period \Rtwo=0.490, while mean and median date-wise \Rtwo{} remained
+-1.861 and -0.583, with 3 of 16 dates positive. On Taiwan, contemporaneous
+other-site background obtained \Rtwo=0.690 and the complete estimator obtained
+\Rtwo=0.706 across 54 retrospectively defined later dates. Nested
+leave-one-site-out evaluation retained pooled \Rtwo=0.702, mean and median
+site-wise \Rtwo{} of 0.692 and 0.709, and positive skill at all six sites. The
+framework therefore connects leakage diagnosis to operationally explicit,
+grouped environmental prediction without claiming camera-only monitoring.
 \end{abstract}
 
 \begin{keyword}
@@ -130,7 +131,7 @@ stages of investigation:
         are held out;
   \item introduce background-conditioned multimodal local refinement as a
         response to the observed date shift; and
-  \item validate the framework under chronological future-period,
+  \item evaluate the framework under chronological future-period,
         leave-one-site-out and explicitly declared calibration-assisted tasks.
 \end{enumerate}
 
@@ -153,14 +154,16 @@ is whether an inference-time background, temporal imagery and structured
 context can be integrated into a useful complete system under grouped temporal
 or spatial evaluation.
 
-The methodological contribution is a background-conditioned design principle,
-not a claim that one trained model transfers between campaigns. It couples an
-inference-time pollution background with learned local refinement and evaluates
-each dataset-specific instantiation under grouped shifts. The four contributions
-are:
+The novelty is not the algebraic decomposition alone, which is related to
+statistical downscaling and residual correction. It is the executable contract
+that connects sequence construction, background availability, grouped fitting,
+overlap auditing and group-aware reporting. Separate dataset-specific estimators
+implement that contract without claiming that one trained model transfers
+unchanged between campaigns. The five contributions are:
 \begin{enumerate}
   \item a raw-frame audit of temporal-context leakage in random T=7 evaluation;
-  \item a background-conditioned formulation for local concentration refinement;
+  \item a reusable leakage-safe sequence and grouped-evaluation software workflow;
+  \item an inference-time background interface for local concentration refinement;
   \item grouped temporal and spatial validation on two public datasets; and
   \item robustness and calibration-assisted analyses that define the framework's
         operating limits.
@@ -213,6 +216,18 @@ Here, imagery is tested as an incremental local predictor against explicit
 atmospheric and monitoring-network baselines, not as a substitute for those
 established sources.
 
+The remaining gap is partly a software-design problem. A reported model score
+does not by itself reveal whether windows were grouped before construction,
+whether raw context crossed partitions, whether a background would exist at
+inference, or whether preprocessing and fusion were selected outside the test
+group. Existing guidance on dependence-aware validation and scientific leakage
+identifies these risks \citep{roberts2017cv,kapoor2023leakage}, but they are
+rarely represented as executable environmental-model contracts. The present
+software makes group membership, raw-row lineage, background provenance,
+selection status and group-level uncertainty first-class artifacts. This is the
+specific methodological layer contributed beyond the familiar background-plus-
+residual equation.
+
 \section{Data}
 
 \subsection{TRAQID campaign}
@@ -235,9 +250,9 @@ clusters than 26,558 independent samples.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.98\textwidth]{Figure_01_TRAQID_coverage_and_target_distribution.png}
+  \includegraphics[width=0.98\textwidth]{Figure_01_TRAQID_coverage_and_target_distribution.pdf}
   \caption{TRAQID date coverage and roadside \pmfine{} distributions. Shading
-  denote the season labels used in the campaign-level analysis. Box plots omit
+  denotes the season labels used in the campaign-level analysis. Box plots omit
   fliers for legibility but all values are retained in modelling.}
   \label{fig:dataset}
 \end{figure}
@@ -307,7 +322,7 @@ earliest 162 dates formed training, the next 52 validation and the final 54
 test, producing 13,154, 6,750 and 7,180 sequences respectively. No raw image
 frame occurred in more than one partition. At each target timestamp, the
 monitoring-network background was the median exactly contemporaneous
-(same clock-hour; zero synchronization tolerance) \pmfine{} across
+(same clock-hour; zero synchronisation tolerance) \pmfine{} across
 the other available sites. The target site's own measurement was excluded by
 construction; consequently, the background is a network-assisted
 input rather than target leakage. This task estimates one site's concentration
@@ -321,6 +336,30 @@ at a time. Within every outer fold, the image-correction weight was selected by
 cross-validation over training sites only. All six sites were therefore scored
 once as held-out spatial groups. This is network-assisted spatial transfer
 within southern Kaohsiung, not sensor-free transfer to a new city.
+
+Figure~\ref{fig:scene-examples} provides representative visual inputs from the
+two evaluation domains. The mobile TRAQID views contain rapidly changing road,
+traffic and illumination conditions, whereas each Taiwan camera observes a
+largely fixed urban or industrial scene. These frames are shown to document the
+visual domains supplied to the models; scene appearance alone is not treated as
+a direct measurement of particle concentration.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.99\textwidth]{Figure_02_dataset_scene_examples.png}
+  \caption{Representative grayscale input frames from the public datasets.
+  (a--b) Simultaneous front and rear views from the mobile TRAQID campaign
+  \citep{kathalkar2024traqid}. (c--h) One fixed-camera example from each Taiwan
+  monitoring location in the order Qiaotou, Renwu, Fengshan, Daliao, Linyuan
+  and Xiaogang \citep{wang2026unified}. The panels illustrate the strong domain
+  difference between moving roadside imagery and stationary monitoring scenes;
+  they are contextual examples, not visual proxies for the associated
+  \pmfine{} label. Frames were uniformly converted to grayscale and cropped
+  for layout. A uniform contrast adjustment was applied; no objects or semantic
+  content were added or removed. TRAQID imagery is reproduced under the source
+  repository's MIT licence; Taiwan imagery is adapted under CC BY 4.0.}
+  \label{fig:scene-examples}
+\end{figure}
 
 \section{Methods}
 
@@ -337,7 +376,7 @@ interpreted as separately additive source masses.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.99\textwidth]{Figure_02_framework_architecture.png}
+  \includegraphics[width=0.99\textwidth]{Figure_03_framework_architecture.pdf}
   \caption{Shared background-conditioned architecture. TRAQID instantiates
   $B$ with MERRA-2, CAMS or a nearby monitoring station and combines temporal
   and tabular local estimates. Taiwan instantiates $B$ with the synchronized
@@ -368,6 +407,55 @@ Dataset & Background $B$ & Learned local component & Required at inference & Exc
 TRAQID atmospheric & MERRA-2 or CAMS & Mobile image sequence + structured context & Timestamp, atmospheric products, scene covariates & Held-out-date targets \\
 TRAQID assisted & Nearby OpenAQ monitor & Reference context + local covariates & Same monitor throughout the drive & Future 90\% targets \\
 Taiwan network & Median of other sites & Context model + conditioned image residual & Other sites at target hour + target-site image & Target site's own observation \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Reusable software contract and workflow}
+
+The repository implements the framework as five composable stages rather than
+as one campaign-specific training script. First, a sequence builder groups rows
+before constructing windows and stores every raw-row identifier used by each
+window. Second, an overlap auditor intersects those identifiers across
+partitions and rejects a purported grouped evaluation when shared context is
+present. Third, a background provider joins only variables declared available
+at inference and records their provenance, temporal tolerance and coverage.
+Fourth, local estimators are fitted inside outer groups; optional preprocessing,
+residual correction and fusion are cross-fitted within the outer-training
+partition. Fifth, an evaluator pools untouched outer predictions while also
+reporting per-group errors, date- or site-cluster uncertainty and a machine-
+readable selection-status record.
+
+This contract makes the principal methodological safeguards testable:
+\begin{equation}
+ \mathcal{C}=\{G_{\mathrm{split}},I_{\mathrm{raw}},A_B,
+ F_{\mathrm{inner}},E_{\mathrm{group}}\},
+ \label{eq:software-contract}
+\end{equation}
+where $G_{\mathrm{split}}$ defines the deployment-relevant grouping,
+$I_{\mathrm{raw}}$ identifies all context rows, $A_B$ declares background
+availability, $F_{\mathrm{inner}}$ restricts fitting and selection to training
+groups, and $E_{\mathrm{group}}$ defines pooled and grouped reporting. A new
+dataset may replace the background source or local estimator while retaining
+the same contract and audit outputs. The principal command-line modules and
+their responsibilities are listed in Table~\ref{tab:software-workflow}; exact
+commands and versioned manifests are archived with the release.
+
+\begin{table}[H]
+\centering
+\caption{Reusable software stages. Paths are relative to the public repository.}
+\label{tab:software-workflow}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{P{2.5cm}P{6.0cm}P{6.6cm}}
+\toprule
+Stage & Representative module & Auditable output \\
+\midrule
+Grouped windows & \path{pipelines/image_embeddings/build_sequences.py} & Sequence manifest with groups, targets and raw-row membership \\
+Background join & \path{pipelines/image_embeddings/build_traqid_reference_variants.py}; \path{pipelines/china_surveillance_aqi/build_synchronized_reference.py} & Source, matching tolerance, supporting-site count and coverage audit \\
+Grouped fitting & \path{pipelines/image_embeddings/traqid_reference_innercv_lodo.py}; \path{pipelines/china_surveillance_aqi/train_conditioned_reference_gru.py} & Outer predictions, inner-selection records and fitted configuration \\
+Robustness audit & \path{pipelines/image_embeddings/analyze_traqid_reviewer_metrics.py}; \path{pipelines/china_surveillance_aqi/analyze_reviewer_baselines.py} & Per-group metrics, thinning, outage and baseline sensitivity \\
+Grouped inference & \path{pipelines/china_surveillance_aqi/bootstrap_conservative_visual_gain.py} & Paired date/site-cluster intervals and sufficient statistics \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
@@ -420,7 +508,7 @@ partitions.
 
 For full 20-date LODO, MERRA-2 supplied $B_t$. Local ExtraTrees models compared
 nonvisual context, nonvisual plus images, nonvisual plus structured visual and
-all modalities. Image features were reduced by train-only randomized PCA. All
+all modalities. Image features were reduced by train-only randomised PCA. All
 imputation, scaling, PCA and model fitting were restricted to outer-training
 dates.
 
@@ -434,7 +522,7 @@ matched ablations rather than assumed to be beneficial.
 Both TRAQID grouped runners used date-balanced sample weights and median
 imputation with missingness indicators. Local ExtraTrees models used 300 trees,
 minimum leaf size 8 and \texttt{max\_features}=0.7. ImageNet ResNet50 frame
-embeddings were reduced by train-only randomized PCA to at most 48 components;
+embeddings were reduced by train-only randomised PCA to at most 48 components;
 latest, mean, standard deviation and first-to-last change over T=7 were then
 concatenated. The reference-assisted fusion used four inner date-grouped folds
 and a simplex step of 0.05. The chronological meta-calibrator standardized its
@@ -471,7 +559,7 @@ sites; the held-out site's targets were never used for selection.
 The context ExtraTrees model used 400 trees, minimum leaf size 10 and
 \texttt{max\_features}=0.8. The conditioned image network used a 256-dimensional
 projection of frozen ResNet50 embeddings, a one-layer GRU with hidden width
-128, dropout 0.3 and a correction bound of 15 \ugm. It was optimized with
+128, dropout 0.3 and a correction bound of 15 \ugm. It was optimised with
 AdamW (learning rate $10^{-4}$, weight decay $10^{-4}$), Huber loss with
 $\delta=3$, correction penalty 0.005, batch size 64, at most 80 epochs and
 patience 12. Checkpoint and correction weight were selected exclusively on the
@@ -524,7 +612,7 @@ A deterministic non-overlapping sensitivity retains every seventh target in
 time order within each date, so retained T=7 windows do not share raw frames.
 TRAQID date-cluster uncertainty resampled the 16 complete dates with replacement
 5,000 times, retaining every row within a sampled date. Taiwan uncertainty used
-20,000 paired resamples of the 54 chronological test dates and, separately,
+5,000 paired resamples of the 54 chronological test dates and, separately,
 20,000 paired resamples of the six outer test sites. Percentile intervals
 therefore measure sensitivity to the relevant grouped units rather than treating
 dense sequences as independent samples. All analyses used fixed seed 42 and
@@ -597,12 +685,14 @@ The Taiwan experiment supplied a stronger fair test because it contained 276
 dates and six synchronized sites. Figure~\ref{fig:taiwan-protocol} documents the
 partition audit. Dates were assigned before windows were constructed, raw-frame
 overlap across train, validation and test was zero, and a target site's reading
-never contributed to its own background. The test partition was used once for
-scoring after the checkpoint and image weight had been fixed on validation.
+never contributed to its own background. Checkpoint and image weight were fixed
+on validation before the reported frozen scoring, but the dataset belonged to a
+broader iterative research programme; this is therefore retrospective grouped
+validation rather than prospective confirmation.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.98\textwidth]{Figure_03_protocol_and_leakage_audit.pdf}
+  \includegraphics[width=0.98\textwidth]{Figure_04_protocol_and_leakage_audit.pdf}
   \caption{Taiwan chronological protocol and leakage audit. The earliest 162
   dates train the model, 52 subsequent dates select it and the final 54 dates
   provide 7,180 test sequences. All reported counts are generated from the
@@ -617,7 +707,7 @@ background alone obtained MAE 4.70 \ugm, RMSE 6.61 \ugm{} and
 improved these to 4.58, 6.44 and 0.706, respectively (Table~\ref{tab:taiwan}).
 Its Pearson and Spearman correlations were 0.846 and 0.868. Date-block
 resampling estimated a median RMSE reduction of 0.172 \ugm{} (95\% interval
-0.082--0.254) and an \Rtwo{} gain of 0.016 (0.007--0.026); 49 of 54 dates had
+0.082--0.251) and an \Rtwo{} gain of 0.016 (0.007--0.026); 49 of 54 dates had
 positive within-date \Rtwo{} and RMSE decreased on 41 dates.
 
 Transparent network baselines clarify where this skill originates
@@ -626,7 +716,7 @@ climatology failed on the future period (\Rtwo=-0.116), and delaying the
 other-site median by one hour reduced \Rtwo{} to 0.647. Contemporaneous
 other-site mean and median baselines reached 0.696 and 0.690. Relative to the
 median, the conditioned-image estimator improved MAE by 0.124 \ugm,
-RMSE by 0.172 \ugm{} and \Rtwo{} by 0.016 in 20,000 paired complete-date
+RMSE by 0.172 \ugm{} and \Rtwo{} by 0.016 in 5,000 paired complete-date
 resamples; all three 95\% intervals excluded zero. Removing any one support
 station changed median-background RMSE from 6.61 to 6.68--6.81 \ugm, showing
 moderate rather than catastrophic single-station sensitivity.
@@ -664,6 +754,13 @@ result is that the combined estimator retained positive skill under both
 chronological and held-out-site evaluation. The other-site network already
 carried most of the predictive signal; conditioned imagery provided a small,
 statistically measurable refinement rather than replacing that network.
+At the six-site inference level, the increment over the context-only model was
+less certain: the pooled \Rtwo{} gain was 0.0038 and its paired site-cluster
+95\% interval was -0.0045--0.0120. Corresponding MAE and RMSE reductions were
+0.0556 \ugm{} (-0.0385--0.1577) and 0.0412 \ugm{}
+(-0.0447--0.1256). These intervals use the six sites as the resampling units;
+20,000 resamples improve numerical stability but do not increase the number of
+independent spatial clusters.
 
 \begin{table}[H]
 \centering
@@ -678,9 +775,11 @@ component rows are reported in \ref{app:component-audit}.}
 Protocol & Model & $n$ & MAE & RMSE & Pooled \Rtwo & Status \\
 \midrule
 Chronological & Other-site network background & 7,180 & 4.704 & 6.613 & 0.690 & Frozen baseline \\
+Chronological & Background + context & 7,180 & 4.786 & 6.666 & 0.685 & Frozen component \\
 Chronological & Background + context + conditioned image & 7,180 & \textbf{4.580} & \textbf{6.442} & \textbf{0.706} & Frozen test \\
 \midrule
 Nested LOSO & Other-site network background & 27,019 & 4.868 & 6.604 & 0.689 & Outer test \\
+Nested LOSO & Background + context & 27,019 & 4.873 & 6.501 & 0.699 & Outer test \\
 Nested LOSO & Conservative conditioned image & 27,019 & \textbf{4.818} & \textbf{6.460} & \textbf{0.702} & Inner-CV selected \\
 \bottomrule
 \end{tabular}
@@ -689,7 +788,7 @@ Nested LOSO & Conservative conditioned image & 27,019 & \textbf{4.818} & \textbf
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.98\textwidth]{Figure_04_measured_vs_predicted.pdf}
+  \includegraphics[width=0.98\textwidth]{Figure_05_measured_vs_predicted.pdf}
   \caption{Measured versus predicted Taiwan \pmfine{} on the chronological
   54-date test period. Both panels use identical 7,180 sequences and axes. The
   conditioned model reduces aggregate error but still underestimates sparse
@@ -699,7 +798,7 @@ Nested LOSO & Conservative conditioned image & 27,019 & \textbf{4.818} & \textbf
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.98\textwidth]{Figure_05_baselines_and_outages.pdf}
+  \includegraphics[width=0.98\textwidth]{Figure_06_baselines_and_outages.pdf}
   \caption{Monitoring-network baseline and reliability audit. Left: RMSE on
   the identical 54-date chronological test partition. Right: network-median
   RMSE after removing one support site at a time.}
@@ -708,7 +807,7 @@ Nested LOSO & Conservative conditioned image & 27,019 & \textbf{4.818} & \textbf
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.92\textwidth]{Figure_06_datewise_robustness.pdf}
+  \includegraphics[width=0.92\textwidth]{Figure_07_datewise_robustness.pdf}
   \caption{Taiwan complete-date robustness on the chronological test.
   The visual correction does not improve every date.}
   \label{fig:taiwan-datewise}
@@ -716,7 +815,7 @@ Nested LOSO & Conservative conditioned image & 27,019 & \textbf{4.818} & \textbf
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.92\textwidth]{Figure_07_pollution_range_performance.pdf}
+  \includegraphics[width=0.92\textwidth]{Figure_08_pollution_range_performance.pdf}
   \caption{Taiwan concentration-stratified error. The conditioned image
   improves aggregate performance and the 15--35 \ugm{} stratum, but not every
   concentration range; high-concentration observations remain difficult.}
@@ -725,10 +824,10 @@ Nested LOSO & Conservative conditioned image & 27,019 & \textbf{4.818} & \textbf
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.98\textwidth]{Figure_08_date_block_bootstrap_gain.pdf}
+  \includegraphics[width=0.98\textwidth]{Figure_09_date_block_bootstrap_gain.pdf}
   \caption{Paired complete-date bootstrap for the frozen Taiwan model relative
   to the other-site monitoring-network background. Positive reduction denotes
-  lower error. Intervals are percentile 95\% intervals from 20,000 resamples
+  lower error. Intervals are percentile 95\% intervals from 5,000 resamples
   of all 54 chronological test dates.}
   \label{fig:taiwan-bootstrap}
 \end{figure}
@@ -808,10 +907,12 @@ The complete framework combines broad pollution state with learned local
 scene information rather than asking any one modality to reconstruct the full
 concentration. On TRAQID, atmospheric and local-reference backgrounds enabled
 progressively stronger complete-date estimates, culminating in the
-calibration-assisted future-90\% result of \Rtwo=0.490. On Taiwan, the
+calibration-assisted future-90\% result of pooled \Rtwo=0.490; mean and median
+date-wise \Rtwo{} were -1.861 and -0.583, with 3 of 16 dates positive. On Taiwan, the
 multimodal model improved the prespecified monitoring-network background from
 \Rtwo=0.690 to 0.706 on the chronological period, while nested held-out-site
-evaluation retained \Rtwo=0.702 and positive skill at all six sites. These
+evaluation retained pooled \Rtwo=0.702, mean and median site-wise \Rtwo{} of
+0.692 and 0.709, and positive skill at all six sites. These
 results support the framework as a practical way to combine background,
 temporal imagery and structured context under different sensing geometries.
 Complete component ablations and selection sensitivity are retained in
@@ -835,12 +936,12 @@ date-specific correction, not uniform cross-date accuracy.
 \begin{figure}[H]
   \centering
   \begin{subfigure}[t]{0.43\textwidth}
-    \includegraphics[width=\linewidth]{Figure_09_TRAQID_bias_relation.png}
+    \includegraphics[width=\linewidth]{Figure_10a_TRAQID_bias_relation.pdf}
     \caption{Early-to-future residual relation.}
     \label{fig:bias}
   \end{subfigure}\hfill
   \begin{subfigure}[t]{0.55\textwidth}
-    \includegraphics[width=\linewidth]{Figure_10_TRAQID_calibration_RMSE.png}
+    \includegraphics[width=\linewidth]{Figure_10b_TRAQID_calibration_RMSE.pdf}
     \caption{Matched RMSE for every date.}
     \label{fig:date-rmse}
   \end{subfigure}
@@ -900,7 +1001,7 @@ improve every regime.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.98\textwidth]{Figure_12_TRAQID_measured_predicted_examples.png}
+  \includegraphics[width=0.98\textwidth]{Figure_12_TRAQID_measured_predicted_examples.pdf}
   \caption{Measured, zero-shot and calibrated time series for the dates with
   the largest RMSE improvement, median improvement and largest degradation.
   Dates were selected mechanically from the paired RMSE differences rather than
@@ -923,7 +1024,7 @@ mischaracterize deployment capability.
 The overlap audit complements rather than invalidates prior image-based work.
 Random-sequence results remain useful for reproduction, debugging and
 same-distribution interpolation. They become problematic only when interpreted
-as evidence of future-date generalization.
+as evidence of future-date generalisation.
 
 The constructive implication is that model design and validation design cannot
 be separated. The random model was implicitly free to recover background state
@@ -996,12 +1097,17 @@ extensions: learned spatial background fields, visibility-specific pretraining,
 sky/road region separation and domain adaptation selected without target-test
 inspection.
 
-\subsection{Limitations and scope}
+\subsection{Limitations, measurement uncertainty and scope}
 
-The study has seven central limitations. First, sequences remain autocorrelated
+The study has nine central limitations. First, sequences remain autocorrelated
 within grouped dates even when partitions are leakage-safe. Second, the TRAQID
 reference-assisted analysis covers 16 dates and one usable OpenAQ station
-approximately 4.97 km from the campaign centre. Third, its 10\% protocol changes
+approximately 4.97 km from the campaign centre; route-specific distance varies,
+matching permits gaps up to 90 minutes and four dates lack coverage. The Taiwan
+one-hour-lag and single-support-site outage tests quantify background staleness
+and redundancy, but matched TRAQID distance/tolerance sensitivity remains a
+prospectively specified follow-up rather than an unreported completed analysis.
+Third, its 10\% protocol changes
 the task from zero-shot prediction to calibration-assisted future-period
 prediction. Fourth,
 the Taiwan task assumes contemporaneous access to other network sites and is
@@ -1012,7 +1118,14 @@ confirmation. Retrospective network-model extensions are confined to the
 appendix. Sixth, the redistributed Taiwan files used here do not contain
 embedded station coordinates, pairwise geometry or monitor instrument
 identifiers, so those network characteristics could not be audited directly
-from those files. Seventh, the models
+from those files. Seventh, the TRAQID target comes from a calibrated SDS011
+low-cost sensor and the redistributed Taiwan files omit monitor-model metadata.
+Target measurement error, instrument drift and cross-instrument differences are
+therefore not propagated into the predictive intervals; reported intervals
+quantify sampling variation across dates or sites, not total measurement
+uncertainty. Eighth, six held-out sites provide only six independent spatial
+clusters. The paired site-cluster interval is reported, but bootstrap repetition
+cannot compensate for the small number of spatial units. Ninth, the models
 estimate concentration, not chemical source contributions; visual, traffic and
 road features are associative proxies.
 
@@ -1025,19 +1138,27 @@ therefore accompany pooled headline values.
 
 This study developed and evaluated a leakage-aware multimodal framework that
 combines an atmospheric or monitoring-network background with temporal imagery
-and structured local context. On TRAQID, the frame audit showed that the
+and structured local context through a reusable sequence-audit, background-
+availability, grouped-cross-fitting and uncertainty-reporting workflow. On
+TRAQID, the frame audit showed that the
 random-window score of \Rtwo=0.950 primarily measured interpolation among
 overlapping sequences. Under complete-date evaluation, local-reference
 conditioning achieved zero-shot \Rtwo=0.361, while first-10\%
 calibration-assisted prediction improved the matched future-90\% result from \Rtwo=0.371 to
-0.490 and reduced RMSE by 9.9\%.
+0.490 and reduced RMSE by 9.9\%. Mean and median date-wise \Rtwo{} for the
+calibrated task were -1.861 and -0.583, with 3 of 16 dates positive; the gain is
+therefore useful but not evidence of uniformly stable within-date tracking.
 
 On the six-site Taiwan network, the complete estimator achieved
 \Rtwo=0.706, RMSE 6.44 \ugm{} and MAE 4.58 \ugm{} over 7,180 sequences from 54
 retrospectively defined future dates, with a positive paired date-bootstrap
 improvement over the prespecified network background. Nested leave-one-site-out
-evaluation retained pooled \Rtwo=0.702 and positive \Rtwo{} at all six held-out
-sites. Together, the two datasets demonstrate a flexible framework in which
+evaluation retained pooled \Rtwo=0.702, mean and median site-wise \Rtwo{} of
+0.692 and 0.709, and positive \Rtwo{} at all six held-out sites. The site-level
+increment over the context model was small and its paired six-site interval
+included zero, so Taiwan is interpreted as monitoring-network-assisted local
+refinement rather than camera-only estimation. Together, the two datasets
+demonstrate a flexible framework in which
 background information captures broad pollution state and learned visual and
 contextual branches refine the estimate for the local sensing environment.
 
@@ -1058,10 +1179,18 @@ are available free of charge at
 The software and derived-result release series used for this manuscript is
 archived at Zenodo under the version-independent concept DOI
 (\href{https://doi.org/10.5281/zenodo.22121571}{doi:10.5281/zenodo.22121571});
-the final submission snapshot is release \texttt{v1.0.2-paper}
+the frozen analysis snapshot is release \texttt{v1.0.3-paper}
 \citep{kumar2026roadside}. The software is written in
-Python 3.11 and uses PyTorch, scikit-learn, pandas and NumPy. It runs on macOS
-or Linux with a CPU; a CUDA-capable GPU is optional for neural-network training.
+Python 3.11 and uses PyTorch, scikit-learn, pandas, NumPy, SciPy, Matplotlib,
+torchvision and Pillow. It was first released in 2026 and is developed and
+maintained by Aryan Satyendra Kumar
+(\href{mailto:kumararyan66472@gmail.com}{kumararyan66472@gmail.com}). Release
+\texttt{v1.0.3-paper} is distributed at zero cost under the MIT licence and is
+approximately 50 MB as a compressed source archive, excluding third-party raw
+datasets. It runs on macOS or Linux with a CPU; a CUDA-capable GPU is optional
+for neural-network training. Apple Silicon and x86-64 CPU execution are
+supported through the Python dependencies; experiments requiring CUDA depend
+on a compatible NVIDIA GPU and PyTorch build.
 Dependencies are pinned through \path{pyproject.toml} and
 \path{requirements.txt}; primary prediction checksums, executable commands,
 feature manifests and selection status are listed in \ref{app:provenance}.
@@ -1085,8 +1214,8 @@ data remain governed by the original dataset and service terms.
 
 \section*{CRediT authorship contribution statement}
 Aryan Satyendra Kumar: Conceptualization, Methodology, Software, Validation,
-formal analysis, visualization, data curation, writing---original draft, and
-writing---review and editing.
+Formal analysis, Visualization, Data curation, Writing---original draft, and
+Writing---review and editing.
 
 \section*{Competing interests}
 The author declares no competing interests.
@@ -1124,7 +1253,7 @@ Taiwan learned network 0.740 & Chronological network ablation & Post-hoc & Hypot
 
 The baseline sensitivity analysis uses
 \path{pipelines/china_surveillance_aqi/analyze_reviewer_baselines.py}
-with the frozen chronological predictions, 20,000 complete-date bootstrap
+with the frozen chronological predictions, 5,000 complete-date bootstrap
 resamples and seed 42. It does not refit the frozen image model. The sequence
 manifest, prediction tables, split audit and generated summaries are retained
 with the repository workflow; raw third-party imagery is not redistributed.
@@ -1348,11 +1477,15 @@ Taiwan, this work & Same framework, inner-CV fusion & Nested leave-one-site-out 
 \section*{Declaration of generative AI and AI-assisted technologies in the
 writing process}
 During preparation of this work, the author used OpenAI ChatGPT and Codex to
-assist with language editing, manuscript organization, code review and the
-preparation of explanatory figures. The author reviewed and verified all
-AI-assisted material, analyses, references and figures and takes full
-responsibility for the content of the publication. No AI-generated primary
-observational data were used.
+assist with language editing, manuscript organisation, code review and drafting
+reproducible plotting code. The author reviewed and verified all AI-assisted
+material, analyses, references and code and takes full responsibility for the
+content of the publication. No AI-generated primary observational data or
+primary research images were used. Quantitative figures were regenerated
+deterministically from preserved observations, split manifests and prediction
+tables. The graphical abstract was rendered from editable, author-verified
+TikZ/LaTeX geometry and mathematical text; no text-to-image or generative image
+model was used.
 
 \section*{Acknowledgements}
 The author thanks Sreejith Chakrapani and Navaneethakrishnan V. for research

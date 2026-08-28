@@ -2,22 +2,24 @@ Figure captions
 
 Figure 1. TRAQID date coverage and roadside PM2.5 distributions. Shading denotes the season labels used in the campaign-level analysis. Box plots omit fliers for legibility but all values are retained in modelling.
 
-Figure 2. Shared background-conditioned architecture. TRAQID instantiates B with MERRA-2, CAMS or a nearby monitoring station and combines temporal and tabular local estimates. Taiwan instantiates B with the synchronized median of other sites, uses a cross-fitted context model and adds a bounded, validation-shrunk conditioned-image correction. The governing decomposition is shared; feature availability and the fitted fusion are dataset-specific.
+Figure 2. Representative grayscale input frames from the public datasets. Panels a-b show simultaneous front and rear views from TRAQID. Panels c-h show one fixed-camera example from each Taiwan monitoring location in the order Qiaotou, Renwu, Fengshan, Daliao, Linyuan and Xiaogang. Frames were uniformly converted to grayscale and cropped for layout. A uniform contrast adjustment was applied; no objects or semantic content were added or removed. TRAQID imagery is reproduced under the source repository's MIT licence; Taiwan imagery is adapted under CC BY 4.0.
 
-Figure 3. Taiwan chronological protocol and leakage audit. The earliest 162 dates train the model, 52 subsequent dates select it and the final 54 dates provide 7,180 test sequences. All reported counts are generated from the frozen sequence manifest and split audit.
+Figure 3. Shared background-conditioned architecture. TRAQID instantiates B with MERRA-2, CAMS or a nearby monitoring station and combines temporal and tabular local estimates. Taiwan instantiates B with the synchronised median of other sites, uses a cross-fitted context model and adds a bounded, validation-shrunk conditioned-image correction. The governing decomposition is shared; feature availability and the fitted fusion are dataset-specific.
 
-Figure 4. Measured versus predicted Taiwan PM2.5 on the chronological 54-date test period. Both panels use identical 7,180 sequences and axes. The conditioned model reduces aggregate error but still underestimates sparse high-concentration observations.
+Figure 4. Taiwan chronological protocol and leakage audit. The earliest 162 dates train the model, 52 subsequent dates select it and the final 54 dates provide 7,180 test sequences. All reported counts are generated from the frozen sequence manifest and split audit.
 
-Figure 5. Monitoring-network baseline and reliability audit. Left: RMSE on the identical 54-date chronological test partition. Right: network-median RMSE after removing one support site at a time.
+Figure 5. Measured versus predicted Taiwan PM2.5 on the chronological 54-date test period. Both panels use identical 7,180 sequences and axes. The conditioned model reduces aggregate error but still underestimates sparse high-concentration observations.
 
-Figure 6. Taiwan complete-date robustness on the chronological test. The visual correction does not improve every date.
+Figure 6. Monitoring-network baseline and reliability audit. Left: RMSE on the identical 54-date chronological test partition. Right: network-median RMSE after removing one support site at a time.
 
-Figure 7. Taiwan concentration-stratified error. The conditioned image improves aggregate performance and the 15--35 microgram m-3 stratum, but not every concentration range; high-concentration observations remain difficult.
+Figure 7. Taiwan complete-date robustness on the chronological test. The visual correction does not improve every date.
 
-Figure 8. Paired complete-date bootstrap for the frozen Taiwan model relative to the other-site monitoring-network background. Positive reduction denotes lower error. Intervals are percentile 95% intervals from 20,000 resamples of all 54 chronological test dates.
+Figure 8. Taiwan concentration-stratified error. The conditioned image improves aggregate performance and the 15-35 microgram m-3 stratum, but not every concentration range; high-concentration observations remain difficult.
 
-Figure 9. Chronological calibration diagnostics. (a) Early-to-future residual relation. (b) Matched RMSE for every date. The association in (a) is descriptive; each target-date correction was fitted without that date's future targets.
+Figure 9. Paired complete-date bootstrap for the frozen Taiwan model relative to the other-site monitoring-network background. Positive reduction denotes lower error. Intervals are percentile 95% intervals from 5,000 resamples of all 54 chronological test dates.
 
-Figure 10. TRAQID robustness analysis. Left: future-90% zero-shot and calibrated RMSE by measured concentration. Right: matched date-level RMSE changes; positive bars favour calibration. No model was refitted or selected for this analysis.
+Figure 10. Chronological calibration diagnostics. (a) Early-to-future residual relation. (b) Matched RMSE for every date. The association in panel a is descriptive; each target-date correction was fitted without that date's future targets.
 
-Figure 11. Measured, zero-shot and calibrated time series for the dates with the largest RMSE improvement, median improvement and largest degradation. Dates were selected mechanically from the paired RMSE differences rather than chosen for visual appearance.
+Figure 11. TRAQID robustness analysis. Left: future-90% zero-shot and calibrated RMSE by measured concentration. Right: matched date-level RMSE changes; positive bars favour calibration. No model was refitted or selected for this analysis.
+
+Figure 12. Measured, zero-shot and calibrated time series for the dates with the largest RMSE improvement, median improvement and largest degradation. Dates were selected mechanically from the paired RMSE differences rather than chosen for visual appearance.
